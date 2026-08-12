@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="update variantClass to use global color denoted in renderer">
+    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/LinkedListRenderer.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/LinkedListRenderer.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListTracer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListTracer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,63 +45,66 @@
     <decayedCancelled>
       <entry key="MS100" value="1.0" />
       <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0000000000036842" />
-      <entry key="S10" value="1.0000040889258515" />
-      <entry key="S30" value="1.054678396331541" />
-      <entry key="S60" value="1.7150125289669917" />
-      <entry key="M2" value="4.382956940810777" />
-      <entry key="M5" value="15.249121500939323" />
-      <entry key="M10" value="32.2532202137168" />
-      <entry key="M15" value="45.85187024961253" />
-      <entry key="M30" value="72.50740682174927" />
-      <entry key="H1" value="96.94405112329883" />
-      <entry key="H2" value="114.8308253129893" />
-      <entry key="H4" value="127.1221868232288" />
-      <entry key="D1" value="142.647561017468" />
-      <entry key="W1" value="146.34012326778904" />
+      <entry key="S2" value="1.0000000000000002" />
+      <entry key="S5" value="1.0000005547262436" />
+      <entry key="S10" value="1.0009320776365767" />
+      <entry key="S30" value="1.2146746385469733" />
+      <entry key="S60" value="2.0437360216164295" />
+      <entry key="M2" value="3.8953852058319662" />
+      <entry key="M5" value="11.192325965145894" />
+      <entry key="M10" value="26.840553363772475" />
+      <entry key="M15" value="41.88328673043993" />
+      <entry key="M30" value="75.18488463196053" />
+      <entry key="H1" value="108.85656663744278" />
+      <entry key="H2" value="134.7563353412339" />
+      <entry key="H4" value="152.39326724630132" />
+      <entry key="D1" value="173.38560310181836" />
+      <entry key="W1" value="178.15519432061248" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="6.953523728744546E-87" />
-      <entry key="S2" value="2.887713927431385E-22" />
-      <entry key="S5" value="2.451768307975985E-9" />
-      <entry key="S10" value="5.681851529641524E-5" />
-      <entry key="S30" value="0.07082395830500389" />
-      <entry key="S60" value="0.5190294549575454" />
-      <entry key="M2" value="1.5489270242964819" />
-      <entry key="M5" value="3.3908257446968864" />
-      <entry key="M10" value="4.938888209317115" />
-      <entry key="M15" value="5.810650073464683" />
-      <entry key="M30" value="7.062002518942549" />
-      <entry key="H1" value="7.915922244045049" />
-      <entry key="H2" value="8.424201446577861" />
-      <entry key="H4" value="8.702925376189633" />
-      <entry key="D1" value="8.949144697261133" />
-      <entry key="W1" value="8.992701132377002" />
+      <entry key="MS100" value="2.9199559953113247E-112" />
+      <entry key="MS500" value="4.9325927619375633E-23" />
+      <entry key="S2" value="2.6501400130319035E-6" />
+      <entry key="S5" value="0.0058826446283850985" />
+      <entry key="S10" value="0.07859702265837132" />
+      <entry key="S30" value="0.6039106693043033" />
+      <entry key="S60" value="1.5041353486239408" />
+      <entry key="M2" value="3.2370187222542612" />
+      <entry key="M5" value="6.751233427933263" />
+      <entry key="M10" value="10.163453007611402" />
+      <entry key="M15" value="12.273406252644053" />
+      <entry key="M30" value="15.518697502954963" />
+      <entry key="H1" value="17.86850059891131" />
+      <entry key="H2" value="19.316503912897137" />
+      <entry key="H4" value="20.12576472200845" />
+      <entry key="D1" value="20.849492073213057" />
+      <entry key="W1" value="20.97837725435998" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="8.703336455294973E-6" />
-      <entry key="MS500" value="0.0972606470694273" />
-      <entry key="S2" value="0.558449991475075" />
-      <entry key="S5" value="0.7921249935830794" />
-      <entry key="S10" value="0.8900706324916451" />
-      <entry key="S30" value="1.0849619485097541" />
-      <entry key="S60" value="2.2047522229446037" />
-      <entry key="M2" value="5.905690966552088" />
-      <entry key="M5" value="18.614313282106938" />
-      <entry key="M10" value="37.168075509397276" />
-      <entry key="M15" value="51.64150499685407" />
-      <entry key="M30" value="79.55508693073874" />
-      <entry key="H1" value="104.85147057539213" />
-      <entry key="H2" value="123.25037139937062" />
-      <entry key="H4" value="135.82267241495256" />
-      <entry key="D1" value="151.59628213519625" />
-      <entry key="W1" value="155.33276344729242" />
+      <entry key="MS100" value="0.03235202887004305" />
+      <entry key="MS500" value="0.5034777750283593" />
+      <entry key="S2" value="0.8423569375914018" />
+      <entry key="S5" value="0.939036087150412" />
+      <entry key="S10" value="1.041911957991536" />
+      <entry key="S30" value="1.7865185915875637" />
+      <entry key="S60" value="3.505837999313997" />
+      <entry key="M2" value="7.084623555181795" />
+      <entry key="M5" value="17.901099915491507" />
+      <entry key="M10" value="36.96896037511053" />
+      <entry key="M15" value="54.12638406604216" />
+      <entry key="M30" value="90.68224631685175" />
+      <entry key="H1" value="126.71190799632417" />
+      <entry key="H2" value="154.06544962132466" />
+      <entry key="H4" value="172.51510396196744" />
+      <entry key="D1" value="194.23440478538245" />
+      <entry key="W1" value="199.1334720184522" />
     </decayedShown>
   </component>
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -164,7 +166,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1725873310585</updated>
-      <workItem from="1786520505245" duration="7091000" />
+      <workItem from="1786520505245" duration="8058000" />
     </task>
     <task id="LOCAL-00001" summary="add color constants same as msort_arr_td.js to msort_list_td.js">
       <option name="closed" value="true" />
@@ -190,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786551004791</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors">
+      <option name="closed" value="true" />
+      <created>1786552109248</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1786552109248</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,6 +210,7 @@
     <MESSAGE value="add color constants same as msort_arr_td.js to msort_list_td.js" />
     <MESSAGE value="replace ptrVariants with new color constants" />
     <MESSAGE value="update variantClass to use global color denoted in renderer" />
-    <option name="LAST_COMMIT_MESSAGE" value="update variantClass to use global color denoted in renderer" />
+    <MESSAGE value="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors" />
+    <option name="LAST_COMMIT_MESSAGE" value="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors" />
   </component>
 </project>
