@@ -109,11 +109,11 @@ import LinkedListTracer from '../../components/DataStructures/LinkedList/LinkedL
 import {colors} from "../../components/DataStructures/colors";
 
 
-const apColor = colors.apple;
-const runAColor = colors.peach;
-const runBColor = colors.sky;
-const sortColor = colors.leaf;
-const doneColor = colors.stone;
+const apColor = 'apple';
+const runAColor = 'peach';
+const runBColor = 'sky';
+const sortColor = 'leaf';
+const doneColor = 'stone';
 
 
 // Internal data arrays encoding the linked list structure (NOT UI, don't delete)
@@ -158,7 +158,7 @@ export function run_msort() {
         // XXX should colour list the cur_L colour and *remove* the
         // colour from the previous cur_L, if any
         // vis.list.showChain(cur_L, T);
-        vis.list.resetColors();
+        vis.list.resetColors(doneColor);
         vis.list.colorChain(cur_L, runAColor, T);
         vis.list.setCaption(`len = ${cur_len}`);
 
@@ -202,9 +202,9 @@ export function run_msort() {
           vis.list.showChain(cur_L, T);
           vis.list.updateConnections(T);
 
-          vis.list.resetColors();
+          vis.list.resetColors(doneColor);
           vis.list.colorChain(cur_L, runAColor, T);
-          vis.list.highlightHeads(cur_Mid, undefined, apColor);
+          vis.list.highlightHeads(cur_Mid, undefined);
         }, [Tails, L, Mid], depth);
       }
 

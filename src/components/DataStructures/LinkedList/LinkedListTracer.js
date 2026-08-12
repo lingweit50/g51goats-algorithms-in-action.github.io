@@ -173,7 +173,7 @@ class LinkedListTracer extends Tracer {
 
   // Generic two-chain coloring helper.
   // Tracer visual only; colors are provided by caller (algorithm-level).
-  colorChains(L, R, tailsArray, leftColor = 'orange', rightColor = 'blue', defaultColor = 'gray') {
+  colorChains(L, R, tailsArray, leftColor = 'peach', rightColor = 'sky', defaultColor = 'stone') {
     // Reset all nodes to default first
       this.resetColors(defaultColor);
 
@@ -188,9 +188,9 @@ class LinkedListTracer extends Tracer {
     }
   }
 
-  resetColors() {
+  resetColors(defaultColor = 'stone') {
     for (const n of this.nodes.values()) {
-      n.fillVariant = 'gray';
+      n.fillVariant = defaultColor;
     }
     super.set();
   }
@@ -207,44 +207,44 @@ class LinkedListTracer extends Tracer {
     super.set();
   }
 
-  colorMerged(M, E, tailsArray) {
+  colorMerged(M, E, tailsArray, mergedColor = 'leaf') {
     if (!M || M === 'Null') return;
     for (let i = M; i !== 'Null'; i = tailsArray[i]) {
       const key = this.indexToKey.get(i);
       if (!key) break;
       const node = this.nodes.get(key);
       if (!node) break;
-      node.fillVariant = 'green';
+      node.fillVariant = mergedColor;
       if (i === E) break;
     }
     super.set();
   }
 
-  highlightHeads(L, R) {
+  highlightHeads(L, R, cmpColor = 'apple') {
     if (L && L !== 'Null') {
       const key = this.indexToKey.get(L);
       const node = this.nodes.get(key);
-      if (node) node.fillVariant = 'red';
+      if (node) node.fillVariant = cmpColor;
     }
     if (R && R !== 'Null') {
       const key = this.indexToKey.get(R);
       const node = this.nodes.get(key);
-      if (node) node.fillVariant = 'red';
+      if (node) node.fillVariant = cmpColor;
     }
     super.set();
   }
 
   // Remove highlight by directly restoring head colors (no other recoloring)
-  unhighlightHeads(L, R) {
+  unhighlightHeads(L, R, leftColor = 'peach', rightColor = 'sky') {
     if (L && L !== 'Null') {
       const kL = this.indexToKey.get(L);
       const nL = this.nodes.get(kL);
-      if (nL) nL.fillVariant = 'orange'; // left head back to orange
+      if (nL) nL.fillVariant = leftColor; // left head back to orange
     }
     if (R && R !== 'Null') {
       const kR = this.indexToKey.get(R);
       const nR = this.nodes.get(kR);
-      if (nR) nR.fillVariant = 'blue';   // right head back to blue
+      if (nR) nR.fillVariant = rightColor;   // right head back to blue
     }
     super.set();
   }
