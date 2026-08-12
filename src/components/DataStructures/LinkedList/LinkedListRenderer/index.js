@@ -86,11 +86,12 @@ class LinkedListRenderer extends Array2DRenderer {
 
     const variantClass = n => {
       switch (n.fillVariant) {
-        case 'orange': return styles.variantOrange;
-        case 'blue': return styles.variantBlue;
-        case 'green': return styles.variantGreen;
-        case 'red': return styles.variantRed;
-        default: return styles.variantGray;
+        case 'apple': return styles.variantApple;
+        case 'peach': return styles.variantPeach;
+        case 'sky': return styles.variantSky;
+        case 'leaf': return styles.variantLeaf;
+
+        default: return styles.variantStone;
       }
     };
 

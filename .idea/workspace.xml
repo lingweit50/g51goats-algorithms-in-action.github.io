@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="add color constants same as msort_arr_td.js to msort_list_td.js">
+    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="replace ptrVariants with new color constants">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,61 +41,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0010911105518736" />
-      <entry key="MS500" value="1.2806406807234068" />
-      <entry key="S2" value="2.1485461052128594" />
-      <entry key="S5" value="3.3269600096204597" />
-      <entry key="S10" value="5.423762477093319" />
-      <entry key="S30" value="10.862631923235009" />
-      <entry key="S60" value="14.823268071444229" />
-      <entry key="M2" value="18.516821465285407" />
-      <entry key="M5" value="24.6639291136578" />
-      <entry key="M10" value="32.52780877037966" />
-      <entry key="M15" value="37.992360036675905" />
-      <entry key="M30" value="46.92095474640284" />
-      <entry key="H1" value="53.72157314859589" />
-      <entry key="H2" value="58.56930097915323" />
-      <entry key="H4" value="62.8517813526763" />
-      <entry key="D1" value="70.47364080530639" />
-      <entry key="W1" value="72.60844339919161" />
+      <entry key="MS100" value="1.0000000006604077" />
+      <entry key="MS500" value="1.0285048403591937" />
+      <entry key="S2" value="2.6037967223606198" />
+      <entry key="S5" value="5.78596319255523" />
+      <entry key="S10" value="8.3937139080479" />
+      <entry key="S30" value="11.150640014010044" />
+      <entry key="S60" value="12.032984810427159" />
+      <entry key="M2" value="12.834687231788411" />
+      <entry key="M5" value="17.741253707228708" />
+      <entry key="M10" value="27.46121470134227" />
+      <entry key="M15" value="35.16649175472022" />
+      <entry key="M30" value="48.86078882407854" />
+      <entry key="H1" value="59.970345763452116" />
+      <entry key="H2" value="67.7669718732793" />
+      <entry key="H4" value="73.7778408451592" />
+      <entry key="D1" value="83.08073702749343" />
+      <entry key="W1" value="85.55047893058023" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="3.286686388565684E-19" />
-      <entry key="MS500" value="2.0107202570009096E-4" />
-      <entry key="S2" value="0.11907974975549214" />
-      <entry key="S5" value="0.42690885719562244" />
-      <entry key="S10" value="0.6533826269465869" />
-      <entry key="S30" value="0.8677391543083922" />
-      <entry key="S60" value="0.9315251764221899" />
-      <entry key="M2" value="0.9651555192932327" />
-      <entry key="M5" value="0.9859137406882437" />
-      <entry key="M10" value="0.9929318912635667" />
-      <entry key="M15" value="0.9952823590925012" />
-      <entry key="M30" value="0.9976383909475923" />
-      <entry key="H1" value="0.9988184974997171" />
-      <entry key="H2" value="0.9994090741531804" />
-      <entry key="H4" value="0.999704493414519" />
-      <entry key="D1" value="0.999950742837148" />
-      <entry key="W1" value="0.9999929631138983" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="2.3675223711732893E-106" />
+      <entry key="S5" value="5.619758289091883E-43" />
+      <entry key="S10" value="7.49650471159185E-22" />
+      <entry key="S30" value="9.084191331391969E-8" />
+      <entry key="S60" value="3.0139992255128346E-4" />
+      <entry key="M2" value="0.01736087332340408" />
+      <entry key="M5" value="0.19761896812359797" />
+      <entry key="M10" value="0.44454355031155024" />
+      <entry key="M15" value="0.5824735502230232" />
+      <entry key="M30" value="0.7631995481019509" />
+      <entry key="H1" value="0.8736129280762455" />
+      <entry key="H2" value="0.9346726315005939" />
+      <entry key="H4" value="0.9667846872497488" />
+      <entry key="D1" value="0.9943859067742958" />
+      <entry key="W1" value="0.9991960502725673" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9873013603147756" />
-      <entry key="MS500" value="1.2767074200833022" />
-      <entry key="S2" value="2.1649111436281485" />
-      <entry key="S5" value="3.510403434000593" />
-      <entry key="S10" value="5.8427990434545904" />
-      <entry key="S30" value="11.606392579491033" />
-      <entry key="S60" value="15.684854403965222" />
-      <entry key="M2" value="19.444759804974755" />
-      <entry key="M5" value="25.63434385081164" />
-      <entry key="M10" value="33.512855458291455" />
-      <entry key="M15" value="38.98234501810051" />
-      <entry key="M30" value="47.91591791776022" />
-      <entry key="H1" value="54.719045264681675" />
-      <entry key="H2" value="59.56803359872213" />
-      <entry key="H4" value="63.851145784337874" />
-      <entry key="D1" value="71.47353421727179" />
-      <entry key="W1" value="73.60842814435503" />
+      <entry key="MS100" value="0.9659363295673543" />
+      <entry key="MS500" value="1.021448560712154" />
+      <entry key="S2" value="2.60005031894679" />
+      <entry key="S5" value="5.7829478801304015" />
+      <entry key="S10" value="8.391596159769236" />
+      <entry key="S30" value="11.149720367651653" />
+      <entry key="S60" value="12.03276975608089" />
+      <entry key="M2" value="12.851122586256125" />
+      <entry key="M5" value="17.935661300182492" />
+      <entry key="M10" value="27.902175235186103" />
+      <entry key="M15" value="35.74582984453341" />
+      <entry key="M30" value="49.62192414272795" />
+      <entry key="H1" value="60.84277223806769" />
+      <entry key="H2" value="68.70100744165646" />
+      <entry key="H4" value="74.74429445519837" />
+      <entry key="D1" value="84.07506555343099" />
+      <entry key="W1" value="86.54966671673219" />
     </decayedShown>
   </component>
   <component name="PackageJsonUpdateNotifier">
@@ -128,7 +127,8 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "terminal"
+    "settings.editor.selected.configurable": "terminal",
+    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external"
   }
 }]]></component>
   <component name="RunManager">
@@ -161,7 +161,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1725873310585</updated>
-      <workItem from="1786520505245" duration="5362000" />
+      <workItem from="1786520505245" duration="6028000" />
     </task>
     <task id="LOCAL-00001" summary="add color constants same as msort_arr_td.js to msort_list_td.js">
       <option name="closed" value="true" />
@@ -171,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786549572461</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="replace ptrVariants with new color constants">
+      <option name="closed" value="true" />
+      <created>1786550261238</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1786550261238</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -179,6 +187,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add color constants same as msort_arr_td.js to msort_list_td.js" />
-    <option name="LAST_COMMIT_MESSAGE" value="add color constants same as msort_arr_td.js to msort_list_td.js" />
+    <MESSAGE value="replace ptrVariants with new color constants" />
+    <option name="LAST_COMMIT_MESSAGE" value="replace ptrVariants with new color constants" />
   </component>
 </project>
