@@ -106,6 +106,14 @@
 
 import { msort_lista_td } from '../explanations';
 import LinkedListTracer from '../../components/DataStructures/LinkedList/LinkedListTracer';
+import {colors} from "../../components/DataStructures/colors";
+
+
+const apColor = colors.apple;
+const runAColor = colors.peach;
+const runBColor = colors.sky;
+const sortColor = colors.leaf;
+const doneColor = colors.stone;
 
 // ---------- Pointer-color mapping (must match LinkedListRenderer.module.scss variants) ----------
 const ptrVariant = {

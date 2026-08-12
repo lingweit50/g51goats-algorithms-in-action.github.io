@@ -204,6 +204,34 @@
   background: linear-gradient(90deg, #69c587 0 calc(100% - var(--cap-w)), #4ea46d calc(100% - var(--cap-w)));
 }
 
+
+/* Comparison highlighting; red in the default theme */
+.variantApple .pill {
+  background: var(--apple);
+}
+
+/* Left-side highlighting; orange in the default theme */
+.variantPeach .pill {
+  background: var(--peach);
+}
+
+/* Right-side highlighting; blue in the default theme */
+.variantSky .pill {
+  background: var(--sky);
+}
+
+/* Sorted nodes; green in the default theme */
+.variantLeaf .pill {
+  background: var(--leaf);
+}
+
+/* Default color */
+.variantStone .pill {
+  background: var(--stone);
+}
+
+
+
 /* ======================================================
    🔹 Node State Modifiers
    ====================================================== */

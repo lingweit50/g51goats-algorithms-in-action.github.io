@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="" />
+    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/LinkedListRenderer.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/LinkedListRenderer.module.scss" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,30 +17,119 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="2024_sem2" />
+        <entry key="$PROJECT_DIR$" value="2026_sem2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Downvert11"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/lingweit50/g51goats-algorithms-in-action.github.io",
+    "accountId": "52cce4e8-83be-41db-995a-e103aceac949"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0000000000009774" />
+      <entry key="S2" value="1.0010067376783294" />
+      <entry key="S5" value="1.0742974359314315" />
+      <entry key="S10" value="1.3975912335581584" />
+      <entry key="S30" value="3.1382974803547663" />
+      <entry key="S60" value="4.932173187754904" />
+      <entry key="M2" value="6.806701887545585" />
+      <entry key="M5" value="11.587499826910495" />
+      <entry key="M10" value="18.922194021594144" />
+      <entry key="M15" value="24.125276014811448" />
+      <entry key="M30" value="32.65404990841833" />
+      <entry key="H1" value="39.15164419491889" />
+      <entry key="H2" value="43.807045692151945" />
+      <entry key="H4" value="47.9807631016796" />
+      <entry key="D1" value="55.49815546260256" />
+      <entry key="W1" value="57.612066494424646" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9526379980439373" />
+      <entry key="MS500" value="0.9903428719339926" />
+      <entry key="S2" value="0.9985812364264038" />
+      <entry key="S5" value="1.0732600067169973" />
+      <entry key="S10" value="1.3969363355448599" />
+      <entry key="S30" value="3.1378197872142057" />
+      <entry key="S60" value="4.931786218283611" />
+      <entry key="M2" value="6.806432474321588" />
+      <entry key="M5" value="11.58733431711373" />
+      <entry key="M10" value="18.922071062496098" />
+      <entry key="M15" value="24.12517519289196" />
+      <entry key="M30" value="32.65398412939603" />
+      <entry key="H1" value="39.15160542607558" />
+      <entry key="H2" value="43.807023784519664" />
+      <entry key="H4" value="47.98075050087487" />
+      <entry key="D1" value="55.498152735456436" />
+      <entry key="W1" value="57.61206607770059" />
+    </decayedShown>
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="2lpNwMEtCXH3aoSNxw3UXU0mWtn" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "tom-test-branch",
+    "javascript.preferred.runtime.type.id": "node",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Sunny/Desktop/IT Project"
+    "last_opened_file_path": "/Users/tp/Documents/Programming/JavaScript/g51goats-algorithms-in-action.github.io",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "terminal"
   }
 }]]></component>
   <component name="RunManager">
@@ -54,6 +147,13 @@
       </method>
     </configuration>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-WS-262.9437.145" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -62,7 +162,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1725873310585</updated>
+      <workItem from="1786520505245" duration="4717000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
