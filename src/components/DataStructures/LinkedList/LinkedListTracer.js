@@ -173,7 +173,7 @@ class LinkedListTracer extends Tracer {
 
   // Generic two-chain coloring helper.
   // Tracer visual only; colors are provided by caller (algorithm-level).
-  colorChains(L, R, tailsArray, leftColor = 'peach', rightColor = 'sky', defaultColor = 'stone') {
+  colorChains(L, R, tailsArray, leftColor = 3, rightColor = 0, defaultColor = 6) {
     // Reset all nodes to default first
       this.resetColors(defaultColor);
 
@@ -188,26 +188,26 @@ class LinkedListTracer extends Tracer {
     }
   }
 
-  resetColors(defaultColor = 'stone') {
+  resetColors(defaultColor = 6) {
     for (const n of this.nodes.values()) {
       n.fillVariant = defaultColor;
     }
     super.set();
   }
 
-  colorChain(startIndex, varient, tailsArray) {
+  colorChain(startIndex, variant, tailsArray) {
     if (!startIndex || startIndex === 'Null') return;
     for (let i = startIndex; i !== 'Null'; i = tailsArray[i]) {
       const key = this.indexToKey.get(i);
       if (!key) break;
       const node = this.nodes.get(key);
       if (!node) break;
-      node.fillVariant = varient;
+      node.fillVariant = variant;
     }
     super.set();
   }
 
-  colorMerged(M, E, tailsArray, mergedColor = 'leaf') {
+  colorMerged(M, E, tailsArray, mergedColor = 1) {
     if (!M || M === 'Null') return;
     for (let i = M; i !== 'Null'; i = tailsArray[i]) {
       const key = this.indexToKey.get(i);
@@ -220,7 +220,7 @@ class LinkedListTracer extends Tracer {
     super.set();
   }
 
-  highlightHeads(L, R, cmpColor = 'apple') {
+  highlightHeads(L, R, cmpColor = 2) {
     if (L && L !== 'Null') {
       const key = this.indexToKey.get(L);
       const node = this.nodes.get(key);
@@ -235,7 +235,7 @@ class LinkedListTracer extends Tracer {
   }
 
   // Remove highlight by directly restoring head colors (no other recoloring)
-  unhighlightHeads(L, R, leftColor = 'peach', rightColor = 'sky') {
+  unhighlightHeads(L, R, leftColor = 3, rightColor = 0) {
     if (L && L !== 'Null') {
       const kL = this.indexToKey.get(L);
       const nL = this.nodes.get(kL);

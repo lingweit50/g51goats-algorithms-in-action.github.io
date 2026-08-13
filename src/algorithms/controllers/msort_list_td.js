@@ -106,13 +106,14 @@
 
 import { msort_lista_td } from '../explanations';
 import LinkedListTracer from '../../components/DataStructures/LinkedList/LinkedListTracer';
+import {colors} from "../../components/DataStructures/colors";
 
 // ---------- Colors ----------
-const apColor = 'apple';
-const runAColor = 'peach';
-const runBColor = 'sky';
-const sortColor = 'leaf';
-const doneColor = 'stone';
+const apColor = colors.apple;
+const runAColor = colors.peach;
+const runBColor = colors.sky;
+const sortColor = colors.leaf;
+const doneColor = colors.stone;
 
 
 // Internal data arrays encoding the linked list structure (NOT UI, don't delete)

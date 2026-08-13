@@ -7,7 +7,8 @@
     <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/LinkedListRenderer.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/LinkedListRenderer.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListTracer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListTracer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,18 +23,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Downvert11"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Downvert11&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/lingweit50/g51goats-algorithms-in-action.github.io",
-    "accountId": "52cce4e8-83be-41db-995a-e103aceac949"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/lingweit50/g51goats-algorithms-in-action.github.io&quot;,
+    &quot;accountId&quot;: &quot;52cce4e8-83be-41db-995a-e103aceac949&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -43,61 +44,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0000000000000002" />
-      <entry key="S5" value="1.0000005547262436" />
-      <entry key="S10" value="1.0009320776365767" />
-      <entry key="S30" value="1.2146746385469733" />
-      <entry key="S60" value="2.0437360216164295" />
-      <entry key="M2" value="3.8953852058319662" />
-      <entry key="M5" value="11.192325965145894" />
-      <entry key="M10" value="26.840553363772475" />
-      <entry key="M15" value="41.88328673043993" />
-      <entry key="M30" value="75.18488463196053" />
-      <entry key="H1" value="108.85656663744278" />
-      <entry key="H2" value="134.7563353412339" />
-      <entry key="H4" value="152.39326724630132" />
-      <entry key="D1" value="173.38560310181836" />
-      <entry key="W1" value="178.15519432061248" />
+      <entry key="MS100" value="9.037443681891081E-29" />
+      <entry key="MS500" value="2.4639599403532407E-6" />
+      <entry key="S2" value="0.04723341612220694" />
+      <entry key="S5" value="0.4755754084241767" />
+      <entry key="S10" value="1.3048786359698743" />
+      <entry key="S30" value="3.6633966345297138" />
+      <entry key="S60" value="6.399060153702995" />
+      <entry key="M2" value="10.515627762453054" />
+      <entry key="M5" value="19.22821410597956" />
+      <entry key="M10" value="33.45699849929591" />
+      <entry key="M15" value="47.977403154119344" />
+      <entry key="M30" value="83.60737668153463" />
+      <entry key="H1" value="123.19206048545088" />
+      <entry key="H2" value="155.2994958246324" />
+      <entry key="H4" value="177.4373111982255" />
+      <entry key="D1" value="203.2503265613687" />
+      <entry key="W1" value="208.98843829662806" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="2.9199559953113247E-112" />
-      <entry key="MS500" value="4.9325927619375633E-23" />
-      <entry key="S2" value="2.6501400130319035E-6" />
-      <entry key="S5" value="0.0058826446283850985" />
-      <entry key="S10" value="0.07859702265837132" />
-      <entry key="S30" value="0.6039106693043033" />
-      <entry key="S60" value="1.5041353486239408" />
-      <entry key="M2" value="3.2370187222542612" />
-      <entry key="M5" value="6.751233427933263" />
-      <entry key="M10" value="10.163453007611402" />
-      <entry key="M15" value="12.273406252644053" />
-      <entry key="M30" value="15.518697502954963" />
-      <entry key="H1" value="17.86850059891131" />
-      <entry key="H2" value="19.316503912897137" />
-      <entry key="H4" value="20.12576472200845" />
-      <entry key="D1" value="20.849492073213057" />
-      <entry key="W1" value="20.97837725435998" />
+      <entry key="MS100" value="1.000000108937198" />
+      <entry key="MS500" value="1.0405304333545036" />
+      <entry key="S2" value="1.535965135626289" />
+      <entry key="S5" value="2.2770880509082465" />
+      <entry key="S10" value="3.1300892682857238" />
+      <entry key="S30" value="5.108657646475489" />
+      <entry key="S60" value="6.94678530086158" />
+      <entry key="M2" value="9.391165564605195" />
+      <entry key="M5" value="13.563872627667497" />
+      <entry key="M10" value="18.196511107433718" />
+      <entry key="M15" value="21.425323130229334" />
+      <entry key="M30" value="26.844295114783797" />
+      <entry key="H1" value="31.059001771436392" />
+      <entry key="H2" value="33.7628569759299" />
+      <entry key="H4" value="35.306827170739886" />
+      <entry key="D1" value="36.70667700776551" />
+      <entry key="W1" value="36.95781351415475" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.03235202887004305" />
-      <entry key="MS500" value="0.5034777750283593" />
-      <entry key="S2" value="0.8423569375914018" />
-      <entry key="S5" value="0.939036087150412" />
-      <entry key="S10" value="1.041911957991536" />
-      <entry key="S30" value="1.7865185915875637" />
-      <entry key="S60" value="3.505837999313997" />
-      <entry key="M2" value="7.084623555181795" />
-      <entry key="M5" value="17.901099915491507" />
-      <entry key="M10" value="36.96896037511053" />
-      <entry key="M15" value="54.12638406604216" />
-      <entry key="M30" value="90.68224631685175" />
-      <entry key="H1" value="126.71190799632417" />
-      <entry key="H2" value="154.06544962132466" />
-      <entry key="H4" value="172.51510396196744" />
-      <entry key="D1" value="194.23440478538245" />
-      <entry key="W1" value="199.1334720184522" />
+      <entry key="MS100" value="8.583515065235548E-6" />
+      <entry key="MS500" value="0.09870882388378852" />
+      <entry key="S2" value="0.839919665161626" />
+      <entry key="S5" value="2.164777675136805" />
+      <entry key="S10" value="3.9736548564334715" />
+      <entry key="S30" value="8.493589504018637" />
+      <entry key="S60" value="13.143942271716982" />
+      <entry key="M2" value="19.76182445050099" />
+      <entry key="M5" value="32.70421547724739" />
+      <entry key="M10" value="51.5926485862094" />
+      <entry key="M15" value="69.35339101938848" />
+      <entry key="M30" value="110.41864881012992" />
+      <entry key="H1" value="154.2309094929907" />
+      <entry key="H2" value="189.0510311665838" />
+      <entry key="H4" value="212.7381092428974" />
+      <entry key="D1" value="239.95594148708093" />
+      <entry key="W1" value="245.94609858862157" />
     </decayedShown>
   </component>
   <component name="PackageJsonUpdateNotifier">
@@ -114,28 +115,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "tom-test-branch",
-    "javascript.preferred.runtime.type.id": "node",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/tp/Documents/Programming/JavaScript/g51goats-algorithms-in-action.github.io",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "terminal",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;tom-test-branch&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/tp/Documents/Programming/JavaScript/g51goats-algorithms-in-action.github.io&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="algorithms-in-action.github.io" />
