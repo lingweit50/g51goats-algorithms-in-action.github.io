@@ -169,7 +169,14 @@ class LinkedListRenderer extends Array2DRenderer {
 
                   <div className={styles.vars}>
                     {n.variables.map(v => (
-                      <motion.div layoutId={`${n.key}-${v}`} key={v} className={styles.varBadge}>
+                      <motion.div 
+                        layoutId={`${n.key}-${v}`} 
+                        key={v} 
+                        className={[
+                          styles.varBadge,
+                          v === 'M' && styles.mBadge,
+                        ].filter(Boolean).join(' ')}
+                      >
                         {v}
                       </motion.div>
                     ))}
