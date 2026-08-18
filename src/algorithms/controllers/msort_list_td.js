@@ -159,7 +159,7 @@ export function initVisualisers() {
       instance: new LinkedListTracer('list', null, 'List(s)'),
       order: 0,
     },
-    stack: {
+    stack: { // To store linked list values for stack vis
       instance: new ArrayTracer('stack', null, 'Call Stack', {
         arrayItemMagnitudes: false,
       }),
@@ -171,12 +171,11 @@ export function initVisualisers() {
 export function run_msort() {
   return function run(chunker, { nodes }) {
     const entire_num_array = nodes;
-    let max_depth_index = -1; // indexes into 2D array, starts at zero
     const finished_stack_frames = []; // [ [left, right,  depth], ...]  (although depth could be implicit this is easier)
     const real_stack = []; // [ [left, right,  depth], ...]
 
 
-    
+    // Given current and completed stack frames, derive the visualisation 
     function derive_stack(cur_real_stack, cur_finished_stack_frames) {
       // Don't display stack when recursion is collapsed
       if (!isRecursionExpanded()) {
@@ -240,6 +239,7 @@ export function run_msort() {
       return stack_vis;
     }
 
+    // Refreshes stack vis at every Main call
     const refresh_stack = (vis, cur_real_stack, cur_finished_stack_frames) => {
       if (!isRecursionExpanded()) {
         vis.stack.setStackDepth(0);
@@ -615,7 +615,8 @@ export function run_msort() {
     function MergeSort(L, len, depth) {
       const left = L - 1;
       const right = L + len - 2;
-      //max_depth_index
+      
+      // Initialises new stack frame
       real_stack.push([left, right, depth])
 
       setupInitialVisualization(L, len, depth);
@@ -664,6 +665,7 @@ export function run_msort() {
         result = L;
       }
 
+      // At each completion of each recursive call of merge sort, pop a frame from call stack
       const frame = real_stack.pop();
       if (frame){
         finished_stack_frames.push(frame);
