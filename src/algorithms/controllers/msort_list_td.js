@@ -115,11 +115,51 @@ const runBColor = colors.sky;
 const sortColor = colors.leaf;
 const doneColor = colors.stone;
 
+// import 1D tracer to generate array for stack visualisation
+import ArrayTracer from '../../components/DataStructures/Array/Array1DTracer';
+
+import {
+  areExpanded,
+} from './collapseChunkPlugin';
+
+// ---------- Pointer-color mapping (must match LinkedListRenderer.module.scss variants) ----------
+const ptrVariant = {
+  runA: 'orange',   // L chain
+  runB: 'blue',     // R chain
+  merged: 'green',  // merged portion
+  cmp: 'red',       // heads under comparison
+  def: 'gray',      // default
+};
+
+
+const STACK_FRAME_COLOR = {
+  No_color: 0,
+  In_progress_stackFrame: 1,
+  Current_stackFrame: 2,
+  Finished_stackFrame: 3,
+  I_color: 4,
+  J_color: 5,
+  P_color: 6, // pivot
+}
 
 // Internal data arrays encoding the linked list structure (NOT UI, don't delete)
 let Heads;        // ['i.head (data)', ...]
 let Tails;        // ['i.tail (next)', ...]
 
+
+
+
+// Stack Visualisation Helper functions
+// checks if either recursive call is expanded (otherwise stack is not
+// displayed)
+function isRecursionExpanded() {
+  return areExpanded(['MergesortL']) || areExpanded(['MergesortR']);
+}
+
+import { update_vis_with_stack_frame } from './msort_arr_td';
+
+
+    
 // ---------- Init visualiser (pointer only) ----------
 export function initVisualisers() {
   return {
@@ -127,12 +167,102 @@ export function initVisualisers() {
       instance: new LinkedListTracer('list', null, 'List(s)'),
       order: 0,
     },
+    stack: { // To store linked list values for stack vis
+      instance: new ArrayTracer('stack', null, 'Call Stack', {
+        arrayItemMagnitudes: false,
+      }),
+      order: 1,
+    },
   }
 }
 
 export function run_msort() {
   return function run(chunker, { nodes }) {
     const entire_num_array = nodes;
+    const finished_stack_frames = []; // [ [left, right,  depth], ...]  (although depth could be implicit this is easier)
+    const real_stack = []; // [ [left, right,  depth], ...]
+
+
+    // Given current and completed stack frames, derive the visualisation 
+    function derive_stack(cur_real_stack, cur_finished_stack_frames) {
+      // Don't display stack when recursion is collapsed
+      if (!isRecursionExpanded()) {
+        return [];
+      }
+
+      let stack_vis = [];
+      const arrayLen = entire_num_array.length;
+      // Calculate depth based on actual stack content
+      let actualMaxDepth = 0;
+      // Calculate maximum depth from finished_stack_frames
+
+      cur_finished_stack_frames.forEach(frame => {
+        if (frame[2] > actualMaxDepth) actualMaxDepth = frame[2];
+      });
+      // Calculate maximum depth from real_stack  
+      cur_real_stack.forEach(frame => {
+        if (frame[2] > actualMaxDepth) actualMaxDepth = frame[2];
+      });
+      const stackDepth = actualMaxDepth + 1;
+      
+      // Initialize stack visualization array
+      for (let i = 0; i < stackDepth; i++) {
+        stack_vis.push(
+          [...Array.from({ length: arrayLen })].map(() => ({
+            base: STACK_FRAME_COLOR.No_color,
+            extra: [],
+            value: undefined,
+            isLeftBoundary: false,
+            isRightBoundary: false
+          })),
+        );
+      }
+
+      // First display all completed stack frames (gray)
+      cur_finished_stack_frames.forEach((stack_frame) => {
+        stack_vis = update_vis_with_stack_frame(
+          stack_vis,
+          stack_frame,
+          STACK_FRAME_COLOR.Finished_stackFrame,
+          entire_num_array,
+          arrayLen
+        );
+      });
+
+      // Then display current active stack frames
+      cur_real_stack.forEach((stack_frame, index) => {
+        const color = (index === cur_real_stack.length - 1) 
+          ? STACK_FRAME_COLOR.Current_stackFrame
+          : STACK_FRAME_COLOR.In_progress_stackFrame;
+        
+        stack_vis = update_vis_with_stack_frame(
+          stack_vis,
+          stack_frame,
+          color,
+          entire_num_array,
+          arrayLen
+        );
+      });
+
+      return stack_vis;
+    }
+
+    // Refreshes stack vis at every Main call
+    const refresh_stack = (vis, cur_real_stack, cur_finished_stack_frames) => {
+      if (!isRecursionExpanded()) {
+        vis.stack.setStackDepth(0);
+        vis.stack.setStack(undefined);
+        return;
+      }
+
+      const stack_data = derive_stack(
+        cur_real_stack,
+        cur_finished_stack_frames
+      );
+
+      vis.stack.setStackDepth(cur_real_stack.length);
+      vis.stack.setStack(stack_data);
+    } 
 
     function initializeListStructure() {
       Heads = ['i.head (data)'];
@@ -145,7 +275,7 @@ export function run_msort() {
     }
 
     function setupInitialVisualization(L, len, depth) {
-      chunker.add('Main', (vis, T, cur_L, cur_len, cur_depth) => {
+      chunker.add('Main', (vis, T, cur_L, cur_len, cur_depth, cur_real_stack, cur_finished_stack_frames) => {
         // Depth 0: show full original list (top-level call)
         // Deeper recursion: hide other sublists and focus only on this L-chain
         if (cur_depth > 0) {
@@ -153,7 +283,8 @@ export function run_msort() {
           // vis.list.showChain(cur_L, T);
         } else {
           vis.list.set(entire_num_array, 'mergeSort list init');
-          // vis.list.colorChain(1, runAColor, T);
+          vis.stack.set(entire_num_array, 'mergeSort list init')
+          // vis.list.colorChain(1, ptrVariant.runA, T);
         }
         // XXX should colour list the cur_L colour and *remove* the
         // colour from the previous cur_L, if any
@@ -164,7 +295,9 @@ export function run_msort() {
 
         // Just L tag is known at this point
         vis.list.assignTag('L', cur_L);
-      }, [Tails, L, len, depth], depth);
+
+        refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
+      }, [Tails, L, len, depth, real_stack, finished_stack_frames], depth);
       
       // This corresponds to pseudocode bookmark:
       // \B len>1 — later checked before recursion happens
@@ -250,7 +383,7 @@ export function run_msort() {
 
     function performRecursiveSort(L, R, midNum, len, depth) {
       // ----- focus left -----
-      chunker.add('preSortL', (vis, T, cur_L, cur_R) => {
+      chunker.add('preSortL', (vis, T, cur_L, cur_R, cur_depth, cur_real_stack, cur_finished_stack_frames) => {
 
         vis.list.assignTag('Mid', undefined);
         vis.list.assignTag('R', undefined);
@@ -260,11 +393,12 @@ export function run_msort() {
 
         // vis.list.moveChainBelow(cur_L, cur_R, T);
         // vis.list.hideChain(cur_R, T);
-      }, [Tails, L, R], depth);
+        refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
+      }, [Tails, L, R, depth, real_stack, finished_stack_frames], depth);
 
       L = MergeSort(L, midNum, depth + 1);
 
-      chunker.add('sortL', (vis, T, cur_L, cur_R, cur_len) => {
+      chunker.add('sortL', (vis, T, cur_L, cur_R, cur_len, cur_depth, cur_real_stack, cur_finished_stack_frames) => {
         vis.list.assignTag('R', cur_R);
         vis.list.assignTag('L', cur_L);
         vis.list.assignTag('Mid', undefined);
@@ -274,10 +408,11 @@ export function run_msort() {
         vis.list.showChain(cur_L, T);
         vis.list.colorChains(cur_L, cur_R, T, runAColor, runBColor, doneColor);
         vis.list.setCaption(`len = ${cur_len}`);
-      }, [Tails, L, R, len], depth);
+        refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
+      }, [Tails, L, R, len, depth, real_stack, finished_stack_frames], depth);
 
       // ----- focus right -----
-      chunker.add('preSortR', (vis, T, cur_L, cur_R) => {
+      chunker.add('preSortR', (vis, T, cur_L, cur_R, cur_depth, cur_real_stack, cur_finished_stack_frames) => {
         // vis.list.assignTag('Mid', undefined);
         // vis.list.assignTag('L', undefined);
         // vis.list.assignTag('R', cur_R);
@@ -288,11 +423,12 @@ export function run_msort() {
         // vis.list.showChain(cur_R, T);
 
         // vis.list.colorChains(undefined, cur_R, T);
-      }, [Tails, L, R], depth);
+        refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
+      }, [Tails, L, R, depth, real_stack, finished_stack_frames], depth);
 
       R = MergeSort(R, len - midNum, depth + 1);
 
-      chunker.add('sortR', (vis, T, cur_L, cur_R, cur_len) => {
+      chunker.add('sortR', (vis, T, cur_L, cur_R, cur_len, cur_depth, cur_real_stack, cur_finished_stack_frames) => {
         vis.list.setCaption(`len = ${cur_len}`);
         vis.list.assignTag('L', cur_L);
         vis.list.assignTag('R', cur_R);
@@ -304,7 +440,9 @@ export function run_msort() {
         vis.list.showChain(cur_R, T);
 
         vis.list.colorChains(cur_L, cur_R, T, runAColor, runBColor, doneColor);
-      }, [Tails, L, R, len], depth);
+        refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
+
+        }, [Tails, L, R, len, real_stack, finished_stack_frames], depth);
 
       return { L, R };
     }
@@ -484,8 +622,15 @@ export function run_msort() {
     }
 
     function MergeSort(L, len, depth) {
-      setupInitialVisualization(L, len, depth);
+      const left = L - 1;
+      const right = L + len - 2;
+      
+      // Initialises new stack frame
+      real_stack.push([left, right, depth])
 
+      setupInitialVisualization(L, len, depth);
+      
+      let result;
       if (len > 1) {
         let midNum = Math.ceil(len / 2);
         const { L: newL, R, Mid } =
@@ -497,7 +642,7 @@ export function run_msort() {
         const mergedList =
           mergeRemainingElements(remainingL, remainingR, M, depth);
 
-        chunker.add('returnM', (vis, T, _cur_L, cur_M) => {
+        chunker.add('returnM', (vis, T, _cur_L, cur_M, cur_real_stack, cur_finished_stack_frames) => {
 
           vis.list.assignTag('L', undefined);
           vis.list.assignTag('R', undefined);
@@ -510,11 +655,12 @@ export function run_msort() {
 
           vis.list.repositionMergedChain(cur_M, T);
           vis.list.updateConnections(T);
-        }, [Tails, newL, mergedList], depth);
+          refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
+        }, [Tails, newL, mergedList, real_stack, finished_stack_frames], depth);
 
-        return mergedList;
+        result = mergedList;
       } else {
-        chunker.add('returnL', (vis, _T, cur_L) => {
+        chunker.add('returnL', (vis, _T, cur_L, cur_real_stack, cur_finished_stack_frames) => {
 
           vis.list.assignTag('Mid', undefined);
           vis.list.assignTag('R', undefined);
@@ -522,10 +668,19 @@ export function run_msort() {
 
           vis.list.resetColors(doneColor);
           vis.list.colorMerged(cur_L, cur_L, Tails, sortColor);
-        }, [Tails, L], depth);
+          refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
 
-        return L;
+          }, [Tails, L, real_stack, finished_stack_frames], depth);
+
+          result = L;
+          }
+
+      // At each completion of each recursive call of merge sort, pop a frame from call stack
+      const frame = real_stack.pop();
+      if (frame){
+        finished_stack_frames.push(frame);
       }
+      return result;
     }
 
     // ---- main ----
@@ -534,8 +689,10 @@ export function run_msort() {
 
     // reset pointer colors once (array UI removed)
     const lastLine = (entire_num_array.length > 1 ? 'returnM' : 'returnL');
+
     chunker.add(lastLine, (vis) => {
-      vis.list.resetColors(doneColor);
+        vis.list.resetColors(doneColor);
+        refresh_stack(vis, [], finished_stack_frames);
     }, [], 1);
 
     return msresult;
