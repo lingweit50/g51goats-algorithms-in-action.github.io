@@ -170,6 +170,13 @@
     color: #888;
     filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.15)); // subtle outline to improve legibility
   }
+
+  .mBadge {
+    position: absolute;
+    left: -32px;
+    top: -27px;
+    margin-top: 0;
+  }
 }
 
 /* ======================================================
