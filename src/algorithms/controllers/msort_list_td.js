@@ -123,6 +123,9 @@ import {
 } from './collapseChunkPlugin';
 
 
+// see stackFrameColour in Array1DRenderer/index.js for corresponding function mapping to CSS
+// CSS variables are now based on global color palette (src/styles/global.scss)
+// so the call stack visualisations follows color options in Setting, same as list color above
 const STACK_FRAME_COLOR = {
   No_color: 0,
   In_progress_stackFrame: 1,

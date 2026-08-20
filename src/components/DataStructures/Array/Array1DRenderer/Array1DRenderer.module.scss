@@ -214,8 +214,8 @@
             transition-duration: 0.1s;
             margin-bottom: m#{i}n(1vh, 1em);
 
-            // Stack frame colours are now defined via global colour palette (src/style/global.css)
-            // so Stack Visualisation for sorts now follow colour options in Setting, like main array colours
+            // Stack frame colors are now defined via global colour palette (src/style/global.css)
+            // so Stack Visualisation for sorts now follow colour options in Setting, like main array colors
             --not-started-section: rgba(0, 0, 0, 0); // transparent
             --in-progress-section: var(--sky); // blue in default theme
             --current-section: var(--apple); // red in default theme
