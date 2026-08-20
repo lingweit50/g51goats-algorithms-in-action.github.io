@@ -171,10 +171,19 @@
     filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.15)); // subtle outline to improve legibility
   }
 
-  .mBadge {
+  /* M / L / R / E labels on the upper row */
+  .varTopBadge {
     position: absolute;
-    left: -32px;
-    top: -27px;
+    top: -55px;
+    left: 0;
+    margin-top: 0;
+  }
+
+  /* M / L / R / E labels on the lower row */
+  .varBottomBadge {
+    position: absolute;
+    top: 5px;
+    left: 0;
     margin-top: 0;
   }
 }
