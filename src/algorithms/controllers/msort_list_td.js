@@ -40,15 +40,15 @@
  * -----------------------------------------------------------
  * Colors
  * -----------------------------------------------------------
- * Currently being used in LinkedListTracer directly, if want to
- * make coloring functions generic there, will need to pass in color
- * here in every coloring function call.
+ * Colors are defined once below (same as array-based merge sorts),
+ * using theme colors and passed to LinkedListTracer call.
+ * Renderer then maps them to CSS variables so they follow color options in Setting
  * 
- * runA   Orange = current L chain
- * runB   Blue = current R chain
- * merged Green = already merged portion (M..E)
- * cmp    Red = elements under comparison (heads of L and R)
- * def    Gray = default/idle color
+ * runA   peach (orange by default) = current L chain
+ * runB   sky (blue by default) = current R chain
+ * merged leaf (green by default) = already merged portion (M..E)
+ * cmp    apple (red by default) = elements under comparison (heads of L and R)
+ * def    stone (grey) = default/idle color
  *
  * Important:
  *   Do visual updates after pointer updates.
@@ -109,11 +109,11 @@ import LinkedListTracer from '../../components/DataStructures/LinkedList/LinkedL
 import {colors} from "../../components/DataStructures/colors";
 
 // ---------- Colors ----------
-const apColor = colors.apple;
-const runAColor = colors.peach;
-const runBColor = colors.sky;
-const sortColor = colors.leaf;
-const doneColor = colors.stone;
+const apColor = colors.apple;   // heads under comparison
+const runAColor = colors.peach; // current L chain
+const runBColor = colors.sky;   // current R chain
+const sortColor = colors.leaf;  // already sorted portion
+const doneColor = colors.stone; // default/idle color
 
 // import 1D tracer to generate array for stack visualisation
 import ArrayTracer from '../../components/DataStructures/Array/Array1DTracer';
@@ -121,15 +121,6 @@ import ArrayTracer from '../../components/DataStructures/Array/Array1DTracer';
 import {
   areExpanded,
 } from './collapseChunkPlugin';
-
-// ---------- Pointer-color mapping (must match LinkedListRenderer.module.scss variants) ----------
-const ptrVariant = {
-  runA: 'orange',   // L chain
-  runB: 'blue',     // R chain
-  merged: 'green',  // merged portion
-  cmp: 'red',       // heads under comparison
-  def: 'gray',      // default
-};
 
 
 const STACK_FRAME_COLOR = {
