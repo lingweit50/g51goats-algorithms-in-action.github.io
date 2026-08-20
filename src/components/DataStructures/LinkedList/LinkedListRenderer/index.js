@@ -59,8 +59,13 @@ class LinkedListRenderer extends Array2DRenderer {
   }
 
   _getAutoOffset(bounds, safeBox, containerWidth) {
-    const sx = Number.isFinite(safeBox?.x) ? safeBox.x : 0;
-    const sy = Number.isFinite(safeBox?.y) ? safeBox.y : 0;
+    const sx = Number.isFinite(safeBox?.x)
+      ? safeBox.x
+      : 0;
+
+    const sy = Number.isFinite(safeBox?.y)
+      ? safeBox.y
+      : 0;
 
     const sw = Number.isFinite(safeBox?.width)
       ? safeBox.width
@@ -70,14 +75,23 @@ class LinkedListRenderer extends Array2DRenderer {
       ? safeBox.height
       : 240;
 
-    const groupCx = bounds.minX + bounds.width / 2;
-    const groupCy = bounds.minY + bounds.height / 2;
+    const groupCx =
+      bounds.minX + bounds.width / 2;
 
-    const safeCx = sx + sw / 2;
-    const safeCy = sy + sh / 2;
+    const groupCy =
+      bounds.minY + bounds.height / 2;
 
-    let offX = safeCx - groupCx;
-    let offY = safeCy - groupCy;
+    const safeCx =
+      sx + sw / 2;
+
+    const safeCy =
+      sy + sh / 2;
+
+    let offX =
+      safeCx - groupCx;
+
+    let offY =
+      safeCy - groupCy;
 
     const after = {
       minX: bounds.minX + offX,
@@ -102,7 +116,10 @@ class LinkedListRenderer extends Array2DRenderer {
       offY -= after.maxY - (sy + sh);
     }
 
-    return { offX, offY };
+    return {
+      offX,
+      offY,
+    };
   }
 
   renderData() {
@@ -110,159 +127,311 @@ class LinkedListRenderer extends Array2DRenderer {
     const list = [...nodes.values()];
 
     /*
-     * Node:
-     *
-     * ┌────────────────────┬────────┐
-     * │       VALUE        │  HEAD  │
-     * │                    │   •    │
-     * └────────────────────┴────────┘
-     *
-     * NODE_W  = 50
-     * CAP_W   = 15
-     * VALUE_W = 35
+     * Node dimensions.
      */
-
     const NODE_W = 50;
     const NODE_H = 20;
-    const CAP_W = 15;
-    const VALUE_W = NODE_W - CAP_W;
 
     /*
-     * Leave a tiny gap after the source head box.
+     * n.pos.x and n.pos.y are not the top-left
+     * coordinates of the rendered node.
+     */
+    const NODE_LEFT_OFFSET = 60;
+    const NODE_TOP_OFFSET = 10;
+
+    /*
+     * Space between each end of the arrow
+     * and its corresponding node.
      *
-     * The destination gap is deliberately 0 so that
-     * the arrowhead tip reaches the actual boundary
-     * of the destination value box.
+     * [source]  ------->  [target]
+     *         ^^       ^^
+     *         2px      2px
      */
-    const START_GAP = 2;
-    const END_GAP = 0;
+    const SOURCE_GAP = 2;
+    const TARGET_GAP = 2;
 
     /*
-     * Get the rectangular area occupied by the
-     * HEAD / pointer portion of a node.
-     */
-    const getHeadRect = n => {
-      const nodeLeft = n.pos.x - 60;
-      const nodeTop = n.pos.y - NODE_H / 2;
-
-      return {
-        left: nodeLeft + VALUE_W,
-        right: nodeLeft + NODE_W,
-        top: nodeTop,
-        bottom: nodeTop + NODE_H,
-      };
-    };
-
-    /*
-     * Get the rectangular area occupied by the
-     * VALUE portion of a node.
-     */
-    const getValueRect = n => {
-      const nodeLeft = n.pos.x - 60;
-      const nodeTop = n.pos.y - NODE_H / 2;
-
-      return {
-        left: nodeLeft,
-        right: nodeLeft + VALUE_W,
-        top: nodeTop,
-        bottom: nodeTop + NODE_H,
-      };
-    };
-
-    /*
-     * Centre of the source HEAD section.
-     */
-    const getHeadCenter = n => {
-      const nodeLeft = n.pos.x - 60;
-
-      return {
-        x: nodeLeft + VALUE_W + CAP_W / 2,
-        y: n.pos.y,
-      };
-    };
-
-    /*
-     * Centre of the destination VALUE section.
-     */
-    const getValueCenter = n => {
-      const nodeLeft = n.pos.x - 60;
-
-      return {
-        x: nodeLeft + VALUE_W / 2,
-        y: n.pos.y,
-      };
-    };
-
-    /*
-     * Find the point where a line travelling from
-     * "from" toward "toward" exits the given rectangle.
+     * Arrowhead dimensions.
      *
-     * This means arrows correctly leave or enter through
-     * the appropriate side of a node even when diagonal.
+     * These coordinates scale together with
+     * the nodes because the arrowhead is drawn
+     * as an SVG polygon rather than an SVG marker.
      */
-    const getRectBoundaryPoint = (rect, from, toward) => {
-      const dx = toward.x - from.x;
-      const dy = toward.y - from.y;
+    const ARROW_HEAD_LENGTH = 4;
+    const ARROW_HEAD_HALF_WIDTH = 3;
 
-      if (dx === 0 && dy === 0) {
+    /*
+     * Node geometry helpers.
+     */
+    const nodeLeftX = n =>
+      n.pos.x - NODE_LEFT_OFFSET;
+
+    const nodeRightX = n =>
+      nodeLeftX(n) + NODE_W;
+
+    const nodeTopY = n =>
+      n.pos.y - NODE_TOP_OFFSET;
+
+    const nodeCenterX = n =>
+      nodeLeftX(n) + NODE_W / 2;
+
+    const nodeCenterY = n =>
+      nodeTopY(n) + NODE_H / 2;
+
+    /*
+     * Find the point where a line leaving the
+     * centre of a node intersects its rectangular
+     * boundary.
+     *
+     * The point is then moved "gap" pixels outside
+     * the rectangle.
+     *
+     * This lets the same function handle:
+     *
+     * source -> target
+     *
+     * and:
+     *
+     * target -> source
+     *
+     * It also works when nodes are positioned
+     * diagonally during the merge sort animation.
+     */
+    const getOutsidePoint = (
+      node,
+      towardX,
+      towardY,
+      gap
+    ) => {
+      const cx = nodeCenterX(node);
+      const cy = nodeCenterY(node);
+
+      const dx = towardX - cx;
+      const dy = towardY - cy;
+
+      const distance = Math.hypot(dx, dy);
+
+      if (distance === 0) {
         return {
-          x: from.x,
-          y: from.y,
+          x: nodeRightX(node) + gap,
+          y: cy,
         };
       }
 
-      let tx = Infinity;
-      let ty = Infinity;
+      const halfW =
+        NODE_W / 2;
 
-      if (dx > 0) {
-        tx = (rect.right - from.x) / dx;
-      } else if (dx < 0) {
-        tx = (rect.left - from.x) / dx;
-      }
+      const halfH =
+        NODE_H / 2;
 
-      if (dy > 0) {
-        ty = (rect.bottom - from.y) / dy;
-      } else if (dy < 0) {
-        ty = (rect.top - from.y) / dy;
-      }
+      /*
+       * Determine which side of the rectangle
+       * the ray hits first.
+       */
+      const tx =
+        Math.abs(dx) > 0
+          ? halfW / Math.abs(dx)
+          : Infinity;
 
-      const t = Math.min(tx, ty);
+      const ty =
+        Math.abs(dy) > 0
+          ? halfH / Math.abs(dy)
+          : Infinity;
 
+      const t =
+        Math.min(tx, ty);
+
+      /*
+       * Point exactly on the rectangle boundary.
+       */
+      const boundaryX =
+        cx + dx * t;
+
+      const boundaryY =
+        cy + dy * t;
+
+      /*
+       * Unit vector pointing from this node
+       * towards the other node.
+       */
+      const ux =
+        dx / distance;
+
+      const uy =
+        dy / distance;
+
+      /*
+       * Move outside the box by the requested gap.
+       */
       return {
-        x: from.x + dx * t,
-        y: from.y + dy * t,
+        x:
+          boundaryX +
+          ux * gap,
+
+        y:
+          boundaryY +
+          uy * gap,
       };
     };
 
+    /*
+     * Construct the arrow shaft and arrowhead.
+     *
+     * The arrowhead is a normal SVG polygon.
+     * This means it scales and moves with the
+     * exact same transform as the arrow shaft
+     * and nodes.
+     */
+    const getArrowGeometry = (
+      x1,
+      y1,
+      x2,
+      y2
+    ) => {
+      const dx =
+        x2 - x1;
+
+      const dy =
+        y2 - y1;
+
+      const length =
+        Math.hypot(dx, dy);
+
+      if (length === 0) {
+        return null;
+      }
+
+      /*
+       * Unit vector along the arrow.
+       */
+      const ux =
+        dx / length;
+
+      const uy =
+        dy / length;
+
+      /*
+       * Perpendicular unit vector.
+       *
+       * This is used to give the triangular
+       * arrowhead its width.
+       */
+      const px =
+        -uy;
+
+      const py =
+        ux;
+
+      /*
+       * Do not allow the arrowhead to consume
+       * most or all of a short arrow.
+       *
+       * Normally the head is 4 units long.
+       *
+       * For very short arrows it can occupy at
+       * most 40% of the complete arrow length.
+       */
+      const effectiveHeadLength =
+        Math.min(
+          ARROW_HEAD_LENGTH,
+          length * 0.4
+        );
+
+      /*
+       * Centre of the base of the triangle.
+       */
+      const baseX =
+        x2 -
+        ux * effectiveHeadLength;
+
+      const baseY =
+        y2 -
+        uy * effectiveHeadLength;
+
+      /*
+       * Two corners of the triangle base.
+       */
+      const leftX =
+        baseX +
+        px * ARROW_HEAD_HALF_WIDTH;
+
+      const leftY =
+        baseY +
+        py * ARROW_HEAD_HALF_WIDTH;
+
+      const rightX =
+        baseX -
+        px * ARROW_HEAD_HALF_WIDTH;
+
+      const rightY =
+        baseY -
+        py * ARROW_HEAD_HALF_WIDTH;
+
+      return {
+        /*
+         * Stop the shaft at the BASE of the
+         * arrowhead rather than underneath it.
+         */
+        shaftPath:
+          `M ${x1},${y1} ` +
+          `L ${baseX},${baseY}`,
+
+        /*
+         * Triangle:
+         *
+         *       tip
+         *        >
+         *       /|
+         *      / |
+         * left   right
+         */
+        headPoints:
+          `${x2},${y2} ` +
+          `${leftX},${leftY} ` +
+          `${rightX},${rightY}`,
+      };
+    };
+
+    /*
+     * Size of SVG drawing area.
+     */
     const maxX =
-      (list.length
-        ? Math.max(...list.map(n => n.pos.x))
-        : 0) + NODE_W;
+      (
+        list.length
+          ? Math.max(
+              ...list.map(n => n.pos.x)
+            )
+          : 0
+      ) + NODE_W;
 
     const maxY =
-      (list.length
-        ? Math.max(...list.map(n => n.pos.y))
-        : 0) + NODE_H;
+      (
+        list.length
+          ? Math.max(
+              ...list.map(n => n.pos.y)
+            )
+          : 0
+      ) + NODE_H;
 
-    const getPath = (x1, y1, x2, y2) =>
-      `M ${x1},${y1} L ${x2},${y2}`;
-
+    /*
+     * Node colour.
+     */
     const variantClass = n => {
       switch (n.fillVariant) {
-        case 0:
-          return styles.variantSky;
+        case 'orange':
+          return styles.variantOrange;
 
-        case 1:
-          return styles.variantLeaf;
+        case 'blue':
+          return styles.variantBlue;
 
-        case 2:
-          return styles.variantApple;
+        case 'green':
+          return styles.variantGreen;
 
-        case 3:
-          return styles.variantPeach;
+        case 'red':
+          return styles.variantRed;
 
         default:
-          return styles.variantStone;
+          return styles.variantGray;
       }
     };
 
@@ -274,29 +443,31 @@ class LinkedListRenderer extends Array2DRenderer {
         height: 240,
       };
 
-    const tagBlockH = layout?.tagBlockH ?? 24;
+    const tagBlockH =
+      layout?.tagBlockH ?? 24;
 
-    const bounds = this._getNodesBounds(
-      list,
-      tagBlockH
-    );
+    const bounds =
+      this._getNodesBounds(
+        list,
+        tagBlockH
+      );
 
     const containerWidth =
       this.props.width || 800;
 
-    const { offX, offY } =
-      this._getAutoOffset(
-        bounds,
-        safeBox,
-        containerWidth
-      );
+    /*
+     * Currently retained from the original
+     * auto-positioning implementation.
+     */
+    this._getAutoOffset(
+      bounds,
+      safeBox,
+      containerWidth
+    );
 
-    // const cameraTranslateX =
-    //   (-this.centerX * 2) + offX - 100;
-
-    // const cameraTranslateY =
-    //   (-this.centerY * 2) + offY - 30;
-
+    /*
+     * Current fixed camera positioning.
+     */
     const cameraTranslateX = -400;
     const cameraTranslateY = 0;
 
@@ -306,16 +477,14 @@ class LinkedListRenderer extends Array2DRenderer {
           className={styles.stage}
           style={{
             transform:
-              `translate(${cameraTranslateX}px, ` +
-              `${cameraTranslateY}px) ` +
+              `translate(` +
+              `${cameraTranslateX}px,` +
+              `${cameraTranslateY}px` +
+              `) ` +
               `scale(${this.zoom})`,
           }}
         >
-
-          {/* ========================= */}
-          {/* ARROW LAYER               */}
-          {/* ========================= */}
-
+          {/* Arrow layer */}
           <svg
             className={styles.edges}
             width={maxX}
@@ -328,167 +497,108 @@ class LinkedListRenderer extends Array2DRenderer {
               background: 'transparent',
             }}
           >
-            <defs>
-              <marker
-                id="arrow-dark"
-                viewBox="0 0 5 8"
-                markerUnits="userSpaceOnUse"
-                markerWidth={6}
-                markerHeight={9}
-                refX={5}
-                refY={4}
-                orient="auto"
-              >
-                <path
-                  d="M0,0 L5,4 L0,8 Z"
-                  fill="#ff3b3b"
-                />
-              </marker>
-            </defs>
-
             {list.map(n => {
               /*
-               * No pointer if there is no next node.
+               * No outgoing link or hidden node.
                */
-              if (!n.nextKey || n.hidden) {
+              if (
+                n.nextKey == null ||
+                n.hidden
+              ) {
                 return null;
               }
 
-              const to = nodes.get(n.nextKey);
+              const to =
+                nodes.get(n.nextKey);
 
-              if (!to || to.hidden) {
+              /*
+               * Destination does not exist or is hidden.
+               */
+              if (
+                !to ||
+                to.hidden
+              ) {
                 return null;
               }
 
               /*
-               * Arrow must travel:
-               *
-               * source HEAD
-               *     ↓
-               * destination VALUE
+               * Centres of both nodes are used only
+               * to determine the direction of the link.
                */
-              const sourceHead =
-                getHeadRect(n);
+              const sourceCx =
+                nodeCenterX(n);
 
-              const targetValue =
-                getValueRect(to);
+              const sourceCy =
+                nodeCenterY(n);
 
-              const sourceCenter =
-                getHeadCenter(n);
+              const targetCx =
+                nodeCenterX(to);
 
-              const targetCenter =
-                getValueCenter(to);
+              const targetCy =
+                nodeCenterY(to);
 
               /*
-               * Exact point at which the line leaves
-               * the source HEAD rectangle.
+               * Start the arrow 2px OUTSIDE
+               * the source node.
                */
-              const startBoundary =
-                getRectBoundaryPoint(
-                  sourceHead,
-                  sourceCenter,
-                  targetCenter
+              const source =
+                getOutsidePoint(
+                  n,
+                  targetCx,
+                  targetCy,
+                  SOURCE_GAP
                 );
 
               /*
-               * Exact point at which the arrow reaches
-               * the destination VALUE rectangle.
+               * Stop the arrow 2px BEFORE
+               * the target node.
+               *
+               * The target's outside point is
+               * calculated in the direction of
+               * the source.
                */
-              const endBoundary =
-                getRectBoundaryPoint(
-                  targetValue,
-                  targetCenter,
-                  sourceCenter
+              const target =
+                getOutsidePoint(
+                  to,
+                  sourceCx,
+                  sourceCy,
+                  TARGET_GAP
                 );
 
-              /*
-               * Direction from source boundary
-               * to destination boundary.
-               */
-              const dx =
-                endBoundary.x -
-                startBoundary.x;
-
-              const dy =
-                endBoundary.y -
-                startBoundary.y;
-
-              const length =
-                Math.sqrt(
-                  dx * dx +
-                  dy * dy
+              const arrow =
+                getArrowGeometry(
+                  source.x,
+                  source.y,
+                  target.x,
+                  target.y
                 );
 
-              const ux =
-                length
-                  ? dx / length
-                  : 0;
-
-              const uy =
-                length
-                  ? dy / length
-                  : 0;
-
-              /*
-               * START_GAP moves the tail slightly away
-               * from the source node.
-               */
-              const x1 =
-                startBoundary.x +
-                ux * START_GAP;
-
-              const y1 =
-                startBoundary.y +
-                uy * START_GAP;
-
-              /*
-               * END_GAP is zero.
-               *
-               * Therefore the SVG path terminates at
-               * the exact boundary of the destination
-               * VALUE box.
-               *
-               * Since refX is the tip of the marker,
-               * the arrowhead tip sits at this exact
-               * endpoint rather than appearing pushed
-               * backwards along short arrows.
-               */
-              const x2 =
-                endBoundary.x -
-                ux * END_GAP;
-
-              const y2 =
-                endBoundary.y -
-                uy * END_GAP;
+              if (!arrow) {
+                return null;
+              }
 
               return (
-                <motion.path
+                <React.Fragment
                   key={`e-${n.key}-${to.key}`}
-                  initial={false}
-                  animate={{
-                    d: getPath(
-                      x1,
-                      y1,
-                      x2,
-                      y2
-                    ),
-                  }}
-                  transition={{
-                    duration: 0.25,
-                  }}
-                  fill="none"
-                  markerEnd="url(#arrow-dark)"
-                  className={styles.edge}
-                  vectorEffect="non-scaling-stroke"
-                />
+                >
+                  {/* Arrow shaft */}
+                  <path
+                    d={arrow.shaftPath}
+                    fill="none"
+                    className={styles.edge}
+                  />
+
+                  {/* Arrowhead */}
+                  <polygon
+                    points={arrow.headPoints}
+                    fill="#ff3b3b"
+                  />
+                </React.Fragment>
               );
             })}
           </svg>
 
-          {/* ========================= */}
-          {/* NODE LAYER                */}
-          {/* ========================= */}
-
+          {/* Node layer */}
           <AnimateSharedLayout>
             {list.map(n => (
               !n.hidden && (
@@ -498,57 +608,72 @@ class LinkedListRenderer extends Array2DRenderer {
                   className={[
                     styles.node,
                     variantClass(n),
-                    n.hidden && styles.hidden,
+                    n.hidden &&
+                      styles.hidden,
                   ]
                     .filter(Boolean)
                     .join(' ')}
                   style={{
                     position: 'absolute',
-                    left: n.pos.x - 60,
-                    top: n.pos.y - 10,
-                    width: NODE_W,
-                    height: NODE_H,
+                    left:
+                      nodeLeftX(n),
+                    top:
+                      nodeTopY(n),
+                    width:
+                      NODE_W,
+                    height:
+                      NODE_H,
                   }}
                   transition={{
                     duration: 0.25,
                   }}
                 >
                   <div
-                    className={styles.pill}
+                    className={
+                      styles.pill
+                    }
                   >
                     <span
-                      className={styles.value}
+                      className={
+                        styles.value
+                      }
                     >
                       {n.value}
                     </span>
 
                     <span
-                      className={styles.cap}
+                      className={
+                        styles.cap
+                      }
                     >
                       <i
-                        className={styles.dot}
+                        className={
+                          styles.dot
+                        }
                       />
                     </span>
                   </div>
 
                   <div
-                    className={styles.vars}
+                    className={
+                      styles.vars
+                    }
                   >
-                    {n.variables.map(v => (
-                      <motion.div
-                        layoutId={`${n.key}-${v}`}
-                        key={v}
-                        className={[
-                          styles.varBadge,
-                          v === 'M' &&
-                            styles.mBadge,
-                        ]
-                          .filter(Boolean)
-                          .join(' ')}
-                      >
-                        {v}
-                      </motion.div>
-                    ))}
+                    {n.variables.map(
+                      v => (
+                        <motion.div
+                          layoutId={
+                            `${n.key}-${v}`
+                          }
+                          key={v}
+                          className={
+                            styles.varBadge
+                          }
+                        >
+                          {v}
+                        </motion.div>
+                      )
+                    )}
                   </div>
                 </motion.div>
               )
@@ -556,7 +681,11 @@ class LinkedListRenderer extends Array2DRenderer {
           </AnimateSharedLayout>
         </div>
 
-        <div className={styles.value}>
+        <div
+          className={
+            styles.value
+          }
+        >
           {this.props.data.caption}
         </div>
       </div>
