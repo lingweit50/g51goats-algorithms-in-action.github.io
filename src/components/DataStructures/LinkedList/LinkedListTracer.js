@@ -5,8 +5,13 @@
  *
  * Original interface not great and very tied to top-down merge sort
  * with not so good positioning of lists etc. Moving it in the right
- * direction but still a way to go and there may be lefover junk XXX
- * XXX colour stuff should be made similar to other code
+ * direction but still a way to go and there may be leftover junk
+ *
+ * Colors now used shared theme colors index (peach, sky, apple, ...)
+ * (see src/components/DataStructures/colors.js)
+ * Renderer maps to these to CSS variables so node colors follow options in Setting
+ * Colors are passed in by algorithm (with default presets)
+ *
  *
  * Node Class:
  *   Each list node is represented by a ListNode instance with:
@@ -33,20 +38,19 @@
  *   applyTags() centralizes rendering of all active tags
  *   desiredTags stores the live association: tag -> list index
  *
- * Color Functions:
+ * Color Functions (arguments are theme color index, following colors.js):
  *   resetColors()
- *       reset all nodes to default gray
- *   colorChain(start, variant, Tails)
+ *       reset all nodes to default stone/gray
+ *   colorChain(start, color, Tails)
  *       marks all nodes reachable from start index with variant color
- *       or split to colorLeft/colorRight if to hardcode colors inside
  * XXX the rest of these are ver mergesort-specific
  *   colorChains(L, R, Tails, leftColor, rightColor, defaultColor)
  *       resets all to defaultColor first, then colors L-chain and R-chain
- *   colorMerged(M, E, Tails)
+ *   colorMerged(M, E, Tails, mergedColor)
  *       marks only the merged portion of list during merge sort
- *   highlightHeads(L, R)
+ *   highlightHeads(L, R, cmpColor)
  *       temporarily highlights one or two nodes under comparison to red
- *   unhighlightHeads(L, R)
+ *   unhighlightHeads(L, R, leftColor, rightColor)
  *       restores head colors after highlight to their chain colors
  *
  * Visibility Control:
@@ -173,6 +177,7 @@ class LinkedListTracer extends Tracer {
 
   // Generic two-chain coloring helper.
   // Tracer visual only; colors are provided by caller (algorithm-level).
+  // Renderer maps color index to CSS variables so display follows color options in Setting
   colorChains(L, R, tailsArray, leftColor = 3, rightColor = 0, defaultColor = 6) {
     // Reset all nodes to default first
       this.resetColors(defaultColor);
@@ -239,12 +244,12 @@ class LinkedListTracer extends Tracer {
     if (L && L !== 'Null') {
       const kL = this.indexToKey.get(L);
       const nL = this.nodes.get(kL);
-      if (nL) nL.fillVariant = leftColor; // left head back to orange
+      if (nL) nL.fillVariant = leftColor; // left head back to L-chain color
     }
     if (R && R !== 'Null') {
       const kR = this.indexToKey.get(R);
       const nR = this.nodes.get(kR);
-      if (nR) nR.fillVariant = rightColor;   // right head back to blue
+      if (nR) nR.fillVariant = rightColor;   // right head back to R-chain color
     }
     super.set();
   }
