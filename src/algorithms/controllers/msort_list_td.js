@@ -442,7 +442,7 @@ export function run_msort() {
         vis.list.colorChains(cur_L, cur_R, T, runAColor, runBColor, doneColor);
         refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
 
-        }, [Tails, L, R, len, real_stack, finished_stack_frames], depth);
+        }, [Tails, L, R, len, depth, real_stack, finished_stack_frames], depth);
 
       return { L, R };
     }
