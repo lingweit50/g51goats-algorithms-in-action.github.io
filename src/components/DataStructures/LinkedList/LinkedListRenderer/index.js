@@ -16,10 +16,25 @@ class LinkedListRenderer extends Array2DRenderer {
 
   _getNodesBounds(list, tagBlockH = 24) {
     const visible = list.filter(n => !n.hidden);
-    if (!visible.length) return { minX: 0, minY: 0, maxX: 0, maxY: 0, width: 0, height: 0 };
 
-    const NODE_W = 50, NODE_H = 20;
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    if (!visible.length) {
+      return {
+        minX: 0,
+        minY: 0,
+        maxX: 0,
+        maxY: 0,
+        width: 0,
+        height: 0,
+      };
+    }
+
+    const NODE_W = 50;
+    const NODE_H = 20;
+
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
 
     visible.forEach(n => {
       const left = n.pos.x - 60;
@@ -33,17 +48,31 @@ class LinkedListRenderer extends Array2DRenderer {
       maxY = Math.max(maxY, bottom);
     });
 
-    return { minX, minY, maxX, maxY, width: maxX - minX, height: maxY - minY };
+    return {
+      minX,
+      minY,
+      maxX,
+      maxY,
+      width: maxX - minX,
+      height: maxY - minY,
+    };
   }
 
   _getAutoOffset(bounds, safeBox, containerWidth) {
     const sx = Number.isFinite(safeBox?.x) ? safeBox.x : 0;
     const sy = Number.isFinite(safeBox?.y) ? safeBox.y : 0;
-    const sw = Number.isFinite(safeBox?.width) ? safeBox.width : containerWidth;
-    const sh = Number.isFinite(safeBox?.height) ? safeBox.height : 240;
+
+    const sw = Number.isFinite(safeBox?.width)
+      ? safeBox.width
+      : containerWidth;
+
+    const sh = Number.isFinite(safeBox?.height)
+      ? safeBox.height
+      : 240;
 
     const groupCx = bounds.minX + bounds.width / 2;
     const groupCy = bounds.minY + bounds.height / 2;
+
     const safeCx = sx + sw / 2;
     const safeCy = sy + sh / 2;
 
@@ -56,10 +85,22 @@ class LinkedListRenderer extends Array2DRenderer {
       minY: bounds.minY + offY,
       maxY: bounds.maxY + offY,
     };
-    if (after.minX < sx) offX += (sx - after.minX);
-    if (after.maxX > sx + sw) offX -= (after.maxX - (sx + sw));
-    if (after.minY < sy) offY += (sy - after.minY);
-    if (after.maxY > sy + sh) offY -= (after.maxY - (sy + sh));
+
+    if (after.minX < sx) {
+      offX += sx - after.minX;
+    }
+
+    if (after.maxX > sx + sw) {
+      offX -= after.maxX - (sx + sw);
+    }
+
+    if (after.minY < sy) {
+      offY += sy - after.minY;
+    }
+
+    if (after.maxY > sy + sh) {
+      offY -= after.maxY - (sy + sh);
+    }
 
     return { offX, offY };
   }
@@ -68,79 +109,373 @@ class LinkedListRenderer extends Array2DRenderer {
     const { nodes, layout } = this.props.data;
     const list = [...nodes.values()];
 
+    /*
+     * Node:
+     *
+     * ┌────────────────────┬────────┐
+     * │       VALUE        │  HEAD  │
+     * │                    │   •    │
+     * └────────────────────┴────────┘
+     *
+     * NODE_W  = 50
+     * CAP_W   = 15
+     * VALUE_W = 35
+     */
+
     const NODE_W = 50;
     const NODE_H = 20;
     const CAP_W = 15;
-    const DOT_SIZE = 5;
-    const H_GAP = 40;
+    const VALUE_W = NODE_W - CAP_W;
 
-    const dotCenterX = n => n.pos.x - 19;
-    const dotCenterY = n => n.pos.y;
-    const targetX = to => to.pos.x - 29;
-    const targetY = to => to.pos.y;
+    /*
+     * Leave a tiny gap after the source head box.
+     *
+     * The destination gap is deliberately 0 so that
+     * the arrowhead tip reaches the actual boundary
+     * of the destination value box.
+     */
+    const START_GAP = 2;
+    const END_GAP = 0;
 
-    const maxX = (list.length ? Math.max(...list.map(n => n.pos.x)) : 0) + NODE_W;
-    const maxY = (list.length ? Math.max(...list.map(n => n.pos.y)) : 0) + NODE_H;
+    /*
+     * Get the rectangular area occupied by the
+     * HEAD / pointer portion of a node.
+     */
+    const getHeadRect = n => {
+      const nodeLeft = n.pos.x - 60;
+      const nodeTop = n.pos.y - NODE_H / 2;
 
-    const getPath = (x1, y1, x2, y2) => `M ${x1},${y1} L ${x2},${y2}`;
+      return {
+        left: nodeLeft + VALUE_W,
+        right: nodeLeft + NODE_W,
+        top: nodeTop,
+        bottom: nodeTop + NODE_H,
+      };
+    };
+
+    /*
+     * Get the rectangular area occupied by the
+     * VALUE portion of a node.
+     */
+    const getValueRect = n => {
+      const nodeLeft = n.pos.x - 60;
+      const nodeTop = n.pos.y - NODE_H / 2;
+
+      return {
+        left: nodeLeft,
+        right: nodeLeft + VALUE_W,
+        top: nodeTop,
+        bottom: nodeTop + NODE_H,
+      };
+    };
+
+    /*
+     * Centre of the source HEAD section.
+     */
+    const getHeadCenter = n => {
+      const nodeLeft = n.pos.x - 60;
+
+      return {
+        x: nodeLeft + VALUE_W + CAP_W / 2,
+        y: n.pos.y,
+      };
+    };
+
+    /*
+     * Centre of the destination VALUE section.
+     */
+    const getValueCenter = n => {
+      const nodeLeft = n.pos.x - 60;
+
+      return {
+        x: nodeLeft + VALUE_W / 2,
+        y: n.pos.y,
+      };
+    };
+
+    /*
+     * Find the point where a line travelling from
+     * "from" toward "toward" exits the given rectangle.
+     *
+     * This means arrows correctly leave or enter through
+     * the appropriate side of a node even when diagonal.
+     */
+    const getRectBoundaryPoint = (rect, from, toward) => {
+      const dx = toward.x - from.x;
+      const dy = toward.y - from.y;
+
+      if (dx === 0 && dy === 0) {
+        return {
+          x: from.x,
+          y: from.y,
+        };
+      }
+
+      let tx = Infinity;
+      let ty = Infinity;
+
+      if (dx > 0) {
+        tx = (rect.right - from.x) / dx;
+      } else if (dx < 0) {
+        tx = (rect.left - from.x) / dx;
+      }
+
+      if (dy > 0) {
+        ty = (rect.bottom - from.y) / dy;
+      } else if (dy < 0) {
+        ty = (rect.top - from.y) / dy;
+      }
+
+      const t = Math.min(tx, ty);
+
+      return {
+        x: from.x + dx * t,
+        y: from.y + dy * t,
+      };
+    };
+
+    const maxX =
+      (list.length
+        ? Math.max(...list.map(n => n.pos.x))
+        : 0) + NODE_W;
+
+    const maxY =
+      (list.length
+        ? Math.max(...list.map(n => n.pos.y))
+        : 0) + NODE_H;
+
+    const getPath = (x1, y1, x2, y2) =>
+      `M ${x1},${y1} L ${x2},${y2}`;
 
     const variantClass = n => {
       switch (n.fillVariant) {
-        case 0: return styles.variantSky;
-        case 1: return styles.variantLeaf;
-        case 2: return styles.variantApple;
-        case 3: return  styles.variantPeach;
+        case 0:
+          return styles.variantSky;
 
-        default: return styles.variantStone;
+        case 1:
+          return styles.variantLeaf;
+
+        case 2:
+          return styles.variantApple;
+
+        case 3:
+          return styles.variantPeach;
+
+        default:
+          return styles.variantStone;
       }
     };
 
-    const safeBox = layout?.safeBox ?? { x: 0, y: 24, width: Infinity, height: 240 };
-    const tagBlockH = layout?.tagBlockH ?? 24;
-    const bounds = this._getNodesBounds(list, tagBlockH);
-    const containerWidth = this.props.width || 800;
-    const { offX, offY } = this._getAutoOffset(bounds, safeBox, containerWidth);
+    const safeBox =
+      layout?.safeBox ?? {
+        x: 0,
+        y: 24,
+        width: Infinity,
+        height: 240,
+      };
 
-    // const cameraTranslateX = (-this.centerX * 2) + offX - 100;
-    // const cameraTranslateY = (-this.centerY * 2) + offY - 30;
-    const cameraTranslateX = -400; // XXX shift close to left of panel
+    const tagBlockH = layout?.tagBlockH ?? 24;
+
+    const bounds = this._getNodesBounds(
+      list,
+      tagBlockH
+    );
+
+    const containerWidth =
+      this.props.width || 800;
+
+    const { offX, offY } =
+      this._getAutoOffset(
+        bounds,
+        safeBox,
+        containerWidth
+      );
+
+    // const cameraTranslateX =
+    //   (-this.centerX * 2) + offX - 100;
+
+    // const cameraTranslateY =
+    //   (-this.centerY * 2) + offY - 30;
+
+    const cameraTranslateX = -400;
     const cameraTranslateY = 0;
 
     return (
       <div className={styles.container}>
-        <div className={styles.stage}
+        <div
+          className={styles.stage}
           style={{
-            transform: `translate(${cameraTranslateX}px,${cameraTranslateY}px) scale(${this.zoom})`,
-            // transformOrigin: '0 0', width: maxX, height: maxY, position: 'relative'
+            transform:
+              `translate(${cameraTranslateX}px, ` +
+              `${cameraTranslateY}px) ` +
+              `scale(${this.zoom})`,
           }}
         >
-          {/* Arrows */}
-          <svg className={styles.edges}
-            width={maxX} height={maxY}
-            style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'visible', background: 'transparent' }}
+
+          {/* ========================= */}
+          {/* ARROW LAYER               */}
+          {/* ========================= */}
+
+          <svg
+            className={styles.edges}
+            width={maxX}
+            height={maxY}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              pointerEvents: 'none',
+              overflow: 'visible',
+              background: 'transparent',
+            }}
           >
             <defs>
-              <marker id="arrow-dark" viewBox="0 0 5 8"
-                markerUnits="userSpaceOnUse" markerWidth={6} markerHeight={9}
-                refX={5} refY={4} orient="auto">
-                <path d="M0,0 L5,4 L0,8 Z" fill="#ff3b3b" />
+              <marker
+                id="arrow-dark"
+                viewBox="0 0 5 8"
+                markerUnits="userSpaceOnUse"
+                markerWidth={6}
+                markerHeight={9}
+                refX={5}
+                refY={4}
+                orient="auto"
+              >
+                <path
+                  d="M0,0 L5,4 L0,8 Z"
+                  fill="#ff3b3b"
+                />
               </marker>
             </defs>
 
             {list.map(n => {
-              if (!n.nextKey || n.hidden) return null;
-              const to = nodes.get(n.nextKey);
-              if (!to || to.hidden) return null;
+              /*
+               * No pointer if there is no next node.
+               */
+              if (!n.nextKey || n.hidden) {
+                return null;
+              }
 
-              const x1 = dotCenterX(n);
-              const y1 = dotCenterY(n);
-              const x2 = targetX(to) - 25;
-              const y2 = targetY(to);
+              const to = nodes.get(n.nextKey);
+
+              if (!to || to.hidden) {
+                return null;
+              }
+
+              /*
+               * Arrow must travel:
+               *
+               * source HEAD
+               *     ↓
+               * destination VALUE
+               */
+              const sourceHead =
+                getHeadRect(n);
+
+              const targetValue =
+                getValueRect(to);
+
+              const sourceCenter =
+                getHeadCenter(n);
+
+              const targetCenter =
+                getValueCenter(to);
+
+              /*
+               * Exact point at which the line leaves
+               * the source HEAD rectangle.
+               */
+              const startBoundary =
+                getRectBoundaryPoint(
+                  sourceHead,
+                  sourceCenter,
+                  targetCenter
+                );
+
+              /*
+               * Exact point at which the arrow reaches
+               * the destination VALUE rectangle.
+               */
+              const endBoundary =
+                getRectBoundaryPoint(
+                  targetValue,
+                  targetCenter,
+                  sourceCenter
+                );
+
+              /*
+               * Direction from source boundary
+               * to destination boundary.
+               */
+              const dx =
+                endBoundary.x -
+                startBoundary.x;
+
+              const dy =
+                endBoundary.y -
+                startBoundary.y;
+
+              const length =
+                Math.sqrt(
+                  dx * dx +
+                  dy * dy
+                );
+
+              const ux =
+                length
+                  ? dx / length
+                  : 0;
+
+              const uy =
+                length
+                  ? dy / length
+                  : 0;
+
+              /*
+               * START_GAP moves the tail slightly away
+               * from the source node.
+               */
+              const x1 =
+                startBoundary.x +
+                ux * START_GAP;
+
+              const y1 =
+                startBoundary.y +
+                uy * START_GAP;
+
+              /*
+               * END_GAP is zero.
+               *
+               * Therefore the SVG path terminates at
+               * the exact boundary of the destination
+               * VALUE box.
+               *
+               * Since refX is the tip of the marker,
+               * the arrowhead tip sits at this exact
+               * endpoint rather than appearing pushed
+               * backwards along short arrows.
+               */
+              const x2 =
+                endBoundary.x -
+                ux * END_GAP;
+
+              const y2 =
+                endBoundary.y -
+                uy * END_GAP;
 
               return (
-                <path
+                <motion.path
                   key={`e-${n.key}-${to.key}`}
-                  d={getPath(x1, y1, x2, y2)}
+                  initial={false}
+                  animate={{
+                    d: getPath(
+                      x1,
+                      y1,
+                      x2,
+                      y2
+                    ),
+                  }}
+                  transition={{
+                    duration: 0.25,
+                  }}
                   fill="none"
                   markerEnd="url(#arrow-dark)"
                   className={styles.edge}
@@ -150,27 +485,67 @@ class LinkedListRenderer extends Array2DRenderer {
             })}
           </svg>
 
-          {/* Node layer */}
+          {/* ========================= */}
+          {/* NODE LAYER                */}
+          {/* ========================= */}
+
           <AnimateSharedLayout>
             {list.map(n => (
               !n.hidden && (
-                <motion.div key={n.key} layout
+                <motion.div
+                  key={n.key}
+                  layout
                   className={[
                     styles.node,
                     variantClass(n),
                     n.hidden && styles.hidden,
-                  ].filter(Boolean).join(' ')}
-                  style={{ position: 'absolute', left: n.pos.x - 60, top: n.pos.y - 10, width: NODE_W, height: NODE_H }}
-                  transition={{ duration: 0.25 }}
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  style={{
+                    position: 'absolute',
+                    left: n.pos.x - 60,
+                    top: n.pos.y - 10,
+                    width: NODE_W,
+                    height: NODE_H,
+                  }}
+                  transition={{
+                    duration: 0.25,
+                  }}
                 >
-                  <div className={styles.pill}>
-                    <span className={styles.value}>{n.value}</span>
-                    <span className={styles.cap}><i className={styles.dot} /></span>
+                  <div
+                    className={styles.pill}
+                  >
+                    <span
+                      className={styles.value}
+                    >
+                      {n.value}
+                    </span>
+
+                    <span
+                      className={styles.cap}
+                    >
+                      <i
+                        className={styles.dot}
+                      />
+                    </span>
                   </div>
 
-                  <div className={styles.vars}>
+                  <div
+                    className={styles.vars}
+                  >
                     {n.variables.map(v => (
-                      <motion.div layoutId={`${n.key}-${v}`} key={v} className={styles.varBadge}>
+                      <motion.div
+                        layoutId={`${n.key}-${v}`}
+                        key={v}
+                        className={[
+                          styles.varBadge,
+                          v === 'M' &&
+                            styles.mBadge,
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                      >
                         {v}
                       </motion.div>
                     ))}
@@ -180,8 +555,9 @@ class LinkedListRenderer extends Array2DRenderer {
             ))}
           </AnimateSharedLayout>
         </div>
-        <div className={styles.value /* XXX */} >
-            {this.props.data.caption}
+
+        <div className={styles.value}>
+          {this.props.data.caption}
         </div>
       </div>
     );
