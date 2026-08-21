@@ -162,20 +162,28 @@ import { update_vis_with_stack_frame } from './msort_arr_td';
     
 // ---------- Init visualiser (pointer only) ----------
 export function initVisualisers() {
-  return {
-    list: {
-      instance: new LinkedListTracer('list', null, 'List(s)'),
-      order: 0,
-    },
-    stack: { // To store linked list values for stack vis
-      instance: new ArrayTracer('stack', null, 'Call Stack', {
-        arrayItemMagnitudes: false,
-      }),
-      order: 1,
-    },
+  if (isRecursionExpanded()){
+    return {
+      list: {
+        instance: new LinkedListTracer('list', null, 'List(s)'),
+        order: 0,
+      },
+      stack: { // To store linked list values for stack vis
+        instance: new ArrayTracer('stack', null, 'Call Stack', {
+          arrayItemMagnitudes: false,
+        }),
+        order: 1,
+      },
+    }
+  } else{
+     return {
+      list: {
+        instance: new LinkedListTracer('list', null, 'List(s)'),
+        order: 0,
+      },
+    }
   }
 }
-
 export function run_msort() {
   return function run(chunker, { nodes }) {
     const entire_num_array = nodes;
@@ -249,6 +257,8 @@ export function run_msort() {
 
     // Refreshes stack vis at every Main call
     const refresh_stack = (vis, cur_real_stack, cur_finished_stack_frames) => {
+      if (!vis.stack) return;  // Guards against vis.stack being undefined
+
       if (!isRecursionExpanded()) {
         vis.stack.setStackDepth(0);
         vis.stack.setStack(undefined);
@@ -283,7 +293,9 @@ export function run_msort() {
           // vis.list.showChain(cur_L, T);
         } else {
           vis.list.set(entire_num_array, 'mergeSort list init');
-          vis.stack.set(entire_num_array, 'mergeSort list init')
+          if(vis.stack){
+            vis.stack.set(entire_num_array, 'mergeSort list init')
+          }
           // vis.list.colorChain(1, ptrVariant.runA, T);
         }
         // XXX should colour list the cur_L colour and *remove* the
