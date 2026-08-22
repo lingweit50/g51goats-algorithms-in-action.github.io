@@ -51,3 +51,5 @@ export { default as dstInsertion } from './dstInsertion.js';
 
 export { default as dstSearch } from './dstSearch.js';
 
+export { default as msort_list_bup } from './msort_list_bup.js';
+

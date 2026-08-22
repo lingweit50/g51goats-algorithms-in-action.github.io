@@ -629,6 +629,28 @@ const algorithmMetadata = {
     "extraInfoKey": "dst",
     "instructionsKey": "dst"
   },
+
+	"msort_list_bup": {
+    "name": "Merge Sort (bottom up, for lists)",
+    "category": "Sort",
+    "noDeploy": false,
+    "keywords": [
+      "sort",
+      "list",
+      "merge",
+      "stable"
+    ],
+    "controller": {
+      "sort": "msort_list_bup"
+    },
+    "pseudocode": {
+      "sort": "msort_list_bup"
+    },
+    "paramKey": "msort_list_bup",
+    "explanationKey": "msort_list_bup",
+    "extraInfoKey": "msort_list_bup",
+    "instructionsKey": "msort_list_bup"
+  },
 };
 //_MASTER_LIST_END_
 
