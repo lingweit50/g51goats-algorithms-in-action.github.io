@@ -651,6 +651,31 @@ const algorithmMetadata = {
     "extraInfoKey": "msort_list_bup",
     "instructionsKey": "msort_list_bup"
   },
+
+	"trie": {
+    "name": "Trie",
+    "category": "Insert/Search",
+    "noDeploy": false,
+    "keywords": [
+      "tree",
+      "radix",
+      "m-way",
+      "digit",
+      "string"
+    ],
+    "controller": {
+      "insertion": "trieInsertion",
+      "search": "trieSearch"
+    },
+    "pseudocode": {
+      "insertion": "trieInsertion",
+      "search": "trieSearch"
+    },
+    "paramKey": "trie",
+    "explanationKey": "trie",
+    "extraInfoKey": "trie",
+    "instructionsKey": "trie"
+  },
 };
 //_MASTER_LIST_END_
 

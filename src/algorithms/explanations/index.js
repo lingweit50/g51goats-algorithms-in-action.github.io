@@ -40,3 +40,5 @@ export { default as dst } from './dst.md';
 
 export { default as msort_list_bup } from './msort_list_bup.md';
 
+export { default as trie } from './trie.md';
+

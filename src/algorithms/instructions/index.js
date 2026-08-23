@@ -203,3 +203,5 @@ export const dst = bstInstructions;
 
 export const msort_list_bup = sortInstructions;
 
+export const trie = bstInstructions;
+
