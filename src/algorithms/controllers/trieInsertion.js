@@ -71,6 +71,10 @@ export default {
       },
       [],
     );
+
+    // XXX hack so trie pseudocode is displayed then we just return
+    const two = 2; if (two > 1) return;
+
     chunker.add(1,
       (vis, r) => {
         vis.graph.setFunctionName("Insert:");

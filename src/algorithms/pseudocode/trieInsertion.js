@@ -1,83 +1,88 @@
 import parse from '../../pseudocode/parse';
 
+// Trie prototype (started with DST based on BST)
 export default parse(`
 \\Code{
-    Main
-    BST_Insert(k, t) // Insert key k in BST t \\B 1
-    if t = Empty \\B 7
+Main
+    Trie_Insert(k, t) // Insert key k in trie t \\B 1
+    for each digit in k // left to right scan of digits \\B for_digit
+    \\Expl{ Keys are seen as a sequence of digits.  These can be binary or
+        decimal or some other radix. Nodes have a (possibly empty) subtree
+        for each digit value (0 up to radix - 1).
+        The leftmost digit of k is used at the root of the tree
+        to determine the subtree k belongs in. The next
+        level of the tree uses the next digit, and so on.
+        This loop traces down the tree until the last digit of k, creating
+        new nodes if needed.
+    \\Expl}
     \\In{
-        return a single-node tree containing k \\B 8
-        \\Expl{ Memory is allocated for a new BST node and initialized with
-                key k and empty sub-trees. It is returned to replace
-                the previously empty tree.
+        if no child of t for digit exists \\B if_subtree_empty
+        \\Expl{ For radix 2 we check for a left or right child, depending on the
+            bit (like digital search trees).  In general, there is a
+            subtree for each possible digit value; here we check if it is Empty.
+        \\Expl}
+        \\In{
+            create child node for digit \\B new_subtree
+            \\Expl{ The new node has empty subtrees and is not marked as an
+                end node.
+            \\Expl}
+        \\In}
+        t <- child of t for digit \\B move_down
+        \\Expl{ For radix 2 we move left or right depending on the bit (like
+                digital search trees).  In general, there is a
+            (possibly empty) subtree for each possible digit value.
+        \\Expl}
+    \\In}
+    mark t as an end node \\B mark_end
+    \\Expl{ Node t corresponds to the last digit in k. Marking it as an end
+        node indicates than k exists in the trie. If k was already in the
+        trie the node would already be marked, so there is no change.
+    \\Expl}
+
+/////////////////////////////////////////////////////////
+    Trie_Search(k, t) // Search for key k in trie t \\B 1
+    for each digit in k // left to right scan of digits \\B for_digit_search
+    \\Expl{ Keys are seen as a sequence of digits.  These can be binary or
+        decimal or some other radix. Nodes have a (possibly empty) subtree
+        for each digit value (0 up to radix - 1).
+        The leftmost digit of k is used at the root of the tree
+        to determine the subtree k belongs in. The next
+        level of the tree uses the next digit, and so on.
+        This loop traces down the tree until the last digit of k, unless
+        appropriate nodes do not exist (in which case the search fails).
+    \\Expl}
+    \\In{
+        if no child of t for digit exists \\B if_subtree_empty_search
+        \\Expl{ For radix 2 we check for a left or right child, depending on the
+            bit (like digital search trees).  In general, there is a
+            subtree for each possible digit value; here we check if it is Empty.
+        \\Expl}
+        \\In{
+            return NOTFOUND \\B not_found_null
+            \\Expl{ There is no child for the current digit of k so k cannot
+                have been inserted into the trie.
+            \\Expl}
+        \\In}
+        t <- child of t for digit \\B move_down_search
+        \\Expl{ For radix 2 we move left or right depending on the bit (like
+            digital search trees).  In general, there is a
+            (possibly empty) subtree for each possible digit value.
+        \\Expl}
+    \\In}
+    if t is an end node \\B mark_end
+    \\Expl{ Node t corresponds to the last digit in k. If it as an end
+        node it means k exists in the trie.
+    \\Expl}
+    \\In{
+        return FOUND \\B found
+        \\Expl{ Potentially nodes could contained extra data and we could
+            return the data or the node t.
         \\Expl}
     \\In}
     else
     \\In{
-      Find insertion point, p \\Ref Locate
-      \\Expl{ Node p will be the parent of the new node containing k.
-              We search down the tree going left or right depending on
-              key comparisons, until we can go no further (or we find k). Nodes left of
-              p have keys less than k and nodes right of p have keys
-              greater than k. If we find a node containing k we simply
-              ignore the insertion of k and return t (see the MORE tab).
-      \\Expl}
-      if k < p.key  \\B 9
-      \\Expl{  The new node n (whose key is k) will be a child of p. We just 
-              need to decide whether it should be a left or a right child of p.
-      \\Expl}
-      \\In{
-          p.left <- new node containing k \\B 10
-          \\Expl{ A new BST node is allocated and initialized with
-                key k and empty sub-trees; this replaces the empty
-                left sub-tree of p.
-          \\Expl}
-      \\In}
-      else
-      \\In{
-          p.right <- new node containing k  \\B 11
-          \\Expl{ A new BST node is allocated and initialized with
-                key k and empty sub-trees; this replaces the empty
-                right sub-tree of p.
-          \\Expl}
-      \\In}
+        return NOTFOUND \\B not_found
     \\In}
-    return t \\B end
 \\Code}
-\\Code{
-  Locate
-  c <- t // c traverses from the root to the insertion point \\B 13
-  
-  \\Expl{ c is going to follow a path down to where the new node is to 
-          be inserted. We start from the root (t). In the last iteration
-          c "falls off" the tree and becomes an empty tree. However, p
-          trails one step behind.
-  \\Expl}
-  repeat
-  \\In{
-      p <- c // when c moves down, p will be c's parent \\B 14
-      \\Expl{ At the end of the loop p will be c's parent.  After we
-              exit the loop, p will be the parent where k is inserted.
-      \\Expl}
-      if k < c.key \\B 15
-      \\Expl{ The BST condition is that nodes with keys less than the current
-              node's key are to be found in the left subtree, and nodes whose
-              keys are greater (or the same) are to be in the right subtree.
-      \\Expl}
-      \\In{
-          c <- c.left \\B 16
-      \\In}
-      else if k > c.key \\B 16a
-      \\In{
-          c <- c.right \\B 17
-      \\In}
-      else return t // k is in t already - skip insertion \\B eq_key
-      \\Expl{ Here we ignore insertion of equal keys.  See the MORE tab.
-      \\Expl}
-  \\In}
-  until c = Empty \\B 18
-  \\Expl{ At the end of this loop, c has located the empty subtree where new
-          key k should be located, and p will be the parent of the new node.
-  \\Expl}
-\\Code}
+
 `);

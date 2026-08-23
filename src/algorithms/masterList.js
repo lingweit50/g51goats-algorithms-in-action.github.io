@@ -581,9 +581,9 @@ const algorithmMetadata = {
   },
 
 "splaytree": {
-    "name": "Splay Tree",
+    "name": "Splay Tree (prototype)",
     "category": "Insert/Search",
-    "noDeploy": true,
+    "noDeploy": false,
     "keywords": [
       "BST",
       "binary",
@@ -608,9 +608,9 @@ const algorithmMetadata = {
   },
 
 	"dst": {
-    "name": "Digital Search Tree",
+    "name": "Digital Search Tree (prototype)",
     "category": "Insert/Search",
-    "noDeploy": true,
+    "noDeploy": false,
     "keywords": [
       "radix",
       "binary",
@@ -631,7 +631,7 @@ const algorithmMetadata = {
   },
 
 	"msort_list_bup": {
-    "name": "Merge Sort (bottom up, for lists)",
+    "name": "Merge Sort (bottom up, for lists) (prototype)",
     "category": "Sort",
     "noDeploy": false,
     "keywords": [
@@ -653,7 +653,7 @@ const algorithmMetadata = {
   },
 
 	"trie": {
-    "name": "Trie",
+    "name": "Trie (prototype)",
     "category": "Insert/Search",
     "noDeploy": false,
     "keywords": [
