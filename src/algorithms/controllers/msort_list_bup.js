@@ -484,6 +484,7 @@ export function run_msort() {
     }
 
     function MergeSort(L, len, depth) {
+
       setupInitialVisualization(L, len, depth);
 
       if (len > 1) {
@@ -530,6 +531,11 @@ export function run_msort() {
 
     // ---- main ----
     initializeListStructure();
+
+    // XXX hack to allow BUP pseudocode to be displayed
+    // before we just return
+    if (entire_num_array.length >= 0) { chunker.add('Main'); return;}
+
     const msresult = MergeSort(1, entire_num_array.length, 0);
 
     // reset pointer colors once (array UI removed)
