@@ -100,6 +100,14 @@ MergeAll
           reassigns pointers. For simplicity, LR.tail.head is not shown -
           it still exists as before but will never be used again.
         \\Expl}
+        // merge completed \\B returnM
+        \\Note{ Bookmark name for conistency with top down version.
+          XXX probably best to rename both afterMerge
+        \\Note}
+        \\Expl{ Here the animation re-draws the list left to right.
+          This is just to clarify the display; no
+          list cells or data are actually copied/moved.
+        \\Expl}
         LR.head <- M // replace first element \\B replace_head
         \\Expl{ The first list in LR (what was L) is replaced by
             M (the merge of L and R).
