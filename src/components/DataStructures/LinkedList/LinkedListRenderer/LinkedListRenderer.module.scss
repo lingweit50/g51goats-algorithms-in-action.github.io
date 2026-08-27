@@ -169,6 +169,7 @@
     // color: #ddd; // hard to see with dark scheme!
     color: #888;
     filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.15)); // subtle outline to improve legibility
+    white-space: nowrap;
   }
 
   /* M / L / R / E labels on the upper row */
