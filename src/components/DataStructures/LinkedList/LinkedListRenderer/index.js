@@ -148,6 +148,19 @@ class LinkedListRenderer extends Array2DRenderer {
      * VALUE_W = 35
      */
 
+    /*
+     * Node:
+     *
+     * ┌────────────────────┬────────┐
+     * │       VALUE        │  HEAD  │
+     * │                    │   •    │
+     * └────────────────────┴────────┘
+     *
+     * NODE_W  = 50
+     * CAP_W   = 15
+     * VALUE_W = 35
+     */
+
     const NODE_W = 50;
     const NODE_H = 20;
 
@@ -341,41 +354,20 @@ class LinkedListRenderer extends Array2DRenderer {
     };
 
     const maxX =
-      (
-        list.length
-          ? Math.max(
-              ...list.map(
-                n => n.pos.x
-              )
-            )
-          : 0
-      ) +
-      NODE_W;
+      (list.length
+        ? Math.max(...list.map(n => n.pos.x))
+        : 0) + NODE_W;
 
     const maxY =
-      (
-        list.length
-          ? Math.max(
-              ...list.map(
-                n => n.pos.y
-              )
-            )
-          : 0
-      ) +
-      NODE_H;
+      (list.length
+        ? Math.max(...list.map(n => n.pos.y))
+        : 0) + NODE_H;
 
-    const getPath = (
-      x1,
-      y1,
-      x2,
-      y2
-    ) =>
+    const getPath = (x1, y1, x2, y2) =>
       `M ${x1},${y1} L ${x2},${y2}`;
 
     const variantClass = n => {
-      switch (
-        n.fillVariant
-      ) {
+      switch (n.fillVariant) {
         case 0:
           return styles.variantSky;
 
@@ -401,24 +393,17 @@ class LinkedListRenderer extends Array2DRenderer {
         height: 240,
       };
 
-    const tagBlockH =
-      layout?.tagBlockH ??
-      24;
+    const tagBlockH = layout?.tagBlockH ?? 24;
 
-    const bounds =
-      this._getNodesBounds(
-        list,
-        tagBlockH
-      );
+    const bounds = this._getNodesBounds(
+      list,
+      tagBlockH
+    );
 
     const containerWidth =
-      this.props.width ||
-      800;
+      this.props.width || 800;
 
-    const {
-      offX,
-      offY,
-    } =
+    const { offX, offY } =
       this._getAutoOffset(
         bounds,
         safeBox,
@@ -431,26 +416,28 @@ class LinkedListRenderer extends Array2DRenderer {
     // const cameraTranslateY =
     //   (-this.centerY * 2) + offY - 30;
 
-    const cameraTranslateX =
-      -400;
+    const cameraTranslateX = -400;
+    const cameraTranslateY = 0;
 
-    const cameraTranslateY =
-      0;
+    // Get all currently visible nodes
+    const visibleNodes = list.filter(n => !n.hidden);
+    
+    // Collect all row y positions and sort them from top to bottom
+    const rowYs = [...new Set(visibleNodes.map(n => n.pos.y))].sort((a, b) => a - b); 
+
+    // Top row y position
+    const topRowY = rowYs[0];
+
+    // Bottom row y position
+    const bottomRowY = rowYs[rowYs.length - 1];
 
     return (
-      <div
-        className={
-          styles.container
-        }
-      >
+      <div className={styles.container}>
         <div
-          className={
-            styles.stage
-          }
+          className={styles.stage}
           style={{
             transform:
-              `translate(` +
-              `${cameraTranslateX}px, ` +
+              `translate(${cameraTranslateX}px, ` +
               `${cameraTranslateY}px) ` +
               `scale(${this.zoom})`,
           }}
@@ -461,25 +448,15 @@ class LinkedListRenderer extends Array2DRenderer {
           {/* ========================= */}
 
           <svg
-            className={
-              styles.edges
-            }
+            className={styles.edges}
             width={maxX}
             height={maxY}
             style={{
-              position:
-                'absolute',
-
+              position: 'absolute',
               inset: 0,
-
-              pointerEvents:
-                'none',
-
-              overflow:
-                'visible',
-
-              background:
-                'transparent',
+              pointerEvents: 'none',
+              overflow: 'visible',
+              background: 'transparent',
             }}
           >
             <defs>
@@ -693,138 +670,89 @@ class LinkedListRenderer extends Array2DRenderer {
           {/* ========================= */}
 
           <AnimateSharedLayout>
-            {list.map(
-              n => (
-                !n.hidden && (
-                  <motion.div
-                    key={
-                      n.key
-                    }
-
-                    layout
-
-                    className={[
-                      styles.node,
-                      variantClass(
-                        n
-                      ),
-
-                      n.hidden &&
-                        styles.hidden,
-                    ]
-                      .filter(
-                        Boolean
-                      )
-                      .join(
-                        ' '
-                      )}
-
-                    style={{
-                      position:
-                        'absolute',
-
-                      left:
-                        n.pos.x -
-                        60,
-
-                      top:
-                        n.pos.y -
-                        10,
-
-                      width:
-                        NODE_W,
-
-                      height:
-                        NODE_H,
-                    }}
-
-                    transition={{
-                      duration:
-                        0.25,
-                    }}
+            {list.map(n => (
+              !n.hidden && (
+                <motion.div
+                  key={n.key}
+                  layout
+                  className={[
+                    styles.node,
+                    variantClass(n),
+                    n.hidden && styles.hidden,
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  style={{
+                    position: 'absolute',
+                    left: n.pos.x - 60,
+                    top: n.pos.y - 10,
+                    width: NODE_W,
+                    height: NODE_H,
+                  }}
+                  transition={{
+                    duration: 0.25,
+                  }}
+                >
+                  <div
+                    className={styles.pill}
                   >
-                    <div
-                      className={
-                        styles.pill
-                      }
+                    <span
+                      className={styles.value}
                     >
-                      <span
-                        className={
-                          styles.value
-                        }
-                      >
-                        {
-                          n.value
-                        }
-                      </span>
+                      {n.value}
+                    </span>
 
-                      <span
-                        className={
-                          styles.cap
-                        }
-                      >
-                        <i
-                          className={
-                            styles.dot
-                          }
-                        />
-                      </span>
-                    </div>
-
-                    <div
-                      className={
-                        styles.vars
-                      }
+                    <span
+                      className={styles.cap}
                     >
-                      {n.variables.map(
-                        v => (
-                          <motion.div
-                            layoutId={
-                              `${n.key}-${v}`
-                            }
+                      <i
+                        className={styles.dot}
+                      />
+                    </span>
+                  </div>
 
-                            key={
-                              v
-                            }
+                  <div
+                    className={styles.vars}
+                  >
+                    {n.variables.map(v => (
+                      <motion.div
+                        layoutId={`${n.key}-${v}`}
+                        key={v}
 
-                            className={[
-                              styles.varBadge,
-
-                              v ===
-                                'M' &&
-                                styles.mBadge,
-                            ]
-                              .filter(
-                                Boolean
-                              )
-                              .join(
-                                ' '
-                              )}
-                          >
-                            {
-                              v
-                            }
-                          </motion.div>
-                        )
-                      )}
-                    </div>
-                  </motion.div>
-                )
+                        // Adjust M/L/R/E label position based on the node row.
+                        className={[
+                          styles.varBadge,
+                          v.split('|').some(tag =>
+                            ['M', 'L', 'R', 'E', 'Mid'].includes(tag.trim()) 
+                          )&&
+                            n.pos.y === topRowY &&
+                            styles.varTopBadge,
+                          
+                          v.split('|').some(tag =>
+                            ['M', 'L', 'R', 'E', 'Mid'].includes(tag.trim()) 
+                          )&&
+                            n.pos.y === bottomRowY &&
+                            topRowY !== bottomRowY &&
+                            styles.varBottomBadge,
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                      >
+                        {v}
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
               )
             )}
           </AnimateSharedLayout>
         </div>
 
         <div
-          className={
-            styles.value
-          }
+          className={styles.value}
+          style={{ transform: 'translateY(-15px)' }}
         >
-          {
-            this.props
-              .data
-              .caption
-          }
+          {this.props.data.caption}
         </div>
       </div>
     );
