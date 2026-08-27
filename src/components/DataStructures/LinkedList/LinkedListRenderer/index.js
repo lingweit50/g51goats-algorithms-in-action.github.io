@@ -300,6 +300,18 @@ class LinkedListRenderer extends Array2DRenderer {
     const cameraTranslateX = -400;
     const cameraTranslateY = 0;
 
+    // Get all currently visible nodes
+    const visibleNodes = list.filter(n => !n.hidden);
+    
+    // Collect all row y positions and sort them from top to bottom
+    const rowYs = [...new Set(visibleNodes.map(n => n.pos.y))].sort((a, b) => a - b); 
+
+    // Top row y position
+    const topRowY = rowYs[0];
+
+    // Bottom row y position
+    const bottomRowY = rowYs[rowYs.length - 1];
+
     return (
       <div className={styles.container}>
         <div
@@ -538,10 +550,22 @@ class LinkedListRenderer extends Array2DRenderer {
                       <motion.div
                         layoutId={`${n.key}-${v}`}
                         key={v}
+
+                        // Adjust M/L/R/E label position based on the node row.
                         className={[
                           styles.varBadge,
-                          v === 'M' &&
-                            styles.mBadge,
+                          v.split('|').some(tag =>
+                            ['M', 'L', 'R', 'E', 'Mid'].includes(tag.trim()) 
+                          )&&
+                            n.pos.y === topRowY &&
+                            styles.varTopBadge,
+                          
+                          v.split('|').some(tag =>
+                            ['M', 'L', 'R', 'E', 'Mid'].includes(tag.trim()) 
+                          )&&
+                            n.pos.y === bottomRowY &&
+                            topRowY !== bottomRowY &&
+                            styles.varBottomBadge,
                         ]
                           .filter(Boolean)
                           .join(' ')}
@@ -556,7 +580,10 @@ class LinkedListRenderer extends Array2DRenderer {
           </AnimateSharedLayout>
         </div>
 
-        <div className={styles.value}>
+        <div
+          className={styles.value}
+          style={{ transform: 'translateY(-15px)' }}
+        >
           {this.props.data.caption}
         </div>
       </div>
