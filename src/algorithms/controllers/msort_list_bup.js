@@ -104,7 +104,7 @@
  */
 
 
-import { msort_lista_td } from '../explanations';
+import { msort_list_bup } from '../explanations';
 import LinkedListTracer from '../../components/DataStructures/LinkedList/LinkedListTracer';
 
 // ---------- Pointer-color mapping (must match LinkedListRenderer.module.scss variants) ----------
@@ -549,7 +549,7 @@ export function run_msort() {
 }
 
 export default {
-  explanation: msort_lista_td,
+  explanation: msort_list_bup,
   initVisualisers,
   run: run_msort()
 };
