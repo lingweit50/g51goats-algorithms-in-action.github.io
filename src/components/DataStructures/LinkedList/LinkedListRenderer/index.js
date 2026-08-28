@@ -744,7 +744,7 @@ class LinkedListRenderer extends Array2DRenderer {
                   </div>
                 </motion.div>
               )
-            )}
+            ))}
           </AnimateSharedLayout>
         </div>
 
