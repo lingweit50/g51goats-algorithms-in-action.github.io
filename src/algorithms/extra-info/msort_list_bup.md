@@ -18,7 +18,7 @@ a:hover{
 Geeks for Geeks Link: [**Merge Sort for linked lists**][G4GLink]
 
 
-[G4GLink]: https://www.geeksforgeeks.org/merge-sort-for-linked-list/
+[G4GLink]: https://www.geeksforgeeks.org/dsa/iterative-merge-sort-for-linked-list/
 
 ## Exercises/Exploration
 
