@@ -119,7 +119,7 @@ const doneColor = colors.stone; // default/idle color
 import ArrayTracer from '../../components/DataStructures/Array/Array1DTracer';
 
 import {
-  areExpanded
+  areExpanded,
 } from './collapseChunkPlugin';
 
 
@@ -146,6 +146,8 @@ let Tails;        // ['i.tail (next)', ...]
 // Stack Visualisation Helper functions
 // checks if either recursive call is expanded (otherwise stack is not
 // displayed)
+
+// Hides stack array and subheading
 function hideArrayRows() {
   document.querySelectorAll('.Array1DRenderer_row__9zvrx').forEach(el => {
     el.style.visibility = 'hidden';
@@ -157,7 +159,6 @@ function hideArrayRows() {
       el.style.visibility = 'hidden';
     }
   })
-    
 }
 
 function isRecursionExpanded() {
@@ -170,6 +171,8 @@ import { update_vis_with_stack_frame } from './msort_arr_td';
     
 // ---------- Init visualiser (pointer only) ----------
 export function initVisualisers() {
+  // MutationObserver triggers callback function on every DOM change
+  // (e.g. toggling Collapsed/Expanded)
   const observer = new MutationObserver(hideArrayRows)
   observer.observe(document.body, {subtree: true, childList: true});
 
@@ -184,7 +187,6 @@ export function initVisualisers() {
         order: 1,
       },
     }
-   
   } else{
      return {
       list: {
