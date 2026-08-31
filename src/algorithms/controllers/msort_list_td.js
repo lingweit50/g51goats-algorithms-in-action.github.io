@@ -119,7 +119,7 @@ const doneColor = colors.stone; // default/idle color
 import ArrayTracer from '../../components/DataStructures/Array/Array1DTracer';
 
 import {
-  areExpanded,
+  areExpanded
 } from './collapseChunkPlugin';
 
 
@@ -146,6 +146,20 @@ let Tails;        // ['i.tail (next)', ...]
 // Stack Visualisation Helper functions
 // checks if either recursive call is expanded (otherwise stack is not
 // displayed)
+function hideArrayRows() {
+  document.querySelectorAll('.Array1DRenderer_row__9zvrx').forEach(el => {
+    el.style.visibility = 'hidden';
+  });
+
+  document.querySelectorAll('.Ellipsis_ellipsis__mpsbu').forEach(el => {
+    console.log("hi")
+    if (el.textContent.trim() === 'Call Stack') {
+      el.style.visibility = 'hidden';
+    }
+  })
+    
+}
+
 function isRecursionExpanded() {
   return areExpanded(['MergesortL']) || areExpanded(['MergesortR']);
 }
@@ -156,6 +170,9 @@ import { update_vis_with_stack_frame } from './msort_arr_td';
     
 // ---------- Init visualiser (pointer only) ----------
 export function initVisualisers() {
+  const observer = new MutationObserver(hideArrayRows)
+  observer.observe(document.body, {subtree: true, childList: true});
+
   if (isRecursionExpanded()){
     return {
       list: {
@@ -163,12 +180,11 @@ export function initVisualisers() {
         order: 0,
       },
       stack: { // To store linked list values for stack vis
-        instance: new ArrayTracer('stack', null, 'Call Stack', {
-          arrayItemMagnitudes: false,
-        }),
+        instance: new ArrayTracer('stack', null, 'Call Stack'),
         order: 1,
       },
     }
+   
   } else{
      return {
       list: {
@@ -183,7 +199,6 @@ export function run_msort() {
     const entire_num_array = nodes;
     const finished_stack_frames = []; // [ [left, right,  depth], ...]  (although depth could be implicit this is easier)
     const real_stack = []; // [ [left, right,  depth], ...]
-
 
     // Given current and completed stack frames, derive the visualisation 
     function derive_stack(cur_real_stack, cur_finished_stack_frames) {
@@ -258,7 +273,7 @@ export function run_msort() {
         vis.stack.setStack(undefined);
         return;
       }
-
+      
       const stack_data = derive_stack(
         cur_real_stack,
         cur_finished_stack_frames
