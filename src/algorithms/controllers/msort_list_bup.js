@@ -164,6 +164,7 @@ export function initVisualisers() {
 }
 
 export function run_msort() {
+  // XXX could temporarily use depth = 0 (before complete rewrite) as there's no recursion for bup
   return function run(chunker, { nodes }) {
     const entire_num_array = nodes;
     const finished_stack_frames = []; // [ [left, right,  depth], ...]  (although depth could be implicit this is easier)
@@ -173,7 +174,7 @@ export function run_msort() {
     // XXX same with refresh_stack (due to usage of recursion)
 
 
-    // kept, same as msort_list_td
+    // kept, same as msort_list_td, per pseudocode
     function initializeListStructure() {
       Heads = ['i.head (data)'];
       Tails = ['i.tail (next)'];
@@ -184,8 +185,7 @@ export function run_msort() {
       Tails[entire_num_array.length] = 'Null';
     }
 
-    // XXX need to be rewritten to replace recursion with iterative
-
+    // XXX need to be rewritten to replace recursion with iterative (remove depth)
     function setupInitialVisualization(L, len, depth) {
       chunker.add('Main', (vis, T, cur_L, cur_len, cur_depth, cur_real_stack, cur_finished_stack_frames) => {
         // Depth 0: show full original list (top-level call)
@@ -236,7 +236,10 @@ export function run_msort() {
     }
 
 
-    // kept, same as msort_list_td
+    // XXX can have all these shared functions in the same file
+    // (not main focus, can be done later)
+
+    // kept, same as msort_list_td, per pseudocode
     function mergeHeads(L, R, depth) {
       let M;
 
@@ -285,7 +288,7 @@ export function run_msort() {
     }
 
 
-    // kept, same as msort_list_td
+    // kept, same as msort_list_td, per pseudocode
     function mergeRemainingElements(L, R, M, depth) {
       // Merge the rest of L and R starting from M
       let E = M;
@@ -483,6 +486,7 @@ export function run_msort() {
 
     // XXX hack to allow BUP pseudocode to be displayed
     // before we just return
+    // delete this after implementation
     if (entire_num_array.length >= 0) { chunker.add('Main'); return;}
 
     const msresult = MergeSort(1, entire_num_array.length, 0);
