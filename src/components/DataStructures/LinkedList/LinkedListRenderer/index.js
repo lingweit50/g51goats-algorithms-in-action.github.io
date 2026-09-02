@@ -10,7 +10,7 @@ import styles from './LinkedListRenderer.module.scss';
 class LinkedListRenderer extends Array2DRenderer {
   constructor(props) {
     super(props);
-    this.togglePan(false);
+    this.togglePan(true);
     this.toggleZoom(true);
   }
 
