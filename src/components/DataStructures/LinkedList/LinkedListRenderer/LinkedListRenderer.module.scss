@@ -7,9 +7,22 @@
    🔹 Container & Stage
    ====================================================== */
 
+
+.scrollWrapper {
+  position: absolute;      /* Attach the scroll area to the container edges */
+  left: 0;                 /* Follow the left edge of the visualisation panel */
+  right: 0;                /* Follow the draggable right boundary */
+  min-width: 0;            /* Allow the scroll area to shrink */
+  overflow-x: auto;        /* Scroll the linked list when it becomes too wide */
+  overflow-y: hidden;      /* Prevent vertical scrolling */
+  box-sizing: border-box;  /* Keep sizing inside the available space */
+}
+
 /* The outer container wrapping the visualization stage */
 .container {
   position: relative;      /* Allows absolutely positioned children */
+  width: 100%;             /* Follow the visualisation panel width */
+  min-width: 0;            /* Allow the container to shrink */
   overflow: visible;       /* Let arrows/nodes overflow */
   margin-top: 20px;        /* Add top spacing */
 }

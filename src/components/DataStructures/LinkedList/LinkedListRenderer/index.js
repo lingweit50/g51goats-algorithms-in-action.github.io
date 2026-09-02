@@ -192,7 +192,7 @@ class LinkedListRenderer extends Array2DRenderer {
      */
     const getValueRect = n => {
       const nodeLeft =
-        n.pos.x - 60;
+        n.pos.x - 60 + contentOffsetX;
 
       const nodeTop =
         n.pos.y -
@@ -220,7 +220,7 @@ class LinkedListRenderer extends Array2DRenderer {
      */
     const getDotCenter = n => {
       const nodeLeft =
-        n.pos.x - 60;
+        n.pos.x - 60 + contentOffsetX;
 
       return {
         x:
@@ -240,7 +240,7 @@ class LinkedListRenderer extends Array2DRenderer {
      */
     const getValueCenter = n => {
       const nodeLeft =
-        n.pos.x - 60;
+        n.pos.x - 60 + contentOffsetX;
 
       return {
         x:
@@ -400,15 +400,10 @@ class LinkedListRenderer extends Array2DRenderer {
       tagBlockH
     );
 
+
     const containerWidth =
       this.props.width || 800;
-
-    const { offX, offY } =
-      this._getAutoOffset(
-        bounds,
-        safeBox,
-        containerWidth
-      );
+    
 
     // const cameraTranslateX =
     //   (-this.centerX * 2) + offX - 100;
@@ -416,8 +411,15 @@ class LinkedListRenderer extends Array2DRenderer {
     // const cameraTranslateY =
     //   (-this.centerY * 2) + offY - 30;
 
-    const cameraTranslateX = -400;
+    const cameraTranslateX = 0;
     const cameraTranslateY = 0;
+
+    const contentWidth = bounds.width + 40;
+
+  const listStartX = 
+    contentWidth <= containerWidth ? (containerWidth - bounds.width) / 2 : 20;
+
+  const contentOffsetX = listStartX - bounds.minX;
 
     // Get all currently visible nodes
     const visibleNodes = list.filter(n => !n.hidden);
@@ -434,14 +436,28 @@ class LinkedListRenderer extends Array2DRenderer {
     return (
       <div className={styles.container}>
         <div
-          className={styles.stage}
+          className={styles.value}
           style={{
-            transform:
-              `translate(${cameraTranslateX}px, ` +
-              `${cameraTranslateY}px) ` +
-              `scale(${this.zoom})`,
+             width: '100%',
+             textAlign: 'center',
+             transform: 'translateY(-15px)',
           }}
         >
+           {this.props.data.caption}
+        </div>
+
+        <div 
+          className={styles.scrollWrapper}
+        >
+          <div
+            className={styles.stage}
+            style={{
+              width: contentWidth,
+              margin: '0 auto',
+              height: Math.max(maxY + tagBlockH + 50, 240),
+              transform: `scale(${this.zoom})`,
+            }}
+          >
 
           {/* ========================= */}
           {/* ARROW LAYER               */}
@@ -449,7 +465,7 @@ class LinkedListRenderer extends Array2DRenderer {
 
           <svg
             className={styles.edges}
-            width={maxX}
+            width={contentWidth}
             height={maxY}
             style={{
               position: 'absolute',
@@ -684,7 +700,7 @@ class LinkedListRenderer extends Array2DRenderer {
                     .join(' ')}
                   style={{
                     position: 'absolute',
-                    left: n.pos.x - 60,
+                    left: n.pos.x - 60 + contentOffsetX,
                     top: n.pos.y - 10,
                     width: NODE_W,
                     height: NODE_H,
@@ -747,13 +763,8 @@ class LinkedListRenderer extends Array2DRenderer {
             ))}
           </AnimateSharedLayout>
         </div>
+      </div>
 
-        <div
-          className={styles.value}
-          style={{ transform: 'translateY(-15px)' }}
-        >
-          {this.props.data.caption}
-        </div>
       </div>
     );
   }
