@@ -10,7 +10,7 @@ import styles from './LinkedListRenderer.module.scss';
 class LinkedListRenderer extends Array2DRenderer {
   constructor(props) {
     super(props);
-    this.togglePan(true);
+    this.togglePan(false);
     this.toggleZoom(true);
   }
 
@@ -192,7 +192,7 @@ class LinkedListRenderer extends Array2DRenderer {
      */
     const getValueRect = n => {
       const nodeLeft =
-        n.pos.x - 60;
+        n.pos.x - 60 + contentOffsetX;
 
       const nodeTop =
         n.pos.y -
@@ -220,7 +220,7 @@ class LinkedListRenderer extends Array2DRenderer {
      */
     const getDotCenter = n => {
       const nodeLeft =
-        n.pos.x - 60;
+        n.pos.x - 60 + contentOffsetX;
 
       return {
         x:
@@ -240,7 +240,7 @@ class LinkedListRenderer extends Array2DRenderer {
      */
     const getValueCenter = n => {
       const nodeLeft =
-        n.pos.x - 60;
+        n.pos.x - 60 + contentOffsetX;
 
       return {
         x:
@@ -400,17 +400,10 @@ class LinkedListRenderer extends Array2DRenderer {
       tagBlockH
     );
 
+
     const containerWidth =
       this.props.width || 800;
     
-
-
-    const { offX, offY } =
-      this._getAutoOffset(
-        bounds,
-        safeBox,
-        containerWidth
-      );
 
     // const cameraTranslateX =
     //   (-this.centerX * 2) + offX - 100;
@@ -418,12 +411,15 @@ class LinkedListRenderer extends Array2DRenderer {
     // const cameraTranslateY =
     //   (-this.centerY * 2) + offY - 30;
 
-    const cameraTranslateX = Math.max(0, 20 - bounds.minX);
+    const cameraTranslateX = 0;
     const cameraTranslateY = 0;
 
-    const contentWidth =
-      Math.max(maxX, bounds.maxX) +
-      cameraTranslateX + 20;
+    const contentWidth = bounds.width + 40;
+
+  const listStartX = 
+    contentWidth <= containerWidth ? (containerWidth - bounds.width) / 2 : 20;
+
+  const contentOffsetX = listStartX - bounds.minX;
 
     // Get all currently visible nodes
     const visibleNodes = list.filter(n => !n.hidden);
@@ -457,12 +453,9 @@ class LinkedListRenderer extends Array2DRenderer {
             className={styles.stage}
             style={{
               width: contentWidth,
-              minWidth: '100%',
+              margin: '0 auto',
               height: Math.max(maxY + tagBlockH + 50, 240),
-              transform:
-                `translate(${cameraTranslateX}px, ` +
-                `${cameraTranslateY}px) ` +
-                `scale(${this.zoom})`,
+              transform: `scale(${this.zoom})`,
             }}
           >
 
@@ -472,7 +465,7 @@ class LinkedListRenderer extends Array2DRenderer {
 
           <svg
             className={styles.edges}
-            width={maxX}
+            width={contentWidth}
             height={maxY}
             style={{
               position: 'absolute',
@@ -707,7 +700,7 @@ class LinkedListRenderer extends Array2DRenderer {
                     .join(' ')}
                   style={{
                     position: 'absolute',
-                    left: n.pos.x - 60,
+                    left: n.pos.x - 60 + contentOffsetX,
                     top: n.pos.y - 10,
                     width: NODE_W,
                     height: NODE_H,
