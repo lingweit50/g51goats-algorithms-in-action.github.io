@@ -7,6 +7,10 @@
    🔹 Container & Stage
    ====================================================== */
 
+
+.scrollWrapper {
+  width: 100%;  /* Use the full available width */
+}
 /* The outer container wrapping the visualization stage */
 .container {
   position: relative;      /* Allows absolutely positioned children */

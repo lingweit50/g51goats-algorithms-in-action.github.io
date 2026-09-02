@@ -402,6 +402,8 @@ class LinkedListRenderer extends Array2DRenderer {
 
     const containerWidth =
       this.props.width || 800;
+    
+
 
     const { offX, offY } =
       this._getAutoOffset(
@@ -416,8 +418,12 @@ class LinkedListRenderer extends Array2DRenderer {
     // const cameraTranslateY =
     //   (-this.centerY * 2) + offY - 30;
 
-    const cameraTranslateX = -400;
+    const cameraTranslateX = Math.max(0, 20 - bounds.minX);
     const cameraTranslateY = 0;
+
+    const contentWidth =
+      Math.max(maxX, bounds.maxX) +
+      cameraTranslateX + 20;
 
     // Get all currently visible nodes
     const visibleNodes = list.filter(n => !n.hidden);
@@ -434,14 +440,31 @@ class LinkedListRenderer extends Array2DRenderer {
     return (
       <div className={styles.container}>
         <div
-          className={styles.stage}
+          className={styles.value}
           style={{
-            transform:
-              `translate(${cameraTranslateX}px, ` +
-              `${cameraTranslateY}px) ` +
-              `scale(${this.zoom})`,
+             width: '100%',
+             textAlign: 'center',
+             transform: 'translateY(-15px)',
           }}
         >
+           {this.props.data.caption}
+        </div>
+
+        <div 
+          className={styles.scrollWrapper}
+        >
+          <div
+            className={styles.stage}
+            style={{
+              width: contentWidth,
+              minWidth: '100%',
+              height: Math.max(maxY + tagBlockH + 50, 240),
+              transform:
+                `translate(${cameraTranslateX}px, ` +
+                `${cameraTranslateY}px) ` +
+                `scale(${this.zoom})`,
+            }}
+          >
 
           {/* ========================= */}
           {/* ARROW LAYER               */}
@@ -747,13 +770,8 @@ class LinkedListRenderer extends Array2DRenderer {
             ))}
           </AnimateSharedLayout>
         </div>
+      </div>
 
-        <div
-          className={styles.value}
-          style={{ transform: 'translateY(-15px)' }}
-        >
-          {this.props.data.caption}
-        </div>
       </div>
     );
   }
