@@ -148,19 +148,6 @@ class LinkedListRenderer extends Array2DRenderer {
      * VALUE_W = 35
      */
 
-    /*
-     * Node:
-     *
-     * ┌────────────────────┬────────┐
-     * │       VALUE        │  HEAD  │
-     * │                    │   •    │
-     * └────────────────────┴────────┘
-     *
-     * NODE_W  = 50
-     * CAP_W   = 15
-     * VALUE_W = 35
-     */
-
     const NODE_W = 50;
     const NODE_H = 20;
 
@@ -393,17 +380,17 @@ class LinkedListRenderer extends Array2DRenderer {
         height: 240,
       };
 
-    const tagBlockH = layout?.tagBlockH ?? 24;
+    const tagBlockH =
+      layout?.tagBlockH ?? 24;
 
-    const bounds = this._getNodesBounds(
-      list,
-      tagBlockH
-    );
-
+    const bounds =
+      this._getNodesBounds(
+        list,
+        tagBlockH
+      );
 
     const containerWidth =
       this.props.width || 800;
-    
 
     // const cameraTranslateX =
     //   (-this.centerX * 2) + offX - 100;
@@ -414,357 +401,551 @@ class LinkedListRenderer extends Array2DRenderer {
     const cameraTranslateX = 0;
     const cameraTranslateY = 0;
 
-    const contentWidth = bounds.width + 40;
+    const contentWidth =
+      bounds.width + 40;
 
-  const listStartX = 
-    contentWidth <= containerWidth ? (containerWidth - bounds.width) / 2 : 20;
+    const listStartX =
+      contentWidth <= containerWidth
+        ? (containerWidth - bounds.width) / 2
+        : 20;
 
-  const contentOffsetX = listStartX - bounds.minX;
+    const contentOffsetX =
+      listStartX - bounds.minX;
 
     // Get all currently visible nodes
-    const visibleNodes = list.filter(n => !n.hidden);
-    
+    const visibleNodes =
+      list.filter(n => !n.hidden);
+
     // Collect all row y positions and sort them from top to bottom
-    const rowYs = [...new Set(visibleNodes.map(n => n.pos.y))].sort((a, b) => a - b); 
+    const rowYs =
+      [...new Set(
+        visibleNodes.map(n => n.pos.y)
+      )].sort((a, b) => a - b);
 
     // Top row y position
-    const topRowY = rowYs[0];
+    const topRowY =
+      rowYs[0];
 
     // Bottom row y position
-    const bottomRowY = rowYs[rowYs.length - 1];
+    const bottomRowY =
+      rowYs[rowYs.length - 1];
 
     return (
-      <div className={styles.container}>
+      <div
+        className={styles.container}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+
+          /*
+           * IMPORTANT:
+           *
+           * The renderer fills the entire
+           * available animation window.
+           *
+           * This means the scrollWrapper
+           * below can expand vertically to
+           * the bottom of the animation area.
+           */
+          height: '100%',
+          minHeight: 0,
+
+          /*
+           * Do not allow the linked-list
+           * stage itself to create scrolling
+           * outside scrollWrapper.
+           */
+          overflow: 'hidden',
+        }}
+      >
         <div
           className={styles.value}
           style={{
-             width: '100%',
-             textAlign: 'center',
-             transform: 'translateY(-15px)',
+            width: '100%',
+            textAlign: 'center',
+            transform:
+              'translateY(-15px)',
+
+            /*
+             * Caption should not consume
+             * the remaining flexible space.
+             */
+            flex: '0 0 auto',
           }}
         >
-           {this.props.data.caption}
+          {this.props.data.caption}
         </div>
 
-        <div 
+        {/*
+         * ==========================================
+         * FULL ANIMATION WINDOW SCROLL CONTAINER
+         * ==========================================
+         *
+         * Previously this effectively followed
+         * the height of the linked-list stage.
+         *
+         * flex: 1 makes this element occupy all
+         * remaining vertical space in the left
+         * animation window.
+         *
+         * Therefore its horizontal scrollbar
+         * appears at the BOTTOM of the animation
+         * viewport rather than immediately beneath
+         * the linked list.
+         */}
+        <div
           className={styles.scrollWrapper}
+          style={{
+            flex: '1 1 auto',
+
+            /*
+             * Critical when using flex layouts.
+             * Without minHeight: 0, the browser
+             * can force this element to fit the
+             * natural height of its child instead.
+             */
+            minHeight: 0,
+
+            width: '100%',
+
+            /*
+             * Horizontal scrolling belongs to
+             * the entire animation viewport.
+             */
+            overflowX: 'auto',
+
+            /*
+             * We only want the horizontal
+             * scrollbar here.
+             */
+            overflowY: 'hidden',
+
+            position: 'relative',
+          }}
         >
           <div
             className={styles.stage}
             style={{
+              /*
+               * Stage width still follows the
+               * actual linked-list content.
+               *
+               * If this is wider than the
+               * viewport, scrollWrapper becomes
+               * horizontally scrollable.
+               */
               width: contentWidth,
+
               margin: '0 auto',
-              height: Math.max(maxY + tagBlockH + 50, 240),
-              transform: `scale(${this.zoom})`,
+
+              /*
+               * Keep the existing content height
+               * calculation for node positioning.
+               */
+              height:
+                Math.max(
+                  maxY +
+                    tagBlockH +
+                    50,
+                  0
+                ),
+
+              /*
+               * Make the stage stretch vertically
+               * through the viewport without
+               * changing node coordinates.
+               *
+               * This is what separates the
+               * scrollbar position from the
+               * linked-list content height.
+               */
+              minHeight: '100%',
+
+              /*
+               * Required because arrows and nodes
+               * use absolute positioning.
+               */
+              position: 'relative',
+
+              transform:
+                `scale(${this.zoom})`,
+
+              /*
+               * Keep zoom anchored against the
+               * top-left of the scrolling stage.
+               */
+              transformOrigin:
+                'top left',
             }}
           >
+            {/* ========================= */}
+            {/* ARROW LAYER               */}
+            {/* ========================= */}
 
-          {/* ========================= */}
-          {/* ARROW LAYER               */}
-          {/* ========================= */}
+            <svg
+              className={styles.edges}
+              width={contentWidth}
+              height={maxY}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                pointerEvents: 'none',
+                overflow: 'visible',
+                background:
+                  'transparent',
+              }}
+            >
+              <defs>
+                <marker
+                  id="arrow-dark"
 
-          <svg
-            className={styles.edges}
-            width={contentWidth}
-            height={maxY}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              pointerEvents: 'none',
-              overflow: 'visible',
-              background: 'transparent',
-            }}
-          >
-            <defs>
-              <marker
-                id="arrow-dark"
+                  viewBox={
+                    `0 0 ` +
+                    `${ARROW_HEAD_LENGTH} ` +
+                    `${ARROW_HEAD_HEIGHT}`
+                  }
 
-                viewBox={
-                  `0 0 ` +
-                  `${ARROW_HEAD_LENGTH} ` +
-                  `${ARROW_HEAD_HEIGHT}`
+                  markerUnits={
+                    'userSpaceOnUse'
+                  }
+
+                  markerWidth={
+                    ARROW_HEAD_LENGTH
+                  }
+
+                  markerHeight={
+                    ARROW_HEAD_HEIGHT
+                  }
+
+                  /*
+                   * Attach the end of the shaft
+                   * to the BASE of the triangle.
+                   */
+                  refX={0}
+
+                  refY={
+                    ARROW_HEAD_HEIGHT /
+                    2
+                  }
+
+                  orient="auto"
+                >
+                  <path
+                    d={
+                      `M0,0 ` +
+                      `L${ARROW_HEAD_LENGTH},` +
+                      `${ARROW_HEAD_HEIGHT / 2} ` +
+                      `L0,${ARROW_HEAD_HEIGHT} Z`
+                    }
+
+                    fill="#ff3b3b"
+                  />
+                </marker>
+              </defs>
+
+              {list.map(n => {
+                /*
+                 * No arrow if the node
+                 * points nowhere.
+                 */
+                if (
+                  !n.nextKey ||
+                  n.hidden
+                ) {
+                  return null;
                 }
 
-                markerUnits={
-                  'userSpaceOnUse'
-                }
+                const to =
+                  nodes.get(
+                    n.nextKey
+                  );
 
-                markerWidth={
-                  ARROW_HEAD_LENGTH
-                }
-
-                markerHeight={
-                  ARROW_HEAD_HEIGHT
+                if (
+                  !to ||
+                  to.hidden
+                ) {
+                  return null;
                 }
 
                 /*
-                 * Attach the end of the shaft
-                 * to the BASE of the triangle.
+                 * Arrow starts EXACTLY
+                 * at the source dot.
                  */
-                refX={0}
+                const sourceDot =
+                  getDotCenter(n);
 
-                refY={
-                  ARROW_HEAD_HEIGHT /
-                  2
-                }
+                /*
+                 * Destination geometry.
+                 */
+                const targetRect =
+                  getValueRect(to);
 
-                orient="auto"
-              >
-                <path
-                  d={
-                    `M0,0 ` +
-                    `L${ARROW_HEAD_LENGTH},` +
-                    `${ARROW_HEAD_HEIGHT / 2} ` +
-                    `L0,${ARROW_HEAD_HEIGHT} Z`
-                  }
+                const targetCenter =
+                  getValueCenter(to);
 
-                  fill="#ff3b3b"
-                />
-              </marker>
-            </defs>
+                /*
+                 * Exact location where
+                 * the arrowhead TIP should
+                 * touch the VALUE box.
+                 */
+                const targetBoundary =
+                  getTargetBoundary(
+                    sourceDot,
+                    targetRect,
+                    targetCenter
+                  );
 
-            {list.map(n => {
-              /*
-               * No arrow if the node
-               * points nowhere.
-               */
-              if (
-                !n.nextKey ||
-                n.hidden
-              ) {
-                return null;
-              }
+                /*
+                 * Direction from source dot
+                 * to final arrowhead tip.
+                 */
+                const dx =
+                  targetBoundary.x -
+                  sourceDot.x;
 
-              const to =
-                nodes.get(
-                  n.nextKey
+                const dy =
+                  targetBoundary.y -
+                  sourceDot.y;
+
+                const length =
+                  Math.sqrt(
+                    dx * dx +
+                    dy * dy
+                  );
+
+                const ux =
+                  length
+                    ? dx / length
+                    : 0;
+
+                const uy =
+                  length
+                    ? dy / length
+                    : 0;
+
+                /*
+                 * Stop the LINE before
+                 * the actual destination.
+                 *
+                 * The triangular marker
+                 * occupies these final
+                 * ARROW_HEAD_LENGTH pixels.
+                 */
+                const shaftEndX =
+                  targetBoundary.x -
+                  ux *
+                    ARROW_HEAD_LENGTH;
+
+                const shaftEndY =
+                  targetBoundary.y -
+                  uy *
+                    ARROW_HEAD_LENGTH;
+
+                const x1 =
+                  sourceDot.x;
+
+                const y1 =
+                  sourceDot.y;
+
+                const x2 =
+                  shaftEndX;
+
+                const y2 =
+                  shaftEndY;
+
+                return (
+                  <motion.path
+                    key={
+                      `e-${n.key}-${to.key}`
+                    }
+
+                    initial={
+                      false
+                    }
+
+                    animate={{
+                      d:
+                        getPath(
+                          x1,
+                          y1,
+                          x2,
+                          y2
+                        ),
+                    }}
+
+                    transition={{
+                      duration:
+                        0.25,
+                    }}
+
+                    fill="none"
+
+                    markerEnd={
+                      'url(#arrow-dark)'
+                    }
+
+                    className={
+                      styles.edge
+                    }
+
+                    style={{
+                      strokeLinecap:
+                        'butt',
+                    }}
+
+                    vectorEffect={
+                      'non-scaling-stroke'
+                    }
+                  />
                 );
+              })}
+            </svg>
 
-              if (
-                !to ||
-                to.hidden
-              ) {
-                return null;
-              }
+            {/* ========================= */}
+            {/* NODE LAYER                */}
+            {/* ========================= */}
 
-              /*
-               * Arrow starts EXACTLY
-               * at the source dot.
-               */
-              const sourceDot =
-                getDotCenter(n);
+            <AnimateSharedLayout>
+              {list.map(n => (
+                !n.hidden && (
+                  <motion.div
+                    key={n.key}
+                    layout
 
-              /*
-               * Destination geometry.
-               */
-              const targetRect =
-                getValueRect(to);
+                    className={[
+                      styles.node,
+                      variantClass(n),
+                      n.hidden &&
+                        styles.hidden,
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
 
-              const targetCenter =
-                getValueCenter(to);
+                    style={{
+                      position:
+                        'absolute',
 
-              /*
-               * Exact location where
-               * the arrowhead TIP should
-               * touch the VALUE box.
-               */
-              const targetBoundary =
-                getTargetBoundary(
-                  sourceDot,
-                  targetRect,
-                  targetCenter
-                );
+                      left:
+                        n.pos.x -
+                        60 +
+                        contentOffsetX,
 
-              /*
-               * Direction from source dot
-               * to final arrowhead tip.
-               */
-              const dx =
-                targetBoundary.x -
-                sourceDot.x;
+                      top:
+                        n.pos.y -
+                        10,
 
-              const dy =
-                targetBoundary.y -
-                sourceDot.y;
+                      width:
+                        NODE_W,
 
-              const length =
-                Math.sqrt(
-                  dx * dx +
-                  dy * dy
-                );
+                      height:
+                        NODE_H,
+                    }}
 
-              const ux =
-                length
-                  ? dx / length
-                  : 0;
-
-              const uy =
-                length
-                  ? dy / length
-                  : 0;
-
-              /*
-               * Stop the LINE before
-               * the actual destination.
-               *
-               * The triangular marker
-               * occupies these final
-               * ARROW_HEAD_LENGTH pixels.
-               */
-              const shaftEndX =
-                targetBoundary.x -
-                ux *
-                  ARROW_HEAD_LENGTH;
-
-              const shaftEndY =
-                targetBoundary.y -
-                uy *
-                  ARROW_HEAD_LENGTH;
-
-              const x1 =
-                sourceDot.x;
-
-              const y1 =
-                sourceDot.y;
-
-              const x2 =
-                shaftEndX;
-
-              const y2 =
-                shaftEndY;
-
-              return (
-                <motion.path
-                  key={
-                    `e-${n.key}-${to.key}`
-                  }
-
-                  initial={
-                    false
-                  }
-
-                  animate={{
-                    d:
-                      getPath(
-                        x1,
-                        y1,
-                        x2,
-                        y2
-                      ),
-                  }}
-
-                  transition={{
-                    duration:
-                      0.25,
-                  }}
-
-                  fill="none"
-
-                  markerEnd={
-                    'url(#arrow-dark)'
-                  }
-
-                  className={
-                    styles.edge
-                  }
-
-                  style={{
-                    strokeLinecap:
-                      'butt',
-                  }}
-
-                  vectorEffect={
-                    'non-scaling-stroke'
-                  }
-                />
-              );
-            })}
-          </svg>
-
-          {/* ========================= */}
-          {/* NODE LAYER                */}
-          {/* ========================= */}
-
-          <AnimateSharedLayout>
-            {list.map(n => (
-              !n.hidden && (
-                <motion.div
-                  key={n.key}
-                  layout
-                  className={[
-                    styles.node,
-                    variantClass(n),
-                    n.hidden && styles.hidden,
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                  style={{
-                    position: 'absolute',
-                    left: n.pos.x - 60 + contentOffsetX,
-                    top: n.pos.y - 10,
-                    width: NODE_W,
-                    height: NODE_H,
-                  }}
-                  transition={{
-                    duration: 0.25,
-                  }}
-                >
-                  <div
-                    className={styles.pill}
+                    transition={{
+                      duration:
+                        0.25,
+                    }}
                   >
-                    <span
-                      className={styles.value}
+                    <div
+                      className={
+                        styles.pill
+                      }
                     >
-                      {n.value}
-                    </span>
-
-                    <span
-                      className={styles.cap}
-                    >
-                      <i
-                        className={styles.dot}
-                      />
-                    </span>
-                  </div>
-
-                  <div
-                    className={styles.vars}
-                  >
-                    {n.variables.map(v => (
-                      <motion.div
-                        layoutId={`${n.key}-${v}`}
-                        key={v}
-
-                        // Adjust M/L/R/E label position based on the node row.
-                        className={[
-                          styles.varBadge,
-                          v.split('|').some(tag =>
-                            ['M', 'L', 'R', 'E', 'Mid'].includes(tag.trim()) 
-                          )&&
-                            n.pos.y === topRowY &&
-                            styles.varTopBadge,
-                          
-                          v.split('|').some(tag =>
-                            ['M', 'L', 'R', 'E', 'Mid'].includes(tag.trim()) 
-                          )&&
-                            n.pos.y === bottomRowY &&
-                            topRowY !== bottomRowY &&
-                            styles.varBottomBadge,
-                        ]
-                          .filter(Boolean)
-                          .join(' ')}
+                      <span
+                        className={
+                          styles.value
+                        }
                       >
-                        {v}
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              )
-            ))}
-          </AnimateSharedLayout>
-        </div>
-      </div>
+                        {n.value}
+                      </span>
 
+                      <span
+                        className={
+                          styles.cap
+                        }
+                      >
+                        <i
+                          className={
+                            styles.dot
+                          }
+                        />
+                      </span>
+                    </div>
+
+                    <div
+                      className={
+                        styles.vars
+                      }
+                    >
+                      {n.variables.map(
+                        v => (
+                          <motion.div
+                            layoutId={
+                              `${n.key}-${v}`
+                            }
+
+                            key={v}
+
+                            /*
+                             * Adjust M/L/R/E label
+                             * position based on the
+                             * node row.
+                             */
+                            className={[
+                              styles.varBadge,
+
+                              v
+                                .split('|')
+                                .some(
+                                  tag =>
+                                    [
+                                      'M',
+                                      'L',
+                                      'R',
+                                      'E',
+                                      'Mid',
+                                    ].includes(
+                                      tag.trim()
+                                    )
+                                ) &&
+                                n.pos.y ===
+                                  topRowY &&
+                                styles.varTopBadge,
+
+                              v
+                                .split('|')
+                                .some(
+                                  tag =>
+                                    [
+                                      'M',
+                                      'L',
+                                      'R',
+                                      'E',
+                                      'Mid',
+                                    ].includes(
+                                      tag.trim()
+                                    )
+                                ) &&
+                                n.pos.y ===
+                                  bottomRowY &&
+                                topRowY !==
+                                  bottomRowY &&
+                                styles.varBottomBadge,
+                            ]
+                              .filter(Boolean)
+                              .join(' ')}
+                          >
+                            {v}
+                          </motion.div>
+                        )
+                      )}
+                    </div>
+                  </motion.div>
+                )
+              ))}
+            </AnimateSharedLayout>
+          </div>
+        </div>
       </div>
     );
   }
