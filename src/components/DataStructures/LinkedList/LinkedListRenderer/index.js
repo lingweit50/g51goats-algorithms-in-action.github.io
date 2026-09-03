@@ -434,50 +434,30 @@ class LinkedListRenderer extends Array2DRenderer {
     const bottomRowY = rowYs[rowYs.length - 1];
 
     return (
-  <div
-    className={styles.container}
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      minHeight: 0,
-      overflow: 'hidden',
-    }}
-  >
-    <div
-      className={styles.value}
-      style={{
-         width: '100%',
-         textAlign: 'center',
-         transform: 'translateY(-15px)',
-      }}
-    >
-       {this.props.data.caption}
-    </div>
+      <div className={styles.container}>
+        <div
+          className={styles.value}
+          style={{
+             width: '100%',
+             textAlign: 'center',
+             transform: 'translateY(-15px)',
+          }}
+        >
+           {this.props.data.caption}
+        </div>
 
-    <div 
-      className={styles.scrollWrapper}
-      style={{
-        flex: '1 1 auto',
-        minHeight: 0,
-        width: '100%',
-        overflowX: 'auto',
-        overflowY: 'hidden',
-        position: 'relative',
-      }}
-    >
-      <div
-        className={styles.stage}
-        style={{
-          width: contentWidth,
-          margin: '0 auto',
-          height: Math.max(maxY + tagBlockH + 50, 0),
-          minHeight: '100%',
-          position: 'relative',
-          transform: `scale(${this.zoom})`,
-          transformOrigin: 'top left',
-        }}
-      >
+        <div 
+          className={styles.scrollWrapper}
+        >
+          <div
+            className={styles.stage}
+            style={{
+              width: contentWidth,
+              margin: '0 auto',
+              height: Math.max(maxY + tagBlockH + 50, 0),
+              transform: `scale(${this.zoom})`,
+            }}
+          >
 
           {/* ========================= */}
           {/* ARROW LAYER               */}
