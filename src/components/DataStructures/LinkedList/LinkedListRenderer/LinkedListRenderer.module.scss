@@ -9,14 +9,13 @@
 
 
 .scrollWrapper {
-  position: absolute;      /* Attach the scroll area to the container edges */
-  left: 0;                 /* Follow the left edge of the visualisation panel */
-  right: 0;                /* Follow the draggable right boundary */
-  min-width: 0;            /* Allow the scroll area to shrink */
-  overflow-x: auto;        /* Scroll the linked list when it becomes too wide */
-  overflow-y: hidden;      /* Prevent vertical scrolling */
-  box-sizing: border-box;  /* Keep sizing inside the available space */
+  position: static;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+  box-sizing: border-box;
 }
+
 
 /* The outer container wrapping the visualization stage */
 .container {

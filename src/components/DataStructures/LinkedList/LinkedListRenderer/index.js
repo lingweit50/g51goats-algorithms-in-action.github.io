@@ -454,7 +454,7 @@ class LinkedListRenderer extends Array2DRenderer {
             style={{
               width: contentWidth,
               margin: '0 auto',
-              height: Math.max(maxY + tagBlockH + 50, 240),
+              height: Math.max(maxY + tagBlockH + 50, 0),
               transform: `scale(${this.zoom})`,
             }}
           >
