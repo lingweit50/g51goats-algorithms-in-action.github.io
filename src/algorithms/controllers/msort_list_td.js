@@ -149,11 +149,11 @@ let Tails;        // ['i.tail (next)', ...]
 
 // Hides stack array and subheading
 function hideArrayRows() {
-  document.querySelectorAll('.Array1DRenderer_row__9zvrx').forEach(el => {
+  document.querySelectorAll('[class*="Array1DRenderer_row__"]').forEach(el => {
     el.style.visibility = 'hidden';
   });
 
-  document.querySelectorAll('.Ellipsis_ellipsis__mpsbu').forEach(el => {
+  document.querySelectorAll('[class*="Ellipsis_ellipsis__"]').forEach(el => {
     console.log("hi")
     if (el.textContent.trim() === 'Call Stack') {
       el.style.visibility = 'hidden';
