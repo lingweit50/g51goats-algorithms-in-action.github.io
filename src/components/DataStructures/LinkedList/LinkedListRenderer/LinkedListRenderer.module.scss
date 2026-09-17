@@ -36,10 +36,18 @@
 /* ======================================================
    🔹 Edges & Arrowheads
    ====================================================== */
+/*
+ * Arrow colour comes from styles/global.scss (--arrow-line, with
+ * --arrow-head aliased to it), so shaft and head always match and
+ * both follow the algorithm theme picker in Settings and the
+ * light/dark toggle.  Do not reintroduce literals here: arrows are
+ * structural, and a saturated arrow reads as a second semantic channel
+ * competing with the node fills.
+ */
 .edges {
-  /* Base arrow line: red stroke with smooth opacity transition */
+  /* Base arrow shaft */
   .edge {
-    stroke: #ff3b3b;
+    stroke: var(--arrow-line);
     stroke-width: 3px;
     stroke-linecap: butt;
     stroke-linejoin: miter;
@@ -47,9 +55,10 @@
     transition: opacity 0.45s ease;
   }
 
-  /* Active arrow (slightly darker red) */
+  /* Emphasised arrow.
+     not currently applied by the renderer */
   .edge--active {
-    stroke: #e53935;
+    stroke: var(--arrow-head);
   }
 
   /* Hidden edge: invisible and non-interactive */
@@ -58,23 +67,26 @@
     pointer-events: none;
   }
 
-  /* Faded edge: for deemphasized connections */
+  /* Faded edge: for deemphasized connections.
+     not currently applied by the renderer */
   .edge--faded {
-    opacity: 0.2;
+    opacity: var(--arrow-faded-opacity);
   }
 
-  /* Arrowhead fill color (solid dark grey) */
+  /* Arrowhead fill color */
   .arrowHead {
-    fill: #2e2e2e;
+    fill: var(--arrow-head);
+    // transition: fill 0.25s ease;
   }
 
   z-index: 3;             /* Render above nodes */
   position: absolute;     /* Overlay entire stage */
 }
 
-/* Circle at the start of each arrow */
+/* Circle at the start of each arrow.
+   not currently applied by the renderer */
 .edgeDot {
-  fill: #2e2e2e;
+  fill: var(--arrow-head);
 }
 
 /* ======================================================

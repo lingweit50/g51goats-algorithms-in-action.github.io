@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors">
+    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="update coloring">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_td.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListTracer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListTracer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/global.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/global.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +122,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;tom-test-branch&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;arrow-color&quot;,
     &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/tp/Documents/Programming/JavaScript/g51goats-algorithms-in-action.github.io&quot;,
@@ -201,7 +199,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786552109248</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="update coloring">
+      <option name="closed" value="true" />
+      <created>1789621886102</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1789621886102</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,6 +218,7 @@
     <MESSAGE value="replace ptrVariants with new color constants" />
     <MESSAGE value="update variantClass to use global color denoted in renderer" />
     <MESSAGE value="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors" />
-    <option name="LAST_COMMIT_MESSAGE" value="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors" />
+    <MESSAGE value="update coloring" />
+    <option name="LAST_COMMIT_MESSAGE" value="update coloring" />
   </component>
 </project>
