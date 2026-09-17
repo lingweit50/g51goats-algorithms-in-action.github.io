@@ -176,23 +176,33 @@ $yellowLine: #FFDE3C;
 	//graph: available graph edges
 	//table: selected table elements
 	--plum: #8c32ab;
-        // used as 4th color in radix exchange sort,...
+	// used as 4th color in radix exchange sort,...
 	--wood:  #d35400;
-        // (currently) spare color
-        --stone: #aeaeae;
-        // same as sorted for various data structures
-
-
+	// (currently) spare color
+	--stone: #aeaeae;
+	// same as sorted for various data structures
 
 
 	--graph-text-fill: #1809ee;
 	--graph-text-stroke: #1809ee;
 
-	--graph-edge-line-stroke: #aeaeae;
+	// neutral arrow colors.
+	// head is darker than line in light mode,
+	// lighter than line in dark mode
+	// this is overridden per theme
+	--arrow-line: #8D7968;
+	--arrow-head: #6F6052;
+	--arrow-faded-opacity: 0.25;
+
+	// Graph/tree arrows resolve to the same ramp rather than carrying
+	// their own literals, so there is one place to change.  Per-state
+	// arrow colours (selected/visited) still override these and stay
+	// semantic - only the *default* arrow is neutral.
+	--graph-edge-line-stroke: var(--arrow-line);
 	--graph-edge-line-weight-fill: #a4a4a4;
 
 
-	--graph-arrow-fill: #aeaeae;
+	--graph-arrow-fill: var(--arrow-head);
 
 	--array-2d-row-col-bg: #ffffff;
 	--array-2d-row-col-border: #4f4f4f;
@@ -354,10 +364,14 @@ $yellowLine: #FFDE3C;
 	--graph-node-weight-fill: #6a6a6a;
 	--graph-node-id-fill-selected: #FFFFFF;
 	--graph-node-id-fill-visited: #FFFFFF;
-	--graph-edge-line-stroke: #464646;
+
+	--arrow-line: #957E6A;
+	--arrow-head: #AA9888;
+
+	--graph-edge-line-stroke: var(--arrow-line);
 	--graph-edge-line-weight-fill: #717171;
 
-	--graph-arrow-fill: #464646;
+	--graph-arrow-fill: var(--arrow-head);
 
 	--array-2d-row-col-bg: #343434;
 	--array-2d-row-col-border: #c0c0c0;
@@ -409,12 +423,12 @@ $yellowLine: #FFDE3C;
 	--graph-edge-line-stroke-visited1: #11cc77;
 	--graph-edge-line-stroke-visited2: #f58b2f;
 	--graph-edge-line-stroke-visited3: #FF0000;        /* YouTube Red */
-  --graph-edge-line-stroke-visited4: #2289ff;
+	--graph-edge-line-stroke-visited4: #2289ff;
 	--graph-edge-weight-fill-visited: #2289ff;
 	--graph-edge-weight-fill-visited1: #11cc77;
 	--graph-edge-weight-fill-visited2: #f58b2f;
 	--graph-edge-weight-fill-visited3: #FF0000;        /* YouTube Red */
-  --graph-edge-weight-fill-visited4: #2289ff;
+	--graph-edge-weight-fill-visited4: #2289ff;
 
 	/* YouTube Red */
 	--graph-select_color-fill: #ff0000;
@@ -424,7 +438,7 @@ $yellowLine: #FFDE3C;
 	--graph-arrow-fill-visited1: #11cc77;
 	--graph-arrow-fill-visited2: #f58b2f;
 	--graph-arrow-fill-visited3: #FF0000;
-  --graph-arrow-fill-visited4: #2289ff;
+	--graph-arrow-fill-visited4: #2289ff;
 
 	--array-1d-row-col-bg-selected: #e85c49;
 	--array-1d-row-col-bg-patched: #83d489;
@@ -439,19 +453,22 @@ $yellowLine: #FFDE3C;
 	--array-2d-row-col-bg-patched: #f58b2f;
 	--array-2d-row-col-sorted: #FFFFFF;
 
-  // named colours (not intended just for graphs):
-  // XXX The idea (not implemented properly) was algorithm code could
-  // use color names such as these and in the default scheme things
-  // would be rendered intuitively, but in others they would look
-  // different (a leaf is green by default but it can be other colors)
+	// named colours (not intended just for graphs):
+	// XXX The idea (not implemented properly) was algorithm code could
+	// use color names such as these and in the default scheme things
+	// would be rendered intuitively, but in others they would look
+	// different (a leaf is green by default but it can be other colors)
 	--leaf: #83d489;
 	// --apple: #a83c49;
-        // --apple: #FF0000;
-        --apple: #DC0707;
-        --peach: #ffa500;
+	// --apple: #FF0000;
+	--apple: #DC0707;
+	--peach: #ffa500;
 	--sky: #2289ff;
 	--plum: #8c32ab;
 	--wood: #9a7d0a;
+
+	--arrow-line: #8D7968;
+	--arrow-head: #6F6052;
 
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
@@ -471,6 +488,8 @@ $yellowLine: #FFDE3C;
 	--plum: #d364a4;
 	--wood: #f5cba7;
 
+	--arrow-line: #688D6E;
+	--arrow-head: #526F57;
 
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
@@ -489,6 +508,9 @@ $yellowLine: #FFDE3C;
 	--plum: #d8c104;
 	--wood: #914626;
 
+	--arrow-line: #8D686E;
+	--arrow-head: #6F5257;
+
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
 	--right-code-variable-font: #A06600;
@@ -504,6 +526,9 @@ $yellowLine: #FFDE3C;
 	--sky: #3e3e3e;
 	--plum: #8e8e8e;
 	--wood: #a2a2a2;
+
+	--arrow-line: #686868;
+	--arrow-head: #5F5F5F;
 
 	//pseudocode colours
 	--right-code-keyword-font: #646464;
@@ -582,4 +607,30 @@ $yellowLine: #FFDE3C;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+
+// override arrow colors in dark mode (due to neutral color is mostly
+// varying states of light and dark, custom themes are needed for it
+// to be visible)
+// put here to not be overridden  by default colors
+
+[data-theme="dark"][algo-theme="default"] {
+	--arrow-line: #957E6A;
+	--arrow-head: #AA9888;
+}
+
+[data-theme="dark"][algo-theme="green"] {
+	--arrow-line: #6A9571;
+	--arrow-head: #88AA8D;
+}
+
+[data-theme="dark"][algo-theme="red"] {
+	--arrow-line: #956A71;
+	--arrow-head: #AA888D;
+}
+
+[data-theme="dark"][algo-theme="grey"] {
+	--arrow-line: #6A7D95;
+	--arrow-head: #8897AA;
 }

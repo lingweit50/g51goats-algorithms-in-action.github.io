@@ -518,7 +518,9 @@ class LinkedListRenderer extends Array2DRenderer {
                     `L0,${ARROW_HEAD_HEIGHT} Z`
                   }
 
-                  fill="#ff3b3b"
+                  className={
+                    styles.arrowHead
+                  }
                 />
               </marker>
             </defs>
