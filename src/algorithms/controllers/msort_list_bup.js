@@ -167,8 +167,8 @@ export function run_msort() {
   // XXX could temporarily use depth = 0 (before complete rewrite) as there's no recursion for bup
   return function run(chunker, { nodes }) {
     const entire_num_array = nodes;
-    const finished_stack_frames = []; // [ [left, right,  depth], ...]  (although depth could be implicit this is easier)
-    const real_stack = []; // [ [left, right,  depth], ...]
+    // const  = []; // [ [left, right,  depth], ...]  (although depth could be implicit this is easier)
+    // const  = []; // [ [left, right,  depth], ...]
 
     // XXX derived_stack function need to be rewritten to match bup (see msort_list_td)
     // XXX same with refresh_stack (due to usage of recursion)
@@ -187,19 +187,12 @@ export function run_msort() {
 
     // XXX need to be rewritten to replace recursion with iterative (remove depth)
     function setupInitialVisualization(L, len, depth) {
-      chunker.add('Main', (vis, T, cur_L, cur_len, cur_depth, cur_real_stack, cur_finished_stack_frames) => {
+      chunker.add('Main', (vis, T, cur_L, cur_len, cur_depth) => {
         // Depth 0: show full original list (top-level call)
         // Deeper recursion: hide other sublists and focus only on this L-chain
-        if (cur_depth > 0) {
-          // vis.list.hideAll();
-          // vis.list.showChain(cur_L, T);
-        } else {
-          vis.list.set(entire_num_array, 'mergeSort list init');
-          if(vis.stack){
-            vis.stack.set(entire_num_array, 'mergeSort list init')
-          }
-          // vis.list.colorChain(1, ptrVariant.runA, T);
-        }
+        
+        vis.list.set(entire_num_array, 'mergeSort list init');
+      
         // XXX should colour list the cur_L colour and *remove* the
         // colour from the previous cur_L, if any
         // vis.list.showChain(cur_L, T);
@@ -210,8 +203,8 @@ export function run_msort() {
         // Just L tag is known at this point
         vis.list.assignTag('L', cur_L);
 
-        // refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
-      }, [Tails, L, len, depth, real_stack, finished_stack_frames], depth);
+        // refresh_stack(vis);
+      }, [Tails, L, len, depth], depth);
 
       // This corresponds to pseudocode bookmark:
       // \B len>1 — later checked before recursion happens
@@ -423,62 +416,54 @@ export function run_msort() {
       const left = L - 1;
       const right = L + len - 2;
 
-      // Initialises new stack frame
-      real_stack.push([left, right, depth])
-
       setupInitialVisualization(L, len, depth);
 
-      let result;
-      if (len > 1) {
-        let midNum = Math.ceil(len / 2);
-        const { L: newL, R, Mid } =
-            splitList(L, midNum, depth);
-        const { L: sortedL, R: sortedR } =
-            performRecursiveSort(newL, R, midNum, len, depth);
-        const { M, L: remainingL, R: remainingR } =
-            mergeHeads(sortedL, sortedR, depth);
-        const mergedList =
-            mergeRemainingElements(remainingL, remainingR, M, depth);
+      // let result;
+      // if (len > 1) {
+      //   let midNum = Math.ceil(len / 2);
+      //   const { L: newL, R, Mid } =
+      //       splitList(L, midNum, depth);
+      //   const { L: sortedL, R: sortedR } =
+      //       performRecursiveSort(newL, R, midNum, len, depth);
+      //   const { M, L: remainingL, R: remainingR } =
+      //       mergeHeads(sortedL, sortedR, depth);
+      //   const mergedList =
+      //       mergeRemainingElements(remainingL, remainingR, M, depth);
 
-        chunker.add('returnM', (vis, T, _cur_L, cur_M, cur_real_stack, cur_finished_stack_frames) => {
+      //   chunker.add('returnM', (vis, T, _cur_L, cur_M) => {
 
-          vis.list.assignTag('L', undefined);
-          vis.list.assignTag('R', undefined);
-          vis.list.assignTag('E', undefined);
-          vis.list.assignTag('Mid', undefined);
-          vis.list.assignTag('M', cur_M);
+      //     vis.list.assignTag('L', undefined);
+      //     vis.list.assignTag('R', undefined);
+      //     vis.list.assignTag('E', undefined);
+      //     vis.list.assignTag('Mid', undefined);
+      //     vis.list.assignTag('M', cur_M);
 
-          vis.list.resetColors(doneColor);
-          vis.list.colorChain(cur_M, sortColor, T);
+      //     vis.list.resetColors(doneColor);
+      //     vis.list.colorChain(cur_M, sortColor, T);
 
-          vis.list.repositionMergedChain(cur_M, T);
-          vis.list.updateConnections(T);
-          // refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
-        }, [Tails, newL, mergedList, real_stack, finished_stack_frames], depth);
+      //     vis.list.repositionMergedChain(cur_M, T);
+      //     vis.list.updateConnections(T);
+      //     // refresh_stack(vis);
+      //   }, [Tails, newL, mergedList], depth);
 
-        result = mergedList;
-      } else {
-        chunker.add('returnL', (vis, _T, cur_L, cur_real_stack, cur_finished_stack_frames) => {
+      //   result = mergedList;
+      // } else {
+      //   chunker.add('returnL', (vis, _T, cur_L) => {
 
-          vis.list.assignTag('Mid', undefined);
-          vis.list.assignTag('R', undefined);
-          vis.list.assignTag('R', undefined);
+      //     vis.list.assignTag('Mid', undefined);
+      //     vis.list.assignTag('R', undefined);
+      //     vis.list.assignTag('R', undefined);
 
-          vis.list.resetColors(doneColor);
-          vis.list.colorMerged(cur_L, cur_L, Tails, sortColor);
-          // refresh_stack(vis, cur_real_stack, cur_finished_stack_frames);
+      //     vis.list.resetColors(doneColor);
+      //     vis.list.colorMerged(cur_L, cur_L, Tails, sortColor);
+      //     // refresh_stack(vis);
 
-        }, [Tails, L, real_stack, finished_stack_frames], depth);
+      //   }, [Tails, L], depth);
 
-        result = L;
-      }
-
-      // At each completion of each recursive call of merge sort, pop a frame from call stack
-      const frame = real_stack.pop();
-      if (frame){
-        finished_stack_frames.push(frame);
-      }
-      return result;
+      //   result = L;
+      // }
+      // // At each completion of each recursive call of merge sort, pop a frame from call stack
+      return L;
     }
 
     // ---- main ----
@@ -487,7 +472,7 @@ export function run_msort() {
     // XXX hack to allow BUP pseudocode to be displayed
     // before we just return
     // delete this after implementation
-    if (entire_num_array.length >= 0) { chunker.add('Main'); return;}
+    // if (entire_num_array.length >= 0) { chunker.add('Main'); return;}
 
     const msresult = MergeSort(1, entire_num_array.length, 0);
 
