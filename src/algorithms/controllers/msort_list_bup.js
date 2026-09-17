@@ -418,7 +418,26 @@ export function run_msort() {
 
       setupInitialVisualization(L, len, depth);
 
-      // let result;
+      let result;
+      // If initial list is 1 element return it
+      if (len < 2) {
+        result = L;
+        return result;
+      }
+
+      // Create LL from L. divide
+      // init_LL
+      
+      // While LL > 1. merge
+      // Merge consecutive pairs
+      // For loop (i = 0; i < len(LL); i += 2), jumps two nodes 
+      // Merge i and i + 1, LL -= 1 (length of linked list) \\ 
+
+      // result == LL.head once LL == 1
+      // Return result
+      
+    
+
       // if (len > 1) {
       //   let midNum = Math.ceil(len / 2);
       //   const { L: newL, R, Mid } =
@@ -463,7 +482,7 @@ export function run_msort() {
       //   result = L;
       // }
       // // At each completion of each recursive call of merge sort, pop a frame from call stack
-      return L;
+      return result;
     }
 
     // ---- main ----
