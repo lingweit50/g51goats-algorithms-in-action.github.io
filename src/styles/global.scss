@@ -190,8 +190,8 @@ $yellowLine: #FFDE3C;
 	// head is darker than line in light mode,
 	// lighter than line in dark mode
 	// this is overridden per theme
-	--arrow-line: #8D7968;
-	--arrow-head: #6F6052;
+	--arrow-line: #8C7C6C;
+	--arrow-head: #665550;
 	--arrow-faded-opacity: 0.25;
 
 	// Graph/tree arrows resolve to the same ramp rather than carrying
@@ -200,8 +200,6 @@ $yellowLine: #FFDE3C;
 	// semantic - only the *default* arrow is neutral.
 	--graph-edge-line-stroke: var(--arrow-line);
 	--graph-edge-line-weight-fill: #a4a4a4;
-
-
 	--graph-arrow-fill: var(--arrow-head);
 
 	--array-2d-row-col-bg: #ffffff;
@@ -467,8 +465,8 @@ $yellowLine: #FFDE3C;
 	--plum: #8c32ab;
 	--wood: #9a7d0a;
 
-	--arrow-line: #8D7968;
-	--arrow-head: #6F6052;
+	--arrow-line: #E9C3AF;
+	--arrow-head: #B07D62;
 
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
@@ -488,8 +486,8 @@ $yellowLine: #FFDE3C;
 	--plum: #d364a4;
 	--wood: #f5cba7;
 
-	--arrow-line: #688D6E;
-	--arrow-head: #526F57;
+	--arrow-line: #B09C8D;
+	--arrow-head: #8A7A6D;
 
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
@@ -508,8 +506,8 @@ $yellowLine: #FFDE3C;
 	--plum: #d8c104;
 	--wood: #914626;
 
-	--arrow-line: #8D686E;
-	--arrow-head: #6F5257;
+	--arrow-line: #E8B39A;
+	--arrow-head: #B88B77;
 
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
@@ -527,7 +525,7 @@ $yellowLine: #FFDE3C;
 	--plum: #8e8e8e;
 	--wood: #a2a2a2;
 
-	--arrow-line: #686868;
+	--arrow-line: #7C8398;
 	--arrow-head: #5F5F5F;
 
 	//pseudocode colours
@@ -536,22 +534,6 @@ $yellowLine: #FFDE3C;
 	--right-code-operator-font: #646464;
 	--right-code-function-font: #646464;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -607,30 +589,4 @@ $yellowLine: #FFDE3C;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-
-// override arrow colors in dark mode (due to neutral color is mostly
-// varying states of light and dark, custom themes are needed for it
-// to be visible)
-// put here to not be overridden  by default colors
-
-[data-theme="dark"][algo-theme="default"] {
-	--arrow-line: #957E6A;
-	--arrow-head: #AA9888;
-}
-
-[data-theme="dark"][algo-theme="green"] {
-	--arrow-line: #6A9571;
-	--arrow-head: #88AA8D;
-}
-
-[data-theme="dark"][algo-theme="red"] {
-	--arrow-line: #956A71;
-	--arrow-head: #AA888D;
-}
-
-[data-theme="dark"][algo-theme="grey"] {
-	--arrow-line: #6A7D95;
-	--arrow-head: #8897AA;
 }
