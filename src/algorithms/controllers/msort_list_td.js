@@ -159,6 +159,12 @@ function hideArrayRows() {
       el.style.visibility = 'hidden';
     }
   })
+
+  // Move stack visualisation up from -50px to -125px
+  const stack = document.querySelector('[class*="Array1DRenderer_stack__"]')
+  if (stack){
+    stack.style.marginTop = '-125px';
+  }
 }
 
 function isRecursionExpanded() {
