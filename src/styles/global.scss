@@ -187,9 +187,8 @@ $yellowLine: #FFDE3C;
 	--graph-text-stroke: #1809ee;
 
 	// neutral arrow colors.
-	// head is darker than line in light mode,
-	// lighter than line in dark mode
-	// this is overridden per theme
+	// arrow head is darker than arrow body
+	// this is overridden in each theme
 	--arrow-line: #8C7C6C;
 	--arrow-head: #665550;
 	--arrow-faded-opacity: 0.25;
@@ -465,6 +464,7 @@ $yellowLine: #FFDE3C;
 	--plum: #8c32ab;
 	--wood: #9a7d0a;
 
+	// default arrow color
 	--arrow-line: #E9C3AF;
 	--arrow-head: #B07D62;
 
@@ -506,8 +506,8 @@ $yellowLine: #FFDE3C;
 	--plum: #d8c104;
 	--wood: #914626;
 
-	--arrow-line: #E8B39A;
-	--arrow-head: #B88B77;
+	--arrow-line: #B57168;
+	--arrow-head: #93575A;
 
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
