@@ -185,6 +185,7 @@ class LinkedListRenderer extends Array2DRenderer {
      */
     const ARROW_HEAD_LENGTH = 6;
     const ARROW_HEAD_HEIGHT = 9;
+    const TARGET_GAP = 2.4;
 
     /*
      * Rectangle occupied by the VALUE
@@ -611,15 +612,22 @@ class LinkedListRenderer extends Array2DRenderer {
                * occupies these final
                * ARROW_HEAD_LENGTH pixels.
                */
+              const isDiagonal =
+                Math.abs(dx) > 0.001 &&
+                Math.abs(dy) > 0.001;
+
+              const targetGap =
+                isDiagonal ? TARGET_GAP : 0;
+
               const shaftEndX =
                 targetBoundary.x -
                 ux *
-                  ARROW_HEAD_LENGTH;
+                  (ARROW_HEAD_LENGTH + targetGap);
 
               const shaftEndY =
                 targetBoundary.y -
                 uy *
-                  ARROW_HEAD_LENGTH;
+                  (ARROW_HEAD_LENGTH + targetGap);
 
               const x1 =
                 sourceDot.x;
