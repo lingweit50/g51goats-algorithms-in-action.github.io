@@ -415,12 +415,26 @@ class LinkedListRenderer extends Array2DRenderer {
     const cameraTranslateX = 0;
     const cameraTranslateY = 0;
 
-    const contentWidth = bounds.width + 40;
+    const currentContentWidth = bounds.width + 40;
 
-  const listStartX = 
-    contentWidth <= containerWidth ? (containerWidth - bounds.width) / 2 : 20;
 
-  const contentOffsetX = listStartX - bounds.minX;
+  const layoutKey = `${containerWidth}-${list.length}`;
+
+  if (this.layoutKey !== layoutKey) {
+    this.layoutKey = layoutKey;
+     const listStartX = currentContentWidth <= containerWidth
+        ? (containerWidth - bounds.width) / 2  : 20;
+    
+    // Keep this offset fixed during the animation.
+    this.contentOffsetX = listStartX - bounds.minX;
+
+    this.contentWidth = Math.max(containerWidth, currentContentWidth);
+  } else {
+    // Do not allow the stage to suddenly shrink during merge.
+    this.contentWidth = Math.max(this.contentWidth, containerWidth, currentContentWidth);
+  }
+    const contentWidth = this.contentWidth;
+    const contentOffsetX = this.contentOffsetX;
 
     // Get all currently visible nodes
     const visibleNodes = list.filter(n => !n.hidden);
