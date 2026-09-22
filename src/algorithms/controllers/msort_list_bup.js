@@ -118,39 +118,9 @@ const runBColor = colors.sky;   // current R chain
 const sortColor = colors.leaf;  // already sorted portion
 const doneColor = colors.stone; // default/idle color
 
-
-// import 1D tracer to generate array for stack visualisation
-import ArrayTracer from '../../components/DataStructures/Array/Array1DTracer';
-
-import {
-  areExpanded,
-} from './collapseChunkPlugin';
-
-
-// see stackFrameColour in Array1DRenderer/index.js for corresponding function mapping to CSS
-// CSS variables are now based on global color palette (src/styles/global.scss)
-// so the call stack visualisations follows color options in Setting, same as list color above
-const STACK_FRAME_COLOR = {
-  No_color: 0,
-  In_progress_stackFrame: 1,
-  Current_stackFrame: 2,
-  Finished_stackFrame: 3,
-  I_color: 4,
-  J_color: 5,
-  P_color: 6, // pivot
-}
-
-
 // Internal data arrays encoding the linked list structure (NOT UI, don't delete)
 let Heads;        // ['i.head (data)', ...]
 let Tails;        // ['i.tail (next)', ...]
-
-
-
-// Stack Visualisation Helper functions
-import { update_vis_with_stack_frame } from './msort_arr_td';
-
-
 
 
 // ---------- Init visualiser (pointer only) ----------
@@ -173,7 +143,6 @@ export function run_msort() {
     // XXX derived_stack function need to be rewritten to match bup (see msort_list_td)
     // XXX same with refresh_stack (due to usage of recursion)
 
-
     // kept, same as msort_list_td, per pseudocode
     function initializeListStructure() {
       Heads = ['i.head (data)'];
@@ -186,11 +155,9 @@ export function run_msort() {
     }
 
     // XXX need to be rewritten to replace recursion with iterative (remove depth)
-    function setupInitialVisualization(L, len, depth) {
-      chunker.add('Main', (vis, T, cur_L, cur_len, cur_depth) => {
-        // Depth 0: show full original list (top-level call)
-        // Deeper recursion: hide other sublists and focus only on this L-chain
-        
+    function setupInitialVisualization(L, len) {
+      chunker.add('Main', (vis, T, cur_L, cur_len) => {
+        // Show full original list (top-level call)
         vis.list.set(entire_num_array, 'mergeSort list init');
       
         // XXX should colour list the cur_L colour and *remove* the
@@ -203,285 +170,188 @@ export function run_msort() {
         // Just L tag is known at this point
         vis.list.assignTag('L', cur_L);
 
-        // refresh_stack(vis);
-      }, [Tails, L, len, depth], depth);
+      }, [Tails, L, len]);
 
       // This corresponds to pseudocode bookmark:
-      // \B len>1 — later checked before recursion happens
-      // chunker.add('len>1', () => { }, [], depth);
+      // \B len<1 — later checked before recursion happens
+      chunker.add('len<1', () => { }, []);
     }
 
+    // Must be implemented
+    // Splits list L into a list of single element lists LL
+    // Need clarification on how LL looks like
+    // Should it be i.head (data): i.head(data), i.head (data)
+    // or should it be i.head (data): [values], [values]
+    function init_LL(L){
+      console.log("Start INIT")
+      // Bookmark: T <- L.tail
+      let T = Tails[L];
+      chunker.add('init_T', () => { }, []);
 
-    // XXX rewrite splitList function to split list into
-    // lists of size-one (singular) elements for iterative sort
-    // see msort_list_td for the original function
-    function splitList(L, midNum, depth) {
-      let Mid = L;
-      let R = Tails[Mid];
-      return { L, R, Mid };
+      let LL = Heads;
+      chunker.add('init_LL', () => { }, []);
+
+      L = T
+      chunker.add('use_T', () => { }, []);
+
+      let LR = LL
+      chunker.add('init_LR_1', () => { }, []);
+
+
+      for (let i = 1; i <= entire_num_array.length; i++){
+        console.log(`
+                  LR: ${LR}\n,
+                  LL: ${LL}\n,
+                  L: ${L}\n,
+                  T: ${T}\n,
+                  Tails: ${Tails}\n,
+                  Heads: ${Heads}
+                  `)
+
+        chunker.add('WhileL', () => { }, []);
+
+        T = Tails[L]
+        chunker.add('init_T_1', () => { }, []);
+
+        Tails[LR] = [Heads[L]] // WRONG
+        chunker.add('assign_LRtail', () => { }, []);
+
+        L = T
+        chunker.add('use_T_1', () => { }, []);
+
+        LR = Tails[LR] // WRONG
+        chunker.add('assign_LR', () => { }, []);
+      }
+
+      console.log(`LR: ${LR}\n,
+                  LL: ${LL}`)
+      console.log("End INIT")
+      return LL;
     }
 
+    // // Must be implemented
+    // // Performs the main sorting operations
+    function MergeAll(LL){
+      // Temp M
+      let M= 1;
 
-    // XXX removed performRecursiveSort function due to using iterative sort for bup
-    // see msort_list_td for the original function
-    function performRecursiveSort(L, R, midNum, len, depth) {
-      return { L, R };
+      let LR = LL;
+      chunker.add('init_LR', () => { }, []);
+      
+      // Placeholder length, L, and R must also be replaced.
+      // Must be replaced, refer to pseudocode to understand what value to place here. 
+      let tempLength = 2
+      while (tempLength > 1){
+        chunker.add('MergeAllWhile', () => { }, []);
+
+        let L = 1
+        chunker.add('init L', () => { }, []);
+
+        let R = 2
+        chunker.add('init R', () => { }, []);
+
+        M = Merge(L, R)
+        tempLength -= 1
+      }
+      chunker.add('returnM', () => { }, []);
+      chunker.add('replace_head', () => { }, []);
+      chunker.add('skip_second', () => { }, []);
+      chunker.add('next_pair', () => { }, []);
+      chunker.add('mergeDone', () => { }, []);
+      return M
     }
 
+    function Merge(L, R){
+      let M = init_M(L ,R)
 
-    // XXX can have all these shared functions in the same file
-    // (not main focus, can be done later)
+      chunker.add('E', () => { }, []);
 
-    // kept, same as msort_list_td, per pseudocode
-    function mergeHeads(L, R, depth) {
-      let M;
+      // Temp while loop, need to fix implementation
+      let tempLength = 1
+      while(tempLength > 0){
+      chunker.add('whileNotNull', () => { }, []);
+        CopySmaller()
+        CopyRest();
+        tempLength -= 1
+      }
 
-      chunker.add('compareHeads', (vis, T, cur_L, cur_R) => {
-        vis.list.moveChainBelow(cur_L, cur_R, T);
-        vis.list.assignTag('L', cur_L);
-        vis.list.assignTag('R', cur_R);
+      return M
+    }
 
-        vis.list.colorChains(cur_L, cur_R, T, runAColor, runBColor, doneColor);
-        vis.list.highlightHeads(cur_L, cur_R, apColor);
-      }, [Tails, L, R], depth);
+    // Must be implemented
+    function init_M(L, R){
+      let M = 1;
+      chunker.add('compareHeads', () => { }, []);
+      if (Heads[L] < Heads[R]){
+    //     M = L;
+        chunker.add('M<-L', () => { }, []);
 
-      if (Heads[L] < Heads[R]) {
-        M = L;
-
-        chunker.add('M<-L', (vis, T, cur_L, cur_R, cur_M) => {
-          vis.list.assignTag('M', cur_M);
-
-          vis.list.colorChains(cur_L, cur_R, T, runAColor, runBColor, doneColor);
-          vis.list.colorMerged(cur_M, cur_M, T, sortColor);
-        }, [Tails, L, R, M], depth);
-
-        L = Tails[L];
-
-        chunker.add('L<-tail(L)', (vis, _T, cur_L, _cur_R, _cur_M) => {
-          vis.list.assignTag('L', cur_L);
-        }, [Tails, L, R, M], depth);
-
+    //     L = Tails[L];
+        chunker.add('L<-tail(L)', () => { }, []);
       } else {
-        M = R;
+    //     M = R;
+        chunker.add('M<-R', () => { }, []);
 
-        chunker.add('M<-R', (vis, T, cur_L, cur_R, cur_M) => {
-          vis.list.assignTag('M', cur_M);
-          vis.list.colorChains(cur_L, cur_R, T, runAColor, runBColor, doneColor);
-          vis.list.colorMerged(cur_M, cur_M, T, sortColor);
-        }, [Tails, L, R, M], depth);
-
-        R = Tails[R];
-
-        chunker.add('R<-tail(R)', (vis, _T, _cur_L, cur_R, _cur_M) => {
-          vis.list.assignTag('R', cur_R);
-        }, [Tails, L, R, M], depth);
+    //     R = Tails[R];
+        chunker.add('R<-tail(R)', () => { }, []);
       }
-
-      return { M, L, R };
-    }
-
-
-    // kept, same as msort_list_td, per pseudocode
-    function mergeRemainingElements(L, R, M, depth) {
-      // Merge the rest of L and R starting from M
-      let E = M;
-
-      // Bookmark: E <- M
-      chunker.add('E', (vis, T, cur_L, cur_R, cur_M, cur_E) => {
-        vis.list.assignTag('L', cur_L);
-        vis.list.assignTag('R', cur_R);
-        vis.list.assignTag('M', cur_M);
-        vis.list.assignTag('E', cur_E);
-
-        vis.list.updateConnections(T);
-
-        vis.list.colorChains(cur_L, cur_R, T, runAColor, runBColor, doneColor);
-        vis.list.colorMerged(cur_M, cur_E, T, sortColor);
-      }, [Tails, L, R, M, E], depth);
-
-
-      // ---------- WHILE LOOP ----------
-      while (L !== 'Null' && R !== 'Null') {
-
-        // Bookmark: while L != Null && R != Null
-        chunker.add('whileNotNull', (vis, T, cur_L, cur_R, cur_M, cur_E) => {
-          vis.list.assignTag('L', cur_L);
-          vis.list.assignTag('R', cur_R);
-          vis.list.assignTag('M', cur_M);
-          vis.list.assignTag('E', cur_E);
-          vis.list.updateConnections(T);
-
-          vis.list.colorChains(cur_L, cur_R, T, runAColor, runBColor, doneColor);
-          vis.list.highlightHeads(cur_L, cur_R, apColor);
-          vis.list.colorMerged(cur_M, cur_E, T, sortColor);
-        }, [Tails, L, R, M, E], depth);
-
-        // Bookmark: findSmaller
-        chunker.add('findSmaller', (vis, _T, cur_L, cur_R) => {
-          vis.list.assignTag('L', cur_L);
-          vis.list.assignTag('R', cur_R);
-          vis.list.highlightHeads(cur_L, cur_R, apColor);
-        }, [Tails, L, R], depth);
-
-        if (Heads[L] <= Heads[R]) {
-          // Bookmark: E.tail <- L, E <- L, L <- L.tail
-          // Bookmark: E.tail <- L
-          Tails[E] = L;
-
-          chunker.add('E.tail<-L', (vis, T, cur_L, cur_R, cur_M, cur_E) => {
-            vis.list.assignTag('L', cur_L);
-            vis.list.assignTag('R', cur_R);
-            vis.list.assignTag('M', cur_M);
-            vis.list.assignTag('E', cur_E);
-
-            vis.list.unhighlightHeads(cur_L, cur_R, runAColor, runBColor);
-            vis.list.updateConnections(T);
-            vis.list.colorMerged(cur_M, cur_E, T, sortColor);
-          }, [Tails, L, R, M, E], depth);
-
-          // Bookmark: E <- L
-          E = L;
-          chunker.add('E<-L', (vis, T, _cur_L, _cur_R, cur_M, cur_E) => {
-            vis.list.assignTag('E', cur_E);
-            vis.list.colorMerged(cur_M, cur_E, T, sortColor);
-          }, [Tails, L, R, M, E], depth);
-
-          // Bookmark: L <- L.tail
-          L = Tails[L];
-          chunker.add('popL', (vis, _T, cur_L) => {
-            vis.list.assignTag('L', cur_L);
-          }, [Tails, L], depth);
-
-
-        } else {
-          // Bookmark: E.tail <- R
-          Tails[E] = R;
-          chunker.add('E.tail<-R', (vis, T, cur_L, cur_R, cur_M, cur_E) => {
-            vis.list.assignTag('L', cur_L);
-            vis.list.assignTag('R', cur_R);
-            vis.list.assignTag('M', cur_M);
-            vis.list.assignTag('E', cur_E);
-            vis.list.unhighlightHeads(cur_L, cur_R, runAColor, runBColor);
-            vis.list.updateConnections(T);
-            vis.list.colorMerged(cur_M, cur_E, T, sortColor);
-          }, [Tails, L, R, M, E], depth);
-
-          // Bookmark: E <- R
-          E = R;
-          chunker.add('E<-R', (vis, T, _cur_L, _cur_R, cur_M, cur_E) => {
-            vis.list.assignTag('E', cur_E);
-            vis.list.colorMerged(cur_M, cur_E, T, sortColor);
-          }, [Tails, L, R, M, E], depth);
-
-          // Bookmark: R <- R.tail
-          R = Tails[R];
-          chunker.add('popR', (vis, _T, cur_R) => {
-            vis.list.assignTag('R', cur_R);
-          }, [Tails, R], depth);
-
-        }
-      }
-
-
-      // ---------- APPEND REMAINDER ----------
-      if (L === 'Null') {
-
-        Tails[E] = R;
-        chunker.add('appendR', (vis, T, cur_E, cur_R) => {
-          vis.list.assignTag('E', undefined);
-          vis.list.assignTag('R', undefined);
-          vis.list.updateConnections(T);
-          // vis.list.colorMerged(cur_E, cur_R, T);
-          vis.list.colorChain(cur_E, sortColor, T);
-        }, [Tails, E, R], depth);
-
-      } else {
-        Tails[E] = L;
-        chunker.add('appendL', (vis, T, cur_E, cur_L) => {
-          vis.list.assignTag('E', undefined);
-          vis.list.assignTag('L', undefined);
-          vis.list.updateConnections(T);
-          // vis.list.colorMerged(cur_E, cur_L, T);
-          vis.list.colorChain(cur_E, sortColor, T);
-        }, [Tails, E, L], depth);
-      }
-
       return M;
     }
 
+    // Must be implemented
+    function CopySmaller(){
+      chunker.add('findSmaller', () => { }, []);
+      chunker.add('E.tail<-L', () => { }, []);
+      chunker.add('E<-L', () => { }, []);
+      chunker.add('popL', () => { }, []);
+      chunker.add('E.tail<-R', () => { }, []);
+      chunker.add('E<-R', () => { }, []);
+      chunker.add('popR', () => { }, []);
+    }
 
-    // XXX main merge sort function, need to be rewritten almost all of it
-    // current code is unchanged from msort_list_td
-    function MergeSort(L, len, depth) {
-      const left = L - 1;
-      const right = L + len - 2;
 
-      setupInitialVisualization(L, len, depth);
+    // Must be implemented
+    function CopyRest(){
+      chunker.add('appendR', () => { }, []);
+      chunker.add('appendL', () => { }, []);
+    }
+    // // XXX main merge sort function, need to be rewritten almost all of it
+    // // current code is unchanged from msort_list_td
+    // Must be implemented
+    function MergeSort(L, len) {
+      setupInitialVisualization(L, len);
 
       let result;
       // If initial list is 1 element return it
-      if (len < 2) {
-        result = L;
-        return result;
+      if (len < 2) {     
+        chunker.add('returnL', (vis, _T, cur_L) => {
+          vis.list.assignTag('Mid', undefined);
+          vis.list.assignTag('R', undefined);
+          vis.list.assignTag('R', undefined);
+
+          vis.list.resetColors(doneColor);
+          vis.list.colorMerged(cur_L, cur_L, Tails, sortColor);
+          }, [Tails, L]);
+          result = L;
+          return result;
       }
 
-      // Create LL from L. divide
-      // init_LL
+      // Create LL from L. Divide
+      let LL = init_LL(L);
       
+      // Temporary length storage. Remove once implementation is complete
+      // Use LL.length instead
       // While LL > 1. merge
-      // Merge consecutive pairs
-      // For loop (i = 0; i < len(LL); i += 2), jumps two nodes 
-      // Merge i and i + 1, LL -= 1 (length of linked list) \\ 
-
-      // result == LL.head once LL == 1
-      // Return result
-      
-    
-
-      // if (len > 1) {
-      //   let midNum = Math.ceil(len / 2);
-      //   const { L: newL, R, Mid } =
-      //       splitList(L, midNum, depth);
-      //   const { L: sortedL, R: sortedR } =
-      //       performRecursiveSort(newL, R, midNum, len, depth);
-      //   const { M, L: remainingL, R: remainingR } =
-      //       mergeHeads(sortedL, sortedR, depth);
-      //   const mergedList =
-      //       mergeRemainingElements(remainingL, remainingR, M, depth);
-
-      //   chunker.add('returnM', (vis, T, _cur_L, cur_M) => {
-
-      //     vis.list.assignTag('L', undefined);
-      //     vis.list.assignTag('R', undefined);
-      //     vis.list.assignTag('E', undefined);
-      //     vis.list.assignTag('Mid', undefined);
-      //     vis.list.assignTag('M', cur_M);
-
-      //     vis.list.resetColors(doneColor);
-      //     vis.list.colorChain(cur_M, sortColor, T);
-
-      //     vis.list.repositionMergedChain(cur_M, T);
-      //     vis.list.updateConnections(T);
-      //     // refresh_stack(vis);
-      //   }, [Tails, newL, mergedList], depth);
-
-      //   result = mergedList;
-      // } else {
-      //   chunker.add('returnL', (vis, _T, cur_L) => {
-
-      //     vis.list.assignTag('Mid', undefined);
-      //     vis.list.assignTag('R', undefined);
-      //     vis.list.assignTag('R', undefined);
-
-      //     vis.list.resetColors(doneColor);
-      //     vis.list.colorMerged(cur_L, cur_L, Tails, sortColor);
-      //     // refresh_stack(vis);
-
-      //   }, [Tails, L], depth);
-
-      //   result = L;
-      // }
-      // // At each completion of each recursive call of merge sort, pop a frame from call stack
+      // Merge consecutive pairs. Conquer
+      let tempLength = LL.length
+      while (tempLength > 1) {
+        chunker.add('MainWhile', () => {}, []);
+        MergeAll(LL);
+        tempLength -= 1
+      }
+      // result = Heads[LL]
+      // chunker.add('Done', () => {}, []);
+  
       return result;
     }
 
@@ -493,7 +363,7 @@ export function run_msort() {
     // delete this after implementation
     // if (entire_num_array.length >= 0) { chunker.add('Main'); return;}
 
-    const msresult = MergeSort(1, entire_num_array.length, 0);
+    const msresult = MergeSort(1, entire_num_array.length);
 
     // reset pointer colors once (array UI removed)
     const lastLine = (entire_num_array.length > 1 ? 'returnM' : 'returnL');
