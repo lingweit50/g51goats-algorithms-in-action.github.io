@@ -443,10 +443,10 @@ class LinkedListRenderer extends Array2DRenderer {
     const rowYs = [...new Set(visibleNodes.map(n => n.pos.y))].sort((a, b) => a - b); 
 
     // Top row y position
-    const topRowY = rowYs[0];
+    const topRowY = rowYs.length ? rowYs[0] : undefined;
 
     // Bottom row y position
-    const bottomRowY = rowYs[rowYs.length - 1];
+    const bottomRowY = rowYs.length ? rowYs[rowYs.length - 1] : undefined;
 
     return (
       <div className={styles.container}>
@@ -661,6 +661,125 @@ class LinkedListRenderer extends Array2DRenderer {
                 <motion.path
                   key={
                     `e-${n.key}-${to.key}`
+                  }
+
+                  initial={
+                    false
+                  }
+
+                  animate={{
+                    d:
+                      getPath(
+                        x1,
+                        y1,
+                        x2,
+                        y2
+                      ),
+                  }}
+
+                  transition={{
+                    duration:
+                      0.25,
+                  }}
+
+                  fill="none"
+
+                  markerEnd={
+                    'url(#arrow-dark)'
+                  }
+
+                  className={
+                    styles.edge
+                  }
+
+                  style={{
+                    strokeLinecap:
+                      'butt',
+                  }}
+
+                  vectorEffect={
+                    'non-scaling-stroke'
+                  }
+                />
+              );
+            })}
+
+            {list.map(n => {
+              if (
+                !n.referenceKey ||
+                n.hidden
+              ) {
+                return null;
+              }
+
+              const to =
+                nodes.get(
+                  n.referenceKey
+                );
+
+              if (
+                !to ||
+                to.hidden
+              ) {
+                return null;
+              }
+
+              const sourceRect =
+                getValueRect(n);
+
+              const targetRect =
+                getValueRect(to);
+
+              const x1 =
+                (sourceRect.left +
+                  sourceRect.right) / 2;
+
+              const y1 =
+                sourceRect.bottom;
+
+              const targetX =
+                (targetRect.left +
+                  targetRect.right) / 2;
+
+              const targetY =
+                targetRect.top;
+
+              const dx =
+                targetX - x1;
+
+              const dy =
+                targetY - y1;
+
+              const length =
+                Math.sqrt(
+                  dx * dx +
+                  dy * dy
+                );
+
+              const ux =
+                length
+                  ? dx / length
+                  : 0;
+
+              const uy =
+                length
+                  ? dy / length
+                  : 0;
+
+              const x2 =
+                targetX -
+                ux *
+                  ARROW_HEAD_LENGTH;
+
+              const y2 =
+                targetY -
+                uy *
+                  ARROW_HEAD_LENGTH;
+
+              return (
+                <motion.path
+                  key={
+                    `r-${n.key}-${to.key}`
                   }
 
                   initial={
