@@ -37,8 +37,8 @@
    🔹 Edges & Arrowheads
    ====================================================== */
 /*
- * Arrow colour comes from styles/global.scss (--arrow-line, with
- * --arrow-head aliased to it), so shaft and head always match and
+ * Arrow colour comes from styles/global.scss (--arrow-line),
+ * so shaft and head always match and
  * both follow the algorithm theme picker in Settings and the
  * light/dark toggle.  Do not reintroduce literals here: arrows are
  * structural, and a saturated arrow reads as a second semantic channel
@@ -58,7 +58,7 @@
   /* Emphasised arrow.
      not currently applied by the renderer */
   .edge--active {
-    stroke: var(--arrow-head);
+    stroke: var(--arrow-line);
   }
 
   /* Hidden edge: invisible and non-interactive */
@@ -75,7 +75,7 @@
 
   /* Arrowhead fill color */
   .arrowHead {
-    fill: var(--arrow-head);
+    fill: var(--arrow-line);
     // transition: fill 0.25s ease;
   }
 
@@ -86,7 +86,7 @@
 /* Circle at the start of each arrow.
    not currently applied by the renderer */
 .edgeDot {
-  fill: var(--arrow-head);
+  fill: var(--arrow-line);
 }
 
 /* ======================================================
@@ -177,7 +177,6 @@
     position: absolute;
     top: calc(100% + 2px);
     left: 0;
-    display: flex;
     gap: 4px;
     pointer-events: none;
   }

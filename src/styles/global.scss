@@ -187,10 +187,9 @@ $yellowLine: #FFDE3C;
 	--graph-text-stroke: #1809ee;
 
 	// neutral arrow colors.
-	// arrow head is darker than arrow body
 	// this is overridden in each theme
 	--arrow-line: #8C7C6C;
-	--arrow-head: #665550;
+	--arrow-head: var(--arrow-line);
 	--arrow-faded-opacity: 0.25;
 
 	// Graph/tree arrows resolve to the same ramp rather than carrying
@@ -199,7 +198,7 @@ $yellowLine: #FFDE3C;
 	// semantic - only the *default* arrow is neutral.
 	--graph-edge-line-stroke: var(--arrow-line);
 	--graph-edge-line-weight-fill: #a4a4a4;
-	--graph-arrow-fill: var(--arrow-head);
+	--graph-arrow-fill: var(--arrow-line);
 
 	--array-2d-row-col-bg: #ffffff;
 	--array-2d-row-col-border: #4f4f4f;
@@ -363,12 +362,11 @@ $yellowLine: #FFDE3C;
 	--graph-node-id-fill-visited: #FFFFFF;
 
 	--arrow-line: #957E6A;
-	--arrow-head: #AA9888;
 
 	--graph-edge-line-stroke: var(--arrow-line);
 	--graph-edge-line-weight-fill: #717171;
 
-	--graph-arrow-fill: var(--arrow-head);
+	--graph-arrow-fill: var(--arrow-line);
 
 	--array-2d-row-col-bg: #343434;
 	--array-2d-row-col-border: #c0c0c0;
@@ -466,7 +464,6 @@ $yellowLine: #FFDE3C;
 
 	// default arrow color
 	--arrow-line: #E9C3AF;
-	--arrow-head: #B07D62;
 
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
@@ -487,7 +484,6 @@ $yellowLine: #FFDE3C;
 	--wood: #f5cba7;
 
 	--arrow-line: #B09C8D;
-	--arrow-head: #8A7A6D;
 
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
@@ -507,7 +503,6 @@ $yellowLine: #FFDE3C;
 	--wood: #914626;
 
 	--arrow-line: #B57168;
-	--arrow-head: #93575A;
 
 	//pseudocode colours
 	--right-code-keyword-font: #bf16b4;
@@ -526,7 +521,6 @@ $yellowLine: #FFDE3C;
 	--wood: #a2a2a2;
 
 	--arrow-line: #7C8398;
-	--arrow-head: #5F5F5F;
 
 	//pseudocode colours
 	--right-code-keyword-font: #646464;
