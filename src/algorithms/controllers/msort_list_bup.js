@@ -529,7 +529,7 @@ export function run_msort() {
       chunker.add('Done', (vis, T, cur_M, cur_LL) => {
         console.log(cur_LL)
         console.log(T)
-        vis.list.layoutRuns(cur_LL, T);
+        vis.list.layoutRuns(cur_LL, T, 80, 80);
         vis.list.assignReferenceTag('LR', undefined);
         vis.list.assignTag('L', undefined);
         vis.list.assignTag('R', undefined);
@@ -539,6 +539,7 @@ export function run_msort() {
         vis.list.resetColors(doneColor);
         vis.list.colorChain(cur_M, sortColor, T);
         vis.list.updateConnections(T);
+        vis.list.hideByKey('ll-0');
       }, [Tails.slice(), result, LL.slice()]);
 
       return result;
