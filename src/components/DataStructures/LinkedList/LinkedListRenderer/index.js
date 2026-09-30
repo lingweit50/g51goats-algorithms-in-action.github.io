@@ -422,8 +422,7 @@ class LinkedListRenderer extends Array2DRenderer {
 
   if (this.layoutKey !== layoutKey) {
     this.layoutKey = layoutKey;
-     const listStartX = currentContentWidth <= containerWidth
-        ? (containerWidth - bounds.width) / 2  : 20;
+    const listStartX = 70;
     
     // Keep this offset fixed during the animation.
     this.contentOffsetX = listStartX - bounds.minX;
@@ -468,7 +467,7 @@ class LinkedListRenderer extends Array2DRenderer {
             className={styles.stage}
             style={{
               width: contentWidth,
-              margin: '0 auto',
+              margin: 0,
               height: Math.max(maxY + tagBlockH + 50, 0),
               transform: `scale(${this.zoom})`,
             }}
