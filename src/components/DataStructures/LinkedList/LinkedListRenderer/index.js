@@ -415,14 +415,15 @@ class LinkedListRenderer extends Array2DRenderer {
     const cameraTranslateX = 0;
     const cameraTranslateY = 0;
 
-    const currentContentWidth = bounds.width + 40;
-
+    const LEFT_PADDING = 80;
+    const RIGHT_PADDING = 40;
+    const currentContentWidth = bounds.width + LEFT_PADDING + RIGHT_PADDING;
 
   const layoutKey = `${containerWidth}-${list.length}`;
 
   if (this.layoutKey !== layoutKey) {
     this.layoutKey = layoutKey;
-    const listStartX = 70;
+    const listStartX = LEFT_PADDING;
     
     // Keep this offset fixed during the animation.
     this.contentOffsetX = listStartX - bounds.minX;
