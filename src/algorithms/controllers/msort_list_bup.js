@@ -152,6 +152,16 @@ export function run_msort() {
     let LL = [];
     let LR = 0;
 
+    function getTail(start) {
+      let current = start;
+
+      while (Tails[current] !== 'Null') {
+        current = Tails[current];
+      }
+
+      return current;
+    }
+
     function setupInitialVisualization(L, len) {
       chunker.add('Main', (vis, T, cur_L, cur_len) => {
         vis.list.set(entire_num_array, 'mergeSort list init');
@@ -439,17 +449,29 @@ export function run_msort() {
 
           const R = LL[LR + 1];
 
+          // Cut the pointer from the end of L to R before repositioning R.
+          const leftTail = getTail(L);
+          Tails[leftTail] = 'Null';
+
           chunker.add('init R', (vis, cur_L, cur_R, cur_T) => {
             vis.list.assignTag('L', cur_L);
             vis.list.assignTag('R', cur_R);
+
+            vis.list.setRunReferences([]);
+
+            // Remove the old pointer before repositioning R.
+            vis.list.updateConnections(cur_T);
+
+            // Move R underneath L.
             vis.list.moveChainDown(cur_R, cur_T);
+
             vis.list.colorChains(
-                cur_L,
-                cur_R,
-                cur_T,
-                runAColor,
-                runBColor,
-                doneColor
+              cur_L,
+              cur_R,
+              cur_T,
+              runAColor,
+              runBColor,
+              doneColor
             );
           }, [L, R, Tails.slice()]);
 
