@@ -585,14 +585,23 @@ export function run_msort() {
         vis.list.resetColors(doneColor);
         vis.list.colorChain(cur_M, sortColor, T);
         vis.list.updateConnections(T);
+        vis.list.hideByKey('ll-0');
       }, [Tails.slice(), result, LL.slice()], depth);
 
       return result;
     }
 
     initializeListStructure();
+    const msresult = MergeSort(L, entire_num_array.length, 0);
 
-    return MergeSort(L, entire_num_array.length, 0);
+    // reset pointer colors once mergesort is complete
+    const lastLine = (entire_num_array.length > 1 ? 'returnM' : 'returnL');
+    chunker.add(lastLine, (vis) => {
+      vis.list.resetColors(doneColor);
+    }, [], 1);
+
+    //return MergeSort(L, entire_num_array.length, 0);
+    return msresult;
   }
 }
 
