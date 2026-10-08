@@ -132,16 +132,18 @@ class LinkedListRenderer extends Array2DRenderer {
       layout,
     } = this.props.data;
 
+    const isBupLabelLayout = layout?.labelLayout === 'bup';
+
     const list =
       [...nodes.values()];
 
     /*
      * Node:
      *
-     * ┌────────────────────┬────────┐
-     * │       VALUE        │  HEAD  │
-     * │                    │   •    │
-     * └────────────────────┴────────┘
+     * ┌────────────────────┬────────�?
+     * �?      VALUE        �? HEAD  �?
+     * �?                   �?  �?   �?
+     * └────────────────────┴────────�?
      *
      * NODE_W  = 50
      * CAP_W   = 15
@@ -151,10 +153,10 @@ class LinkedListRenderer extends Array2DRenderer {
     /*
      * Node:
      *
-     * ┌────────────────────┬────────┐
-     * │       VALUE        │  HEAD  │
-     * │                    │   •    │
-     * └────────────────────┴────────┘
+     * ┌────────────────────┬────────�?
+     * �?      VALUE        �? HEAD  �?
+     * �?                   �?  �?   �?
+     * └────────────────────┴────────�?
      *
      * NODE_W  = 50
      * CAP_W   = 15
@@ -404,7 +406,7 @@ class LinkedListRenderer extends Array2DRenderer {
 
     const containerWidth =
       this.props.width || 800;
-    
+
 
     // const cameraTranslateX =
     //   (-this.centerX * 2) + offX - 100;
@@ -424,7 +426,7 @@ class LinkedListRenderer extends Array2DRenderer {
     this.layoutKey = layoutKey;
      const listStartX = currentContentWidth <= containerWidth
         ? (containerWidth - bounds.width) / 2  : 20;
-    
+
     // Keep this offset fixed during the animation.
     this.contentOffsetX = listStartX - bounds.minX;
 
@@ -438,9 +440,9 @@ class LinkedListRenderer extends Array2DRenderer {
 
     // Get all currently visible nodes
     const visibleNodes = list.filter(n => !n.hidden);
-    
+
     // Collect all row y positions and sort them from top to bottom
-    const rowYs = [...new Set(visibleNodes.map(n => n.pos.y))].sort((a, b) => a - b); 
+    const rowYs = [...new Set(visibleNodes.map(n => n.pos.y))].sort((a, b) => a - b);
 
     // Top row y position
     const topRowY = rowYs.length ? rowYs[0] : undefined;
@@ -461,7 +463,7 @@ class LinkedListRenderer extends Array2DRenderer {
            {this.props.data.caption}
         </div>
 
-        <div 
+        <div
           className={styles.scrollWrapper}
         >
           <div
@@ -882,17 +884,17 @@ class LinkedListRenderer extends Array2DRenderer {
                         className={[
                           styles.varBadge,
                           v.split('|').some(tag =>
-                            ['M', 'L', 'R', 'E', 'Mid'].includes(tag.trim()) 
+                            ['M', 'L', 'R', 'E', 'Mid', 'LR'].includes(tag.trim())
                           )&&
                             n.pos.y === topRowY &&
                             styles.varTopBadge,
-                          
+
                           v.split('|').some(tag =>
-                            ['M', 'L', 'R', 'E', 'Mid'].includes(tag.trim()) 
+                            ['M', 'L', 'R', 'E', 'Mid', 'LR'].includes(tag.trim())
                           )&&
                             n.pos.y === bottomRowY &&
                             topRowY !== bottomRowY &&
-                            styles.varBottomBadge,
+                            ( isBupLabelLayout ? styles.varBottomBadgeBup : styles.varBottomBadge ),
                         ]
                           .filter(Boolean)
                           .join(' ')}
