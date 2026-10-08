@@ -80,7 +80,6 @@
 import Tracer from '../common/Tracer.jsx';
 import LinkedListRenderer from "./LinkedListRenderer";
 import ListNode from "./ListNode";
-
 class LinkedListTracer extends Tracer {
 
   // ------------------------------------------------

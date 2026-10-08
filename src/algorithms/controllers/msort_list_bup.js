@@ -490,7 +490,7 @@ export function run_msort() {
           chunker.add('init R', (vis, cur_L, cur_R, cur_T) => {
             vis.list.assignTag('L', cur_L);
             vis.list.assignTag('R', cur_R);
-            vis.list.moveChainDown(cur_R, cur_T);
+            vis.list.moveChainBelow(cur_L, cur_R, cur_T, 100);
             vis.list.colorChains(
                 cur_L,
                 cur_R,
