@@ -852,21 +852,15 @@ class LinkedListRenderer extends Array2DRenderer {
                     duration: 0.25,
                   }}
                 >
-                  <div
-                    className={styles.pill}
-                  >
-                    <span
-                      className={styles.value}
-                    >
-                      {n.value}
+                  <div className={styles.pill} >
+                    <span className={styles.value}>
+                    {n.isReference
+                        ? <i className={styles.dot} style={{ position: 'static' }} />
+                        : n.value}
                     </span>
 
-                    <span
-                      className={styles.cap}
-                    >
-                      <i
-                        className={styles.dot}
-                      />
+                    <span className={styles.cap} >
+                      <i className={styles.dot} />
                     </span>
                   </div>
 
