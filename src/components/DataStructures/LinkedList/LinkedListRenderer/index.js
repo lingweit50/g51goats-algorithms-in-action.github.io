@@ -239,19 +239,19 @@ class LinkedListRenderer extends Array2DRenderer {
     /*
      * Centre of the VALUE portion.
      */
-    const getValueCenter = n => {
-      const nodeLeft =
-        n.pos.x - 60 + contentOffsetX;
+      const getValueCenter = n => {
+        const nodeLeft =
+          n.pos.x - 60 + contentOffsetX;
 
-      return {
-        x:
-          nodeLeft +
-          VALUE_W / 2,
+        return {
+          x:
+            nodeLeft +
+            NODE_W / 4,
 
-        y:
-          n.pos.y,
+          y:
+            n.pos.y,
+        };
       };
-    };
 
     /*
      * Determine exactly where the arrowhead
@@ -724,22 +724,20 @@ class LinkedListRenderer extends Array2DRenderer {
                 return null;
               }
 
-              const sourceRect =
-                getValueRect(n);
+              const sourceDot =
+                getValueCenter(n);
 
               const targetRect =
                 getValueRect(to);
 
               const x1 =
-                (sourceRect.left +
-                  sourceRect.right) / 2;
+                sourceDot.x;
 
               const y1 =
-                sourceRect.bottom;
+                sourceDot.y;
 
               const targetX =
-                (targetRect.left +
-                  targetRect.right) / 2;
+                getValueCenter(to).x;
 
               const targetY =
                 targetRect.top;
