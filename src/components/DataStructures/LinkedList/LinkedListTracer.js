@@ -112,6 +112,7 @@ class LinkedListTracer extends Tracer {
     this.listOfNumbers = '';
     this.indexToKey = new Map();
     this.referenceNodeKeys = [];
+    this.initialSplitComplete = false;
 
     // tagName -> index (1-based)
     this.desiredTags = {
@@ -137,6 +138,7 @@ class LinkedListTracer extends Tracer {
     this.nodes.clear();
     this.indexToKey.clear();
     this.referenceNodeKeys = [];
+    this.initialSplitComplete = false;
 
     let prevKey = null;
     list.forEach((v, i) => {
@@ -366,6 +368,25 @@ class LinkedListTracer extends Tracer {
     referenceY = 50,
     runGap = 0
   ) {
+    if (!this.initialSplitComplete) {
+      // Keep all original horizontal positions during LL construction.
+      for (const key of this.indexToKey.values()) {
+        const node = this.nodes.get(key);
+        if (node) node.pos.y = dataY;
+      }
+
+      this._buildReferenceList(runHeads, referenceY);
+
+      // Once every element has its own LL reference, normal
+      // positioning can resume for subsequent merging steps.
+      if (runHeads.length === this.indexToKey.size) {
+        this.initialSplitComplete = true;
+      }
+
+      this.applyTags();
+      return;
+    }
+
     this._buildReferenceList(runHeads, referenceY);
 
     let x = startX;
