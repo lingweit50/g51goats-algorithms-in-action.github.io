@@ -429,7 +429,7 @@ class LinkedListRenderer extends Array2DRenderer {
         ? (containerWidth - bounds.width) / 2  : 20;
 
     // Keep this offset fixed during the animation.
-    this.contentOffsetX = listStartX - bounds.minX;
+    this.contentOffsetX = listStartX - bounds.minX + 100;
 
     this.contentWidth = Math.max(containerWidth, currentContentWidth);
   } else {
@@ -715,6 +715,20 @@ class LinkedListRenderer extends Array2DRenderer {
                 return null;
               }
 
+              // Hide redundant skeleton arrows to nodes already
+              // connected from another data node.
+              if (isBupLabelLayout) {
+                  const hasIncomingDataArrow = list.some(other =>
+                      !other.hidden &&
+                      !other.isReference &&
+                      other.nextKey === n.referenceKey
+                  );
+
+                  if (hasIncomingDataArrow) {
+                      return null;
+                  }
+              }
+
               const to =
                 nodes.get(
                   n.referenceKey
@@ -725,6 +739,23 @@ class LinkedListRenderer extends Array2DRenderer {
                 to.hidden
               ) {
                 return null;
+              }
+
+                // Do not draw skeleton reference arrows to nodes
+              // that have been moved below the normal data row.
+              const dataNodes = list.filter(node =>
+                  !node.hidden && !node.isReference
+              );
+
+              const topDataY = Math.min(
+                  ...dataNodes.map(node => node.pos.y)
+              );
+
+              if (
+                  n.isReference &&
+                  to.pos.y > topDataY
+              ) {
+                  return null;
               }
 
               const sourceDot =
@@ -865,10 +896,27 @@ class LinkedListRenderer extends Array2DRenderer {
                     </span>
                   </div>
 
+                  {n.isReference &&
+                      n.variables.includes('LL') && (
+                          <div
+                              className={styles.varBadge}
+                              style={{
+                                  position: 'absolute',
+                                  left: '-40px',
+                                  top: '0px',
+                              }}
+                          >
+                              LL
+                          </div>
+                      )
+                  }
+
                   <div
                     className={styles.vars}
-                  >
-                    {n.variables.map(v => (
+                                  >
+                                    {n.variables
+                      .filter(v => !(n.isReference && v === 'LL'))
+                      .map(v => ( 
                       <motion.div
                         layoutId={`${n.key}-${v}`}
                         key={v}
