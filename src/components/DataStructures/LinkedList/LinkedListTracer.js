@@ -112,9 +112,6 @@ class LinkedListTracer extends Tracer {
     this.listOfNumbers = '';
     this.indexToKey = new Map();
     this.referenceNodeKeys = [];
-    this.desiredReferenceTags = {
-      LR: undefined
-    };
 
     // tagName -> index (1-based)
     this.desiredTags = {
@@ -123,6 +120,10 @@ class LinkedListTracer extends Tracer {
       M: undefined,
       E: undefined,
       Mid: undefined
+    };
+
+    this.desiredReferenceTags = {
+      LR: undefined
     };
   }
 
@@ -308,7 +309,7 @@ class LinkedListTracer extends Tracer {
     super.set();
   }
 
-  setRunReferences(runHeads = [], referenceY = 50) {
+  _buildReferenceList(runHeads = [], referenceY = 50) {
     const wantedKeys = [];
 
     runHeads.forEach((head, i) => {
@@ -316,34 +317,28 @@ class LinkedListTracer extends Tracer {
       wantedKeys.push(key);
 
       let node = this.nodes.get(key);
-
       if (!node) {
         node = new ListNode(head, key);
+        const targetKey = this.indexToKey.get(head);
+        const target = this.nodes.get(targetKey);
+        node.pos = {
+          x: target ? target.pos.x : 80 + i * this.layout.gap,
+          y: referenceY,
+        };
         this.nodes.set(key, node);
       }
-
-      const targetKey = this.indexToKey.get(head);
-      const target = this.nodes.get(targetKey);
 
       node.value = head;
       node.num = head;
       node.isReference = true;
-      node.referenceKey = targetKey || null;
+      node.referenceKey = this.indexToKey.get(head) || null;
       node.hidden = false;
       node.fillVariant = 6;
-
-      if (target) {
-        node.pos = {
-          x: target.pos.x,
-          y: referenceY,
-        };
-      }
+      node.variables = i === 0 ? ['LL'] : [];
     });
 
     for (const key of this.referenceNodeKeys) {
-      if (!wantedKeys.includes(key)) {
-        this.nodes.delete(key);
-      }
+      if (!wantedKeys.includes(key)) this.nodes.delete(key);
     }
 
     this.referenceNodeKeys = wantedKeys;
@@ -351,13 +346,15 @@ class LinkedListTracer extends Tracer {
     this.referenceNodeKeys.forEach((key, i) => {
       const node = this.nodes.get(key);
       if (!node) return;
-
       node.nextKey =
         i + 1 < this.referenceNodeKeys.length
           ? this.referenceNodeKeys[i + 1]
           : null;
     });
+  }
 
+  setRunReferences(runHeads = []) {
+    this._buildReferenceList(runHeads);
     this.applyTags();
   }
 
@@ -367,15 +364,17 @@ class LinkedListTracer extends Tracer {
     startX = 80,
     dataY = 150,
     referenceY = 50,
-    runGap = 80
+    runGap = 0
   ) {
+    this._buildReferenceList(runHeads, referenceY);
+
     let x = startX;
 
-    runHeads.forEach((head, i) => {
+    runHeads.forEach((head, runIndex) => {
       const run = [];
 
-      for (let j = head; j !== 'Null'; j = tailsArray[j]) {
-        const key = this.indexToKey.get(j);
+      for (let i = head; i !== 'Null'; i = tailsArray[i]) {
+        const key = this.indexToKey.get(i);
         if (!key) break;
 
         const node = this.nodes.get(key);
@@ -384,9 +383,20 @@ class LinkedListTracer extends Tracer {
         run.push(node);
       }
 
-      run.forEach((node, j) => {
+      const referenceKey = this.referenceNodeKeys[runIndex];
+      const referenceNode = this.nodes.get(referenceKey);
+
+      if (referenceNode) {
+        referenceNode.pos = {
+          x,
+          y: referenceY,
+        };
+        referenceNode.referenceKey = this.indexToKey.get(head) || null;
+      }
+
+      run.forEach((node, i) => {
         node.pos = {
-          x: x + j * this.layout.gap,
+          x: x + i * this.layout.gap,
           y: dataY,
         };
       });
@@ -394,7 +404,7 @@ class LinkedListTracer extends Tracer {
       x += Math.max(run.length, 1) * this.layout.gap + runGap;
     });
 
-    this.setRunReferences(runHeads, referenceY);
+    this.applyTags();
   }
 
   moveChainDown(startIndex, tailsArray = [], verticalGap = 100) {
@@ -483,7 +493,7 @@ class LinkedListTracer extends Tracer {
   applyTags() {
     const names = [
       ...Object.keys(this.desiredTags),
-      ...Object.keys(this.desiredReferenceTags)
+      ...Object.keys(this.desiredReferenceTags),
     ];
 
     // Remove old stacked and simple name badges
@@ -516,10 +526,8 @@ class LinkedListTracer extends Tracer {
     }
 
     const referenceBuckets = new Map();
-
     Object.keys(this.desiredReferenceTags).forEach(name => {
       const idx = this.desiredReferenceTags[name];
-
       if (idx !== undefined) {
         if (!referenceBuckets.has(idx)) referenceBuckets.set(idx, []);
         referenceBuckets.get(idx).push(name);
