@@ -140,10 +140,10 @@ class LinkedListRenderer extends Array2DRenderer {
     /*
      * Node:
      *
-     * ┌────────────────────┬────────�?
-     * �?      VALUE        �? HEAD  �?
-     * �?                   �?  �?   �?
-     * └────────────────────┴────────�?
+     * â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”?
+     * â”?      VALUE        â”? HEAD  â”?
+     * â”?                   â”?  â€?   â”?
+     * â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”?
      *
      * NODE_W  = 50
      * CAP_W   = 15
@@ -153,10 +153,10 @@ class LinkedListRenderer extends Array2DRenderer {
     /*
      * Node:
      *
-     * ┌────────────────────┬────────�?
-     * �?      VALUE        �? HEAD  �?
-     * �?                   �?  �?   �?
-     * └────────────────────┴────────�?
+     * â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”?
+     * â”?      VALUE        â”? HEAD  â”?
+     * â”?                   â”?  â€?   â”?
+     * â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”?
      *
      * NODE_W  = 50
      * CAP_W   = 15
@@ -417,8 +417,9 @@ class LinkedListRenderer extends Array2DRenderer {
     const cameraTranslateX = 0;
     const cameraTranslateY = 0;
 
-    const currentContentWidth = bounds.width + 40;
-
+    const LEFT_PADDING = 80;
+    const RIGHT_PADDING = 40;
+    const currentContentWidth = bounds.width + LEFT_PADDING + RIGHT_PADDING;
 
   const layoutKey = `${containerWidth}-${list.length}`;
 
@@ -470,7 +471,7 @@ class LinkedListRenderer extends Array2DRenderer {
             className={styles.stage}
             style={{
               width: contentWidth,
-              margin: '0 auto',
+              margin: 0,
               height: Math.max(maxY + tagBlockH + 50, 0),
               transform: `scale(${this.zoom})`,
             }}
