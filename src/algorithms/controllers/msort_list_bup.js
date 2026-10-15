@@ -468,22 +468,23 @@ export function run_msort() {
         while (LR < LL.length - 1) {
           L = LL[LR];
 
-          chunker.add('MergeAllWhile', (vis, cur_L, cur_R, cur_T) => {
+
+          chunker.add('MergeAllWhile', () => {
+          }, [], depth);
+
+          chunker.add('init L', (vis, cur_L, cur_R, cur_T) => {
             vis.list.assignTag('L', cur_L);
             vis.list.assignTag('R', cur_R);
+
             vis.list.colorChains(
-                cur_L,
-                cur_R,
-                cur_T,
-                runAColor,
-                runBColor,
-                doneColor
+              cur_L,
+              cur_R,
+              cur_T,
+              runAColor,
+              runBColor,
+              doneColor
             );
           }, [L, LL[LR + 1], Tails.slice()], depth);
-
-          chunker.add('init L', (vis, cur_L) => {
-            vis.list.assignTag('L', cur_L);
-          }, [L], depth);
 
           const R = LL[LR + 1];
 
@@ -544,20 +545,13 @@ export function run_msort() {
 
           LR++;
 
-          chunker.add('next_pair', (vis, cur_LR, cur_LL) => {
-            if (cur_LR < cur_LL.length) {
-              vis.list.assignReferenceTag('LR', cur_LR);
-              vis.list.assignTag('L', cur_LL[cur_LR]);
-            } else {
-              vis.list.assignReferenceTag('LR', undefined);
-              vis.list.assignTag('L', undefined);
-            }
 
-            if (cur_LR + 1 < cur_LL.length)
-              vis.list.assignTag('R', cur_LL[cur_LR + 1]);
-            else
-              vis.list.assignTag('R', undefined);
-          }, [LR, LL.slice()], depth);
+          chunker.add('next_pair', (vis, cur_LR) => {
+            vis.list.assignTag('L', undefined);
+            vis.list.assignTag('R', undefined);
+            vis.list.assignReferenceTag('LR', cur_LR);
+          }, [LR < LL.length ? LR : undefined], depth);
+
         }
 
         chunker.add('mergeDone', (vis, cur_LL, cur_T) => {
