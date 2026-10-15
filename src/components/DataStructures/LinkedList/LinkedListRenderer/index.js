@@ -925,13 +925,13 @@ class LinkedListRenderer extends Array2DRenderer {
                         className={[
                           styles.varBadge,
                           v.split('|').some(tag =>
-                            ['M', 'L', 'R', 'E', 'Mid', 'LR'].includes(tag.trim())
+                            ['M', 'L', 'R', 'E', 'Mid', 'T', 'LR'].includes(tag.trim()) 
                           )&&
                             n.pos.y === topRowY &&
                             styles.varTopBadge,
 
                           v.split('|').some(tag =>
-                            ['M', 'L', 'R', 'E', 'Mid', 'LR'].includes(tag.trim())
+                            ['M', 'L', 'R', 'E', 'Mid', 'T', 'LR'].includes(tag.trim()) 
                           )&&
                             n.pos.y === bottomRowY &&
                             topRowY !== bottomRowY &&
