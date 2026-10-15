@@ -130,8 +130,10 @@ class LinkedListRenderer extends Array2DRenderer {
     const {
       nodes,
       layout,
+      motionOn,
     } = this.props.data;
 
+    const tweenDuration = motionOn === false ? 0 : 0.25;
     const isBupLabelLayout = layout?.labelLayout === 'bup';
 
     const list =
@@ -682,7 +684,7 @@ class LinkedListRenderer extends Array2DRenderer {
 
                   transition={{
                     duration:
-                      0.25,
+                      tweenDuration,
                   }}
 
                   fill="none"
@@ -830,7 +832,7 @@ class LinkedListRenderer extends Array2DRenderer {
 
                   transition={{
                     duration:
-                      0.25,
+                      tweenDuration,
                   }}
 
                   fill="none"
@@ -881,7 +883,7 @@ class LinkedListRenderer extends Array2DRenderer {
                     height: NODE_H,
                   }}
                   transition={{
-                    duration: 0.25,
+                    duration: tweenDuration,
                   }}
                 >
                   <div className={styles.pill} >
@@ -916,7 +918,7 @@ class LinkedListRenderer extends Array2DRenderer {
                                   >
                                     {n.variables
                       .filter(v => !(n.isReference && v === 'LL'))
-                      .map(v => ( 
+                      .map(v => (
                       <motion.div
                         layoutId={`${n.key}-${v}`}
                         key={v}
