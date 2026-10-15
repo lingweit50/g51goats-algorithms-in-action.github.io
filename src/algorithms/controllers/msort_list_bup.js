@@ -526,11 +526,14 @@ export function run_msort() {
 
           LL[LR] = mergedList;
 
-          chunker.add('replace_head', (vis, cur_M, cur_LL, cur_LR) => {
-
+          chunker.add('replace_head', (vis, cur_M, cur_LL, cur_LR, cur_T) => {
+            vis.list.setRunReferences(cur_LL);
+            vis.list.layoutRuns(cur_LL, cur_T);
             vis.list.assignReferenceTag('LR', cur_LR);
             vis.list.assignTag('M', cur_M);
-          }, [mergedList, LL.slice(), LR], depth);
+            vis.list.updateConnections(cur_T);
+          }, [mergedList, LL.slice(), LR, Tails.slice()], depth);
+
 
           LL.splice(LR + 1, 1);
 
@@ -538,9 +541,8 @@ export function run_msort() {
             vis.list.setRunReferences(cur_LL);
             vis.list.layoutRuns(cur_LL, cur_T);
             vis.list.assignReferenceTag('LR', cur_LR);
-            vis.list.assignTag('M', cur_M);
+            vis.list.assignTag('M', undefined);
             vis.list.updateConnections(cur_T);
-            // vis.list.setCaption(`LL length = ${cur_LL.length}`);
           }, [mergedList, LL.slice(), LR, Tails.slice()], depth);
 
           LR++;
