@@ -171,7 +171,7 @@ export function run_msort() {
         // vis.list.showChain(cur_L, T);
         vis.list.resetColors(doneColor);
         vis.list.colorChain(cur_L, runAColor, T);
-        vis.list.setCaption(`len = ${cur_len}`);
+        // vis.list.setCaption(`len = ${cur_len}`);
 
         // Just L tag is known at this point
         vis.list.assignTag('L', cur_L);
@@ -455,7 +455,7 @@ export function run_msort() {
           for (const run of cur_LL)
             vis.list.colorChain(run, sortColor, cur_T);
 
-          vis.list.setCaption(`LL length = ${cur_LL.length}`);
+          // vis.list.setCaption(`LL length = ${cur_LL.length}`);
           vis.list.updateConnections(cur_T);
         }, [LL.slice(), Tails.slice()], depth);
 
@@ -539,7 +539,7 @@ export function run_msort() {
             vis.list.assignReferenceTag('LR', cur_LR);
             vis.list.assignTag('M', cur_M);
             vis.list.updateConnections(cur_T);
-            vis.list.setCaption(`LL length = ${cur_LL.length}`);
+            // vis.list.setCaption(`LL length = ${cur_LL.length}`);
           }, [mergedList, LL.slice(), LR, Tails.slice()], depth);
 
           LR++;
@@ -569,7 +569,7 @@ export function run_msort() {
             vis.list.colorChain(run, sortColor, cur_T);
 
           vis.list.updateConnections(cur_T);
-          vis.list.setCaption(`LL length = ${cur_LL.length}`);
+          // vis.list.setCaption(`LL length = ${cur_LL.length}`);
         }, [LL.slice(), Tails.slice()], depth);
       }
 
