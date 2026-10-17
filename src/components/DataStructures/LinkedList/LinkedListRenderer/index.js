@@ -431,7 +431,7 @@ class LinkedListRenderer extends Array2DRenderer {
         ? (containerWidth - bounds.width) / 2  : 20;
 
     // Keep this offset fixed during the animation.
-    this.contentOffsetX = listStartX - bounds.minX + 100;
+    this.contentOffsetX = listStartX - bounds.minX + 60;
 
     this.contentWidth = Math.max(containerWidth, currentContentWidth);
   } else {
