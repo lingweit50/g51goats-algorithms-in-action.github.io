@@ -303,6 +303,19 @@ class LinkedListTracer extends Tracer {
   // ------------------------------------------------
   // Node positioning (used by recursive split + merge visuals)
   // ------------------------------------------------
+
+
+  setMotion(bool = true) {
+    this.motionOn = bool;
+    super.set();
+  }
+
+  hideReferenceArrow(runIndex) {
+    const node = this.nodes.get(this.referenceNodeKeys[runIndex]);
+    if (node) node.referenceKey = null;
+    super.set();
+  }
+
   moveNodeTo(k, x, y) {
     const n = this.nodes.get(k);
     if (!n) return;
