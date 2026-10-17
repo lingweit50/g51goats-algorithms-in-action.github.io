@@ -316,6 +316,14 @@ class LinkedListTracer extends Tracer {
     super.set();
   }
 
+  setReferenceTarget(runIndex, headIndex) {
+    const referenceNode = this.nodes.get(this.referenceNodeKeys[runIndex]);
+    if (!referenceNode) return;
+
+    referenceNode.referenceKey = this.indexToKey.get(headIndex) || null;
+    super.set();
+  }
+
   moveNodeTo(k, x, y) {
     const n = this.nodes.get(k);
     if (!n) return;

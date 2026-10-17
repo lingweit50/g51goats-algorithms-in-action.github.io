@@ -527,25 +527,34 @@ export function run_msort() {
 
           LL[LR] = mergedList;
 
-          chunker.add('replace_head', (vis, cur_M, cur_LL, cur_LR) => {
-
+          chunker.add('replace_head', (vis, cur_M, cur_LR, cur_T) => {
             vis.list.setMotion(true);
+            vis.list.repositionMergedChain(cur_M, cur_T);
+
+            // Point the first reference arrow to M.
+            vis.list.setReferenceTarget(cur_LR, cur_M);
+
+            // Hide the second arrow without removing its node.
             vis.list.hideReferenceArrow(cur_LR + 1);
-            vis.list.assignReferenceTag('LR', cur_LR);
-            vis.list.assignTag('M', cur_M);
-          }, [mergedList, LL.slice(), LR], depth);
 
-          LL.splice(LR + 1, 1);
-
-          chunker.add('skip_second', (vis, cur_M, cur_LL, cur_LR, cur_T) => {
-            vis.list.setMotion(false);
-            vis.list.setRunReferences(cur_LL);
-            vis.list.layoutRuns(cur_LL, cur_T);
             vis.list.assignReferenceTag('LR', cur_LR);
             vis.list.assignTag('M', cur_M);
             vis.list.updateConnections(cur_T);
-            // vis.list.setCaption(`LL length = ${cur_LL.length}`);
-          }, [mergedList, LL.slice(), LR, Tails.slice()], depth);
+          }, [mergedList, LR, Tails.slice()], depth);
+
+          LL.splice(LR + 1, 1);
+
+          chunker.add('skip_second', (vis, cur_LL, cur_LR, cur_T) => {
+            vis.list.setMotion(false);
+
+            // Remove the redundant reference node.
+            vis.list.setRunReferences(cur_LL);
+
+            vis.list.layoutRuns(cur_LL, cur_T);
+            vis.list.assignReferenceTag('LR', cur_LR);
+            vis.list.assignTag('M', undefined);
+            vis.list.updateConnections(cur_T);
+          }, [LL.slice(), LR, Tails.slice()], depth);
 
           LR++;
 
