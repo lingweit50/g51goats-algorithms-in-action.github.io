@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="update red theme coloring">
+    <list default="true" id="d972e117-1f6a-4c65-83bd-0128f76b985f" name="Changes" comment="update tweening for line 46 (still need to be split)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_bup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/controllers/msort_list_bup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListRenderer/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListTracer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataStructures/LinkedList/LinkedListTracer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +124,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "decoupling__arrow",
+    "git-widget-placeholder": "tweening__fix__1",
     "javascript.preferred.runtime.type.id": "node",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/tp/Documents/Programming/JavaScript/g51goats-algorithms-in-action.github.io",
@@ -166,6 +169,9 @@
       <updated>1725873310585</updated>
       <workItem from="1786520505245" duration="8058000" />
       <workItem from="1790237772004" duration="616000" />
+      <workItem from="1791443078366" duration="345000" />
+      <workItem from="1791931834329" duration="213000" />
+      <workItem from="1792040968963" duration="4134000" />
     </task>
     <task id="LOCAL-00001" summary="add color constants same as msort_arr_td.js to msort_list_td.js">
       <option name="closed" value="true" />
@@ -199,7 +205,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786552109248</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="update list of list arrow">
+      <option name="closed" value="true" />
+      <created>1791443278343</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1791443278343</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -210,6 +224,8 @@
     <MESSAGE value="replace ptrVariants with new color constants" />
     <MESSAGE value="update variantClass to use global color denoted in renderer" />
     <MESSAGE value="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors" />
-    <option name="LAST_COMMIT_MESSAGE" value="rewrite hard-coded color in LinkedListTracer.js to take color params and use theme colors" />
+    <MESSAGE value="update list of list arrow" />
+    <MESSAGE value="update tweening for line 46 (still need to be split)" />
+    <option name="LAST_COMMIT_MESSAGE" value="update tweening for line 46 (still need to be split)" />
   </component>
 </project>

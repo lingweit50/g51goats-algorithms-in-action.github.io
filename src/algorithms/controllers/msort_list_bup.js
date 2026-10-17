@@ -514,6 +514,7 @@ export function run_msort() {
               );
 
           chunker.add('returnM', (vis, T, cur_M) => {
+
             vis.list.assignTag('L', undefined);
             vis.list.assignTag('R', undefined);
             vis.list.assignTag('E', undefined);
@@ -528,6 +529,8 @@ export function run_msort() {
 
           chunker.add('replace_head', (vis, cur_M, cur_LL, cur_LR) => {
 
+            vis.list.setMotion(true);
+            vis.list.hideReferenceArrow(cur_LR + 1);
             vis.list.assignReferenceTag('LR', cur_LR);
             vis.list.assignTag('M', cur_M);
           }, [mergedList, LL.slice(), LR], depth);
@@ -535,6 +538,7 @@ export function run_msort() {
           LL.splice(LR + 1, 1);
 
           chunker.add('skip_second', (vis, cur_M, cur_LL, cur_LR, cur_T) => {
+            vis.list.setMotion(false);
             vis.list.setRunReferences(cur_LL);
             vis.list.layoutRuns(cur_LL, cur_T);
             vis.list.assignReferenceTag('LR', cur_LR);
@@ -545,8 +549,8 @@ export function run_msort() {
 
           LR++;
 
-
           chunker.add('next_pair', (vis, cur_LR) => {
+            vis.list.setMotion(true);
             vis.list.assignTag('L', undefined);
             vis.list.assignTag('R', undefined);
             vis.list.assignReferenceTag('LR', cur_LR);
