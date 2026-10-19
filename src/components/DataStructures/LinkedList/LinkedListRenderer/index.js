@@ -139,31 +139,6 @@ class LinkedListRenderer extends Array2DRenderer {
     const list =
       [...nodes.values()];
 
-    /*
-     * Node:
-     *
-     * â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”?
-     * â”?      VALUE        â”? HEAD  â”?
-     * â”?                   â”?  â€?   â”?
-     * â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”?
-     *
-     * NODE_W  = 50
-     * CAP_W   = 15
-     * VALUE_W = 35
-     */
-
-    /*
-     * Node:
-     *
-     * â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”?
-     * â”?      VALUE        â”? HEAD  â”?
-     * â”?                   â”?  â€?   â”?
-     * â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”?
-     *
-     * NODE_W  = 50
-     * CAP_W   = 15
-     * VALUE_W = 35
-     */
 
     const NODE_W = 50;
     const NODE_H = 20;
@@ -442,7 +417,9 @@ class LinkedListRenderer extends Array2DRenderer {
     const contentOffsetX = this.contentOffsetX;
 
     // Get all currently visible nodes
-    const visibleNodes = list.filter(n => !n.hidden);
+    // const visibleNodes = list.filter(n => !n.hidden);
+
+    const visibleNodes = list.filter(n => !n.hidden && !n.isReference);
 
     // Collect all row y positions and sort them from top to bottom
     const rowYs = [...new Set(visibleNodes.map(n => n.pos.y))].sort((a, b) => a - b);
@@ -904,8 +881,12 @@ class LinkedListRenderer extends Array2DRenderer {
                               className={styles.varBadge}
                               style={{
                                   position: 'absolute',
-                                  left: '-40px',
-                                  top: '0px',
+                                  // left: '-40px',
+                                  // top: '0px',
+                                  right: 'calc(100% + var(--ll-label-gap))',
+                                  left: 'auto',
+                                  top: '50%',
+                                  transform: 'translateY(-50%)',
                               }}
                           >
                               LL
@@ -926,18 +907,22 @@ class LinkedListRenderer extends Array2DRenderer {
                         // Adjust M/L/R/E label position based on the node row.
                         className={[
                           styles.varBadge,
+                          n.isReference && styles.varRefBadge,
+                          !n.isReference &&
                           v.split('|').some(tag =>
-                            ['M', 'L', 'R', 'E', 'Mid', 'T', 'LR'].includes(tag.trim()) 
+                            ['M', 'L', 'R', 'E', 'Mid', 'T', 'LR'].includes(tag.trim())
                           )&&
                             n.pos.y === topRowY &&
                             styles.varTopBadge,
 
+                          !n.isReference &&
                           v.split('|').some(tag =>
-                            ['M', 'L', 'R', 'E', 'Mid', 'T', 'LR'].includes(tag.trim()) 
+                            ['M', 'L', 'R', 'E', 'Mid', 'T', 'LR'].includes(tag.trim())
                           )&&
                             n.pos.y === bottomRowY &&
                             topRowY !== bottomRowY &&
-                            ( isBupLabelLayout ? styles.varBottomBadgeBup : styles.varBottomBadge ),
+                            // ( isBupLabelLayout ? styles.varBottomBadgeBup : styles.varBottomBadge ),
+                            styles.varBottomBadge,
                         ]
                           .filter(Boolean)
                           .join(' ')}
