@@ -124,9 +124,11 @@ let Tails;       // ['i.tail (next)', ...]
 
 // ---------- Init visualiser (pointer only) ----------
 export function initVisualisers() {
+  const list = new LinkedListTracer('list', null, 'List(s)')
+  list.layout.labelLayout = 'bup';
   return {
     list: {
-      instance: new LinkedListTracer('list', null, 'List(s)'),
+      instance: list,
       order: 0,
     },
   }

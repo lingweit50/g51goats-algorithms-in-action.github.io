@@ -453,6 +453,15 @@ class LinkedListRenderer extends Array2DRenderer {
     // Bottom row y position
     const bottomRowY = rowYs.length ? rowYs[rowYs.length - 1] : undefined;
 
+    const singleRow = topRowY === bottomRowY;
+
+    // In bup layout the data row counts as the "bottom" row even when it is the only row.
+    const badgeBelow = n =>
+      n.pos.y === bottomRowY && (isBupLabelLayout || !singleRow);
+
+    const badgeAbove = n =>
+      n.pos.y === topRowY && !(isBupLabelLayout && singleRow);
+
     return (
       <div className={styles.container}>
         <div
@@ -929,13 +938,13 @@ class LinkedListRenderer extends Array2DRenderer {
                           v.split('|').some(tag =>
                             ['M', 'L', 'R', 'E', 'Mid', 'T', 'LR'].includes(tag.trim()) 
                           )&&
-                            n.pos.y === topRowY &&
+                            badgeAbove(n) &&
                             styles.varTopBadge,
 
                           v.split('|').some(tag =>
                             ['M', 'L', 'R', 'E', 'Mid', 'T', 'LR'].includes(tag.trim()) 
                           )&&
-                            n.pos.y === bottomRowY &&
+                            badgeBelow(n) &&
                             topRowY !== bottomRowY &&
                             ( isBupLabelLayout ? styles.varBottomBadgeBup : styles.varBottomBadge ),
                         ]
