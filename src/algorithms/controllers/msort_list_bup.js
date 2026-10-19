@@ -385,9 +385,9 @@ export function run_msort() {
 
       T = Tails[L];
 
-      chunker.add('init_T', (vis, _T, cur_L) => {
-        vis.list.assignTag('L', cur_L);
-      }, [Tails.slice(), T, L], depth);
+      chunker.add('init_T', (vis, cur_T) => {
+        vis.list.assignTag('T', cur_T);
+      }, [T], depth);
 
       Tails[L] = 'Null';
       LL = [L];
@@ -401,9 +401,10 @@ export function run_msort() {
 
       L = T;
 
-      chunker.add('use_T', (vis, cur_L, cur_T) => {
+      chunker.add('use_T', (vis, cur_L, cur_Tails) => {
         vis.list.assignTag('L', cur_L);
-        vis.list.updateConnections(cur_T);
+        vis.list.assignTag('T', undefined);
+        vis.list.updateConnections(cur_Tails);
       }, [L, Tails.slice()], depth);
 
       LR = 0;
@@ -420,9 +421,9 @@ export function run_msort() {
 
         T = Tails[L];
 
-        chunker.add('init_T_1', (vis, cur_L) => {
-          vis.list.assignTag('L', cur_L);
-        }, [L], depth);
+        chunker.add('init_T_1', (vis, cur_T) => {
+          vis.list.assignTag('T', cur_T);
+        }, [T], depth);
 
         Tails[L] = 'Null';
         LL.push(L);
@@ -438,6 +439,7 @@ export function run_msort() {
 
         chunker.add('use_T_1', (vis, cur_L) => {
           vis.list.assignTag('L', cur_L);
+          vis.list.assignTag('T', undefined);
         }, [L], depth);
 
         LR = LL.length - 1;
