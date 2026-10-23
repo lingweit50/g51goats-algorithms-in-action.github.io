@@ -170,20 +170,17 @@
 
   /* Label group shown below node (e.g., variable names) */
   .vars {
-    display: flex;
-    flex-direction: column; // stack vertically
-    align-items: center;
-    margin-top: 4px; // spacing from node
-    position: absolute;
-    top: calc(100% + 2px);
-    left: 0;
-    gap: 4px;
+    display: block;
+    position: static;
+    margin: 0;
     pointer-events: none;
   }
 
   /* Label style (currently transparent) */
   .varBadge {
-    margin-top: 2px;
+    position: absolute;
+    left: var(--label-x);
+    top: calc(100% + var(--label-gap));
     background: rgba(180, 180, 180, 0.18);
     border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 999px;
@@ -195,20 +192,29 @@
     white-space: nowrap;
   }
 
+
+  /* Label placement positioning */
+  --label-gap: 5px;
+  --ll-label-gap: 5px; /* space between the LL badge and its cell */
+
+  /* Shift from the node's left edge */
+  --label-x: calc(var(--node-w) - var(--cap-w) - 10px);
+
+
   /* M / L / R / E labels on the upper row */
   .varTopBadge {
-    position: absolute;
-    top: -55px;
-    left: 0;
-    margin-top: 0;
+    top: auto;
+    bottom: calc(100% + var(--label-gap));
   }
 
   /* M / L / R / E labels on the lower row */
   .varBottomBadge {
-    position: absolute;
-    top: 5px;
-    left: 0;
-    margin-top: 0;
+    top: calc(100% + var(--label-gap));
+  }
+
+  .varRefBadge {
+    top: auto;
+    bottom: calc(100% + var(--label-gap));
   }
 }
 
